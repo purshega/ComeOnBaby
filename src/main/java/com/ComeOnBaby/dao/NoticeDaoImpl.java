@@ -59,7 +59,7 @@ public class NoticeDaoImpl implements NoticeDao {
     @Override
     public List<Notice> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Case");
+        Query query = session.createQuery("from Notice");
         return query.list();
     }
 

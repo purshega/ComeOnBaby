@@ -59,7 +59,7 @@ public class Q_ADaoImpl implements Q_ADao {
     @Override
     public List<Q_A> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Case");
+        Query query = session.createQuery("from Q_A");
         return query.list();
     }
 

@@ -59,7 +59,7 @@ public class UsersDaoImpl implements UsersDao {
     @Override
     public List<Users> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Case");
+        Query query = session.createQuery("from Users");
         return query.list();
     }
 

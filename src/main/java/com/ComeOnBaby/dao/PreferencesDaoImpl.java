@@ -59,7 +59,7 @@ public class PreferencesDaoImpl implements PreferencesDao {
     @Override
     public List<Preferences> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Case");
+        Query query = session.createQuery("from Preferences");
         return query.list();
     }
 
