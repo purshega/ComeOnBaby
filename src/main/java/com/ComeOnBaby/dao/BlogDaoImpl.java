@@ -1,22 +1,19 @@
 package com.ComeOnBaby.dao;
 
 
-
+import com.ComeOnBaby.model.Blog;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+public class BlogDaoImpl implements BlogDao{
 
-@Repository("projectDao")
-public class ProjectDaoImpl implements ProjectDao {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProjectDaoImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(BlogDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -25,39 +22,39 @@ public class ProjectDaoImpl implements ProjectDao {
         this.sessionFactory = sf;
     }
 
-
     @Override
-    public Long create(Project project) {
+    public Long create(Blog blog) {
         Session session = sessionFactory.getCurrentSession();
-        Long id = (Long) session.save(project);
+        Long id = (Long) session.save(blog);
         return id;
     }
 
     @Override
-    public Project read(Long id) {
+    public Blog read(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        Project project = (Project) session.get(Project.class, id);
-        return project;
+        Blog blog = (Blog) session.get(Blog.class, id);
+        logger.error("Blog read successfully, Blog=" + blog);
+        return blog;
     }
 
     @Override
-    public void update(Project project) {
+    public void update(Blog blog) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(project);
-        logger.error("Case update successfully, Case=" + project);
+        session.update(blog);
+        logger.error("Blog update successfully, Blog=" + blog);
     }
 
     @Override
-    public void delete(Project project) {
+    public void delete(Blog blog) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(project);
-        logger.info("Case deleted successfully, Case details=" + project);
+        session.delete(blog);
+        logger.info("Blog deleted successfully, Blog details=" + blog);
     }
 
     @Override
-    public List<Project> findAll() {
+    public List<Blog> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Project");
+        Query query =  session.createQuery("from Blog");
         return query.list();
     }
 }
