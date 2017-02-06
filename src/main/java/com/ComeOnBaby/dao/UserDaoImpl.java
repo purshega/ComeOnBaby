@@ -1,5 +1,6 @@
 package com.ComeOnBaby.dao;
 
+import com.ComeOnBaby.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Order;
@@ -35,6 +36,11 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 		return user;
 	}
 
+	@Override
+	public void save(User user) {
+
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<User> findAllUsers() {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("firstName"));
@@ -50,9 +56,7 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 		return users;
 	}
 
-	public void save(User user) {
-		persist(user);
-	}
+
 
 	public void deleteBySSO(String sso) {
 		Criteria crit = createEntityCriteria();

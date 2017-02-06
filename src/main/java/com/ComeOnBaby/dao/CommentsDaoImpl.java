@@ -36,7 +36,7 @@ public class CommentsDaoImpl implements CommentsDao {
     public Comments read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Comments comments = (Comments) session.get(Comments.class, id);
-        logger.error("Comments read successfully, Comments=" + comments);
+        logger.error("CommentsService read successfully, CommentsService=" + comments);
         return comments;
     }
 
@@ -44,14 +44,14 @@ public class CommentsDaoImpl implements CommentsDao {
     public void update(Comments comments) {
         Session session = sessionFactory.getCurrentSession();
         session.update(comments);
-        logger.error("Comments update successfully, Comments=" + comments);
+        logger.error("CommentsService update successfully, CommentsService=" + comments);
     }
 
     @Override
     public void delete(Comments comments) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(comments);
-        logger.info("Comments deleted successfully, Comments details=" + comments);
+        logger.info("CommentsService deleted successfully, CommentsService details=" + comments);
     }
 
     @Override

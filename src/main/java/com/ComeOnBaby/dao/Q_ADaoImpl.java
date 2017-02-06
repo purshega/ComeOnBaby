@@ -46,14 +46,14 @@ public class Q_ADaoImpl implements Q_ADao {
         Session session = sessionFactory.getCurrentSession();
         session.update(aQ_A);
         session.getTransaction().commit();
-        logger.error("Q_A update successfully, Q_A=" + aQ_A);
+        logger.error("Q_AService update successfully, Q_AService=" + aQ_A);
     }
 
     @Override
     public void delete(Q_A aQ_A) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(aQ_A);
-        logger.info("Q_A deleted successfully, Q_A details=" + aQ_A);
+        logger.info("Q_AService deleted successfully, Q_AService details=" + aQ_A);
     }
 
     @Override

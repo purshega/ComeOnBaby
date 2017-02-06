@@ -1,6 +1,8 @@
 package com.ComeOnBaby.controller;
 
 
+import com.ComeOnBaby.model.User;
+import com.ComeOnBaby.model.UserProfile;
 import com.ComeOnBaby.service.UserProfileService;
 import com.ComeOnBaby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

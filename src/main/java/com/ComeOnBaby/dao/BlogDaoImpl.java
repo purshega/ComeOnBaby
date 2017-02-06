@@ -35,7 +35,7 @@ public class BlogDaoImpl implements BlogDao{
     public Blog read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Blog blog = (Blog) session.get(Blog.class, id);
-        logger.error("Blog read successfully, Blog=" + blog);
+        logger.error("BlogService read successfully, BlogService=" + blog);
         return blog;
     }
 
@@ -43,14 +43,14 @@ public class BlogDaoImpl implements BlogDao{
     public void update(Blog blog) {
         Session session = sessionFactory.getCurrentSession();
         session.update(blog);
-        logger.error("Blog update successfully, Blog=" + blog);
+        logger.error("BlogService update successfully, BlogService=" + blog);
     }
 
     @Override
     public void delete(Blog blog) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(blog);
-        logger.info("Blog deleted successfully, Blog details=" + blog);
+        logger.info("BlogService deleted successfully, BlogService details=" + blog);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class Fertilization_guideDaoImpl implements Fertilization_guideDao {
     public Fertilization_guide read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Fertilization_guide fertilization_guide = (Fertilization_guide) session.get(Fertilization_guide.class, id);
-        logger.error("Comments read successfully, Comments=" + fertilization_guide);
+        logger.error("CommentsService read successfully, CommentsService=" + fertilization_guide);
         return fertilization_guide;
     }
 
