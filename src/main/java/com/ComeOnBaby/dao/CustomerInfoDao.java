@@ -2,8 +2,6 @@ package com.ComeOnBaby.dao;
 
 
 
-import com.ComeOnBaby.model.CustomerInfo;
-
 import java.util.List;
 
 

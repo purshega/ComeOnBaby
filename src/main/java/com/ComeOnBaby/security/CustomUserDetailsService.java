@@ -1,8 +1,6 @@
 package com.ComeOnBaby.security;
 
 
-import com.ComeOnBaby.model.User;
-import com.ComeOnBaby.model.UserProfile;
 import com.ComeOnBaby.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,6 @@
 package com.ComeOnBaby.dao;
 
 
-import com.ComeOnBaby.model.PersistentLogin;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;

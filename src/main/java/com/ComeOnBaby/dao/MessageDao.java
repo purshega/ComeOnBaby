@@ -2,8 +2,6 @@ package com.ComeOnBaby.dao;
 
 
 
-import com.ComeOnBaby.model.Message;
-
 import java.util.List;
 
 /**

@@ -3,8 +3,6 @@ package com.ComeOnBaby.service;
 
 
 
-import com.ComeOnBaby.model.Message;
-
 import java.util.List;
 
 public interface MessageService {

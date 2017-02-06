@@ -1,7 +1,6 @@
 package com.ComeOnBaby.dao;
 
 
-import com.ComeOnBaby.model.UserProfile;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;

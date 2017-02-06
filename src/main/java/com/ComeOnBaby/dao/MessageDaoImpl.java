@@ -1,7 +1,6 @@
 package com.ComeOnBaby.dao;
 
 
-import com.ComeOnBaby.model.Message;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

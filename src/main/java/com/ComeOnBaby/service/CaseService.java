@@ -3,8 +3,6 @@ package com.ComeOnBaby.service;
 
 
 
-import com.ComeOnBaby.model.Case;
-
 import java.util.List;
 
 public interface CaseService {

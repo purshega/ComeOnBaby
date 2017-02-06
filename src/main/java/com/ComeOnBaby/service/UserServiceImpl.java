@@ -2,7 +2,6 @@ package com.ComeOnBaby.service;
 
 
 import com.ComeOnBaby.dao.UserDao;
-import com.ComeOnBaby.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

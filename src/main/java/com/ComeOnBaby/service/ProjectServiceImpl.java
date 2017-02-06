@@ -2,7 +2,6 @@ package com.ComeOnBaby.service;
 
 
 import com.ComeOnBaby.dao.ProjectDao;
-import com.ComeOnBaby.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -2,8 +2,6 @@ package com.ComeOnBaby.controller;
 
 
 
-import com.ComeOnBaby.model.CustomerInfo;
-import com.ComeOnBaby.model.Project;
 import com.ComeOnBaby.service.CustomerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

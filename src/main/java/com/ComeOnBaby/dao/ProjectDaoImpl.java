@@ -2,7 +2,6 @@ package com.ComeOnBaby.dao;
 
 
 
-import com.ComeOnBaby.model.Project;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
