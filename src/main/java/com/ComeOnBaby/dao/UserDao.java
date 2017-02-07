@@ -1,6 +1,8 @@
 package com.ComeOnBaby.dao;
 
 
+import com.ComeOnBaby.model.User;
+
 import java.util.List;
 
 

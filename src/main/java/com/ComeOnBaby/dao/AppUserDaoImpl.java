@@ -1,7 +1,7 @@
 package com.ComeOnBaby.dao;
 
 
-import com.ComeOnBaby.model.Users;
+import com.ComeOnBaby.model.AppUser;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,9 +14,9 @@ import java.util.List;
 
 
 @Repository("usersDao")
-public class UsersDaoImpl implements UsersDao {
+public class AppUserDaoImpl implements AppUserDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(UsersDaoImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AppUserDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -27,39 +27,39 @@ public class UsersDaoImpl implements UsersDao {
 
 
     @Override
-    public Long create(Users aUsers) {
+    public Long create(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
-        Long id = (Long) session.save(aUsers);
+        Long id = (Long) session.save(appUser);
         session.getTransaction().commit();
         return id;
     }
 
     @Override
-    public Users read(Long id) {
+    public AppUser read(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        Users aUsers = (Users) session.get(Users.class, id);
-        return aUsers;
+        AppUser appUser = (AppUser) session.get(AppUser.class, id);
+        return appUser;
     }
 
     @Override
-    public void update(Users aUsers) {
+    public void update(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(aUsers);
+        session.update(appUser);
         session.getTransaction().commit();
-        logger.error("Users update successfully, Users=" + aUsers);
+        logger.error("AppUser update successfully, AppUser=" + appUser);
     }
 
     @Override
-    public void delete(Users aUsers) {
+    public void delete(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(aUsers);
-        logger.info("Users deleted successfully, Users details=" + aUsers);
+        session.delete(appUser);
+        logger.info("AppUser deleted successfully, AppUser details=" + appUser);
     }
 
     @Override
-    public List<Users> findAll() {
+    public List<AppUser> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createQuery("from Users");
+        Query query = session.createQuery("from AppUser");
         return query.list();
     }
 
