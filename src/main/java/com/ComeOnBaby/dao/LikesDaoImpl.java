@@ -29,7 +29,6 @@ public class LikesDaoImpl implements LikesDao {
     public Long create(Likes aLikes) {
         Session session = sessionFactory.getCurrentSession();
         Long id = (Long) session.save(aLikes);
-        session.getTransaction().commit();
         return id;
     }
 

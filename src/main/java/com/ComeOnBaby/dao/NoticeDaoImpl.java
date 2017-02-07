@@ -30,7 +30,6 @@ public class NoticeDaoImpl implements NoticeDao {
     public Long create(Notice aNotice) {
         Session session = sessionFactory.getCurrentSession();
         Long id = (Long) session.save(aNotice);
-        session.getTransaction().commit();
         return id;
     }
 

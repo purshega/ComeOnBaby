@@ -30,7 +30,6 @@ public class PreferencesDaoImpl implements PreferencesDao {
     public Long create(Preferences aPreferences) {
         Session session = sessionFactory.getCurrentSession();
         Long id = (Long) session.save(aPreferences);
-        session.getTransaction().commit();
         return id;
     }
 

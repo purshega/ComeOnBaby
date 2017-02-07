@@ -30,7 +30,6 @@ public class Q_ADaoImpl implements Q_ADao {
     public Long create(Q_A aQ_A) {
         Session session = sessionFactory.getCurrentSession();
         Long id = (Long) session.save(aQ_A);
-        session.getTransaction().commit();
         return id;
     }
 

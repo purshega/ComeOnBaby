@@ -30,7 +30,6 @@ public class Recipe_quideDaoImpl implements Recipe_guideDao {
     public Long create(Recipe_guide aRecipe_guide) {
         Session session = sessionFactory.getCurrentSession();
         Long id = (Long) session.save(aRecipe_guide);
-        session.getTransaction().commit();
         return id;
     }
 

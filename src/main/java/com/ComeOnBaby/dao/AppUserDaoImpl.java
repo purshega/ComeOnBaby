@@ -30,7 +30,7 @@ public class AppUserDaoImpl implements AppUserDao {
     public Long create(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
         Long id = (Long) session.save(appUser);
-        session.getTransaction().commit();
+        //session.getTransaction().commit();
         return id;
     }
 

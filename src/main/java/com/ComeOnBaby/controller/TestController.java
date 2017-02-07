@@ -35,21 +35,23 @@ MessageService messageService;*/
     @Autowired
     AppUserService userService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/q", method = RequestMethod.GET)
     public ModelAndView test() {
         System.out.println("CreateNew User");
 
         AppUser user = new AppUser();
         user.setEmail("email");
-        user.setId(12345l);
+        user.setLoginType(3);
+        user.setPassword("aaaa");
+        user.setSocialId(1234l);
 
 
         userService.addNewUser(user);
 
 
-        System.out.println("");
+        System.out.println(" =============================");
 
-        ModelAndView modelAndView = new ModelAndView("gxm");
+        ModelAndView modelAndView = new ModelAndView("/");
         return modelAndView;
     }
 
