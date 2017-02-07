@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 
 public class Preferences {
 
+    @Id
     @NotEmpty
     @Column(name="user_id", nullable=false)
     private Long user_id;

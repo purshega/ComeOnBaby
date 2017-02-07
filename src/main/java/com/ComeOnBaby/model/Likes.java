@@ -4,12 +4,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="likes")
 public class Likes {
 
+    @Id
     @NotEmpty
     @Column(name="id_blog", nullable=false)
     private Long id_blog;

@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 @Table(name = "blog")
 public class Blog {
 
-
+    @Id
     @NotEmpty
     @Column(name="id", nullable=false)
     private Long id;

@@ -26,37 +26,37 @@ public class IndexPageController {
      */
 
 
-    @Autowired
-    AuthenticationTrustResolver authenticationTrustResolver;
-
-
-    @Autowired
-    MailService mailService;
-
-    @Autowired
-    EstimateService estimateService;
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView loginPage(Locale locale, Model model  ) {
-
-
-
-	/*	// add parametrized message from controller
-        String welcome = messageSource.getMessage("welcome.message", new Object[]{"John Doe"}, locale);
-		model.addAttribute("message", welcome);*/
-
-        // obtain locale from LocaleContextHolder
-        Locale currentLocale = LocaleContextHolder.getLocale();
-        model.addAttribute("locale", currentLocale);
-
-
-        if (isCurrentAuthenticationAnonymous()) {
-            return new ModelAndView("index");
-        } else {
-            ModelAndView modelAndView = new ModelAndView("redirect:/list");
-            return modelAndView;
-        }
-    }
+//    @Autowired
+//    AuthenticationTrustResolver authenticationTrustResolver;
+//
+//
+//    @Autowired
+//    MailService mailService;
+//
+//    @Autowired
+//    EstimateService estimateService;
+//
+//    @RequestMapping(value = "/login", method = RequestMethod.GET)
+//    public ModelAndView loginPage(Locale locale, Model model  ) {
+//
+//
+//
+//	/*	// add parametrized message from controller
+//        String welcome = messageSource.getMessage("welcome.message", new Object[]{"John Doe"}, locale);
+//		model.addAttribute("message", welcome);*/
+//
+//        // obtain locale from LocaleContextHolder
+//        Locale currentLocale = LocaleContextHolder.getLocale();
+//        model.addAttribute("locale", currentLocale);
+//
+//
+//        if (isCurrentAuthenticationAnonymous()) {
+//            return new ModelAndView("index");
+//        } else {
+//            ModelAndView modelAndView = new ModelAndView("redirect:/list");
+//            return modelAndView;
+//        }
+//    }
 
 
 
@@ -83,7 +83,7 @@ public class IndexPageController {
 */
 
 
-        mailService.sendEmail(recipientMail, recipientName);
+//        mailService.sendEmail(recipientMail, recipientName);
 
         myJsonObj.append("response", "ok");
         return myJsonObj.toString();
@@ -93,10 +93,10 @@ public class IndexPageController {
     /**
      * This method returns true if users is already authenticated [logged-in], else false.
      */
-    private boolean isCurrentAuthenticationAnonymous() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authenticationTrustResolver.isAnonymous(authentication);
-    }
+//    private boolean isCurrentAuthenticationAnonymous() {
+//        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        return authenticationTrustResolver.isAnonymous(authentication);
+//    }
 
 
 

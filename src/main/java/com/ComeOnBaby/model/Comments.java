@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -11,10 +12,12 @@ import java.util.Date;
 @Table(name = "comments")
 public class Comments {
 
+
     @NotEmpty
     @Column(name="id_blog", nullable=false)
     private Long id_blog;
 
+    @Id
     @NotEmpty
     @Column(name="id_user", nullable=false)
     private Long id_user;

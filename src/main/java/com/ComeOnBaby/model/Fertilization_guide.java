@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Table(name = "fertilization_guide")
 public class Fertilization_guide {
 
+    @Id
     @NotEmpty
     @Column(name="id", nullable=false)
     private Long id;

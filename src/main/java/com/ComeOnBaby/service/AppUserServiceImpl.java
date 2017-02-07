@@ -4,10 +4,13 @@ package com.ComeOnBaby.service;
 import com.ComeOnBaby.dao.AppUserDao;
 import com.ComeOnBaby.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service("appUserService")
+@Transactional
 public class AppUserServiceImpl implements AppUserService {
     private AppUserDao appUserDao;
 

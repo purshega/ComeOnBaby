@@ -5,12 +5,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "basic_question")
 public class BasicQuestions {
 
+    @Id
     @NotEmpty
     @Column(name="user_id", nullable=false)
     private Long user_id;

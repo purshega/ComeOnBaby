@@ -1,6 +1,7 @@
 package com.ComeOnBaby.converter;
 
 
+import com.ComeOnBaby.model.UserProfile;
 import com.ComeOnBaby.service.UserProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
