@@ -5,10 +5,9 @@ import com.ComeOnBaby.model.AppUser;
 import com.ComeOnBaby.service.AppUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Date;
@@ -16,28 +15,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+//@Secured({"ROLE_USER"})
 @Controller
 @SessionAttributes("roles")
 public class TestController {
 
-
-//    @Autowired
-//    CustomerInfoService customerInfoService;
-//
-//    @Autowired
-//    CaseService caseService;
-
-/*@Autowired
-MessageService messageService;*/
-
-
     @Autowired
     AppUserService userService;
 
-    @RequestMapping(value = "/q", method = RequestMethod.GET)
-    public ModelAndView test() {
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST,  produces="application/json")
+    public @ResponseBody String test(@RequestBody String operation) {
+    //public String test(@RequestBody String request) {
         System.out.println("CreateNew User");
+        System.out.println("ACTION" + operation);
+        //System.out.println("REQUEST" + request);
 
         AppUser user = new AppUser();
         user.setEmail("email");
@@ -50,9 +42,7 @@ MessageService messageService;*/
 
 
         System.out.println(" =============================");
-
-        ModelAndView modelAndView = new ModelAndView("/");
-        return modelAndView;
+        return operation;
     }
 
   /*  @RequestMapping(value = "/test1", method = RequestMethod.GET)
