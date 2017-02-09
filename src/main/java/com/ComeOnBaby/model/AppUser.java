@@ -24,18 +24,18 @@ public class AppUser {
     private String password;
 
     @Column(name="social_id", nullable=true)
-    private Long socialId;
+    private Long socialID;
 
     @Column(name="login_type", nullable=false)
-    private Integer loginType;
+    private String loginType;
 
     public AppUser(){
     }
 
-    public AppUser(String email, String password, Long socialId, Integer loginType) {
+    public AppUser(String email, String password, Long socialID, String loginType) {
         this.email = email;
         this.password = password;
-        this.socialId = socialId;
+        this.socialID = socialID;
         this.loginType = loginType;
     }
 
@@ -48,11 +48,11 @@ public class AppUser {
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
 
-    public Long getSocialId() {return socialId;}
-    public void setSocialId(Long socialId) {this.socialId = socialId;}
+    public Long getSocialId() {return socialID;}
+    public void setSocialId(Long socialId) {this.socialID = socialId;}
 
-    public Integer getLoginType() {return loginType;}
-    public void setLoginType(Integer loginType) {this.loginType = loginType;}
+    public String getLoginType() {return loginType;}
+    public void setLoginType(String loginType) {this.loginType = loginType;}
 
     @Override
     public String toString() {
@@ -60,7 +60,7 @@ public class AppUser {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", socialId=" + socialId +
+                ", socialID=" + socialID +
                 ", loginType=" + loginType +
                 '}';
     }

@@ -2,9 +2,11 @@ package com.ComeOnBaby.dao;
 
 
 import com.ComeOnBaby.model.AppUser;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import java.util.List;
 
 
 @Repository("usersDao")
-public class AppUserDaoImpl implements AppUserDao {
+public class AppUserDaoImpl extends AbstractDao<Integer, AppUser> implements AppUserDao {
 
     private static final Logger logger = LoggerFactory.getLogger(AppUserDaoImpl.class);
 
@@ -39,6 +41,26 @@ public class AppUserDaoImpl implements AppUserDao {
         Session session = sessionFactory.getCurrentSession();
         AppUser appUser = (AppUser) session.get(AppUser.class, id);
         return appUser;
+    }
+
+    @Override
+    public AppUser findByEmail(String email) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria crit = createEntityCriteria();
+        crit.add(Restrictions.eq("email", email));
+        System.out.println("FIND BY EMAIL: " + email );
+        AppUser user = (AppUser) crit.uniqueResult();
+        return user;
+    }
+
+    @Override
+    public AppUser findBySocialID(String loginType, Long socialID) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria crit = createEntityCriteria();
+        crit.add(Restrictions.eq("loginType", loginType));
+        crit.add(Restrictions.eq("socialID", socialID));
+        AppUser user = (AppUser) crit.uniqueResult();
+        return user;
     }
 
     @Override

@@ -2,7 +2,6 @@
 package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.model.AppUser;
-import com.ComeOnBaby.model.User;
 import com.ComeOnBaby.service.AppUserService;
 
 import com.google.gson.Gson;
@@ -11,15 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.IllegalFormatException;
 
 @Controller
 @RequestMapping("/users")
 @SessionAttributes("roles")
-public class TestController {
+public class UsersController {
+
+    private final static String LOGIN_EMAIL = "EMAIL";
+    private final static String LOGIN_KAKAO = "KAKAO";
+    private final static String LOGIN_FACEBOOK = "FACEBOOK";
+    private static final String RESULT = "result";
+    private static final String MESSAGE = "message";
+    private static final String SUCCESS = "success";
+    private static final String FAILURE = "failure";
+    private static final String USER = "user";
 
     @Autowired
     AppUserService userService;
@@ -27,10 +31,11 @@ public class TestController {
     @RequestMapping(value = "/login", method = RequestMethod.POST,  produces="application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody String login(@RequestBody String body) {
+        System.out.println("ISIDE CONTROLLER");
         JSONObject json = new JSONObject(body);
+        Gson gson = new Gson();
         AppUser user = null;
         if(json.has("user")) {
-            Gson gson = new Gson();
             try {
                 JSONObject jsonUser = json.getJSONObject("user");
                 user = gson.fromJson(jsonUser.toString(), AppUser.class);
@@ -44,24 +49,66 @@ public class TestController {
             throw new IllegalArgumentException();
         }
 
-        if(user.getId() == null) {
-            user = registerUser(user);
-        } else {
+        System.out.println("GET USER: " + user.toString());
 
+        AppUser bdUser = null;
+        switch (user.getLoginType()) {
+            case LOGIN_KAKAO: {
+                System.out.println("KAKAO");
+                if (user.getSocialId() != null) {
+                    System.out.println("KAKAO1");
+                    bdUser = userService.findBySocialID(LOGIN_KAKAO, user.getSocialId());
+                }
+            }
+            case LOGIN_FACEBOOK: {
+                System.out.println("FACEBOOK");
+                if (user.getSocialId() != null) {
+                    System.out.println("FACEBOOK1");
+                    bdUser = userService.findBySocialID(LOGIN_FACEBOOK, user.getSocialId());
+                }
+                break;
+            }
+            case LOGIN_EMAIL: {
+                System.out.println("EMAIL");
+                if (user.getEmail() != null) {
+                    System.out.println("EMAIL1");
+                    bdUser = userService.findByEmail(user.getEmail());
+                }
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("ERROR! NO LOGINTYPE FOR USER");
+            }
         }
-//
-//        AppUser user = new AppUser();
-//        user.setEmail("email");
-//        user.setLoginType(3);
-//        user.setPassword("aaaa");
-//        user.setSocialId(1234l);
-//
-//        userService.addNewUser(user);
-
-        return body;
+        if(bdUser != null) {
+            System.out.println("USER EXIST");
+            JSONObject result = new JSONObject();
+            result.put(RESULT, FAILURE);
+            result.put(MESSAGE, "User Already Registered !");
+            result.put(USER, gson.toJson(bdUser));
+            return result.toString();
+        }
+        else {
+            System.out.println("NEW USER");
+            Long userid = userService.addNewUser(user);
+            AppUser newUser = userService.findById(userid);
+            JSONObject result = new JSONObject();
+            result.put(RESULT, SUCCESS);
+            result.put(MESSAGE, "User Registered Successfully !");
+            result.put(USER, gson.toJson(newUser));
+            return result.toString();
+        }
     }
 
     private AppUser registerUser(AppUser user) {
+        userService.addNewUser(user);
+
+        Long id = userService.addNewUser(user);
+
+        return user;
+    }
+
+    private AppUser loginUser(AppUser user) {
         return user;
     }
 
