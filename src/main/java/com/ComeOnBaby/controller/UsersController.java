@@ -43,10 +43,10 @@ public class UsersController {
                 exc.printStackTrace();
             }
             if(user == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("ERROR PARSING USER FROM JSON");
             }
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("ERROR PARSING USER FROM JSON");
         }
 
         System.out.println("USER FROM JSON: " + user.toString());
@@ -68,9 +68,9 @@ public class UsersController {
             }
             case LOGIN_EMAIL: {
                 System.out.println("EMAIL");
-                if (user.getEmail() != null) {
+                if (user.getEmail() != null && user.getPassword() != null) {
                     bdUser = userService.findByEmail(user.getEmail());
-                } else throw new IllegalArgumentException("ERROR! NO EMAIL FOR EMAIL LOGIN TYPE");
+                } else throw new IllegalArgumentException("ERROR! NO EMAIL OR PASSWORD FOR EMAIL LOGIN TYPE");
                 break;
             }
             default: {
@@ -79,6 +79,11 @@ public class UsersController {
         }
         if(bdUser != null) {
             System.out.println("USER EXIST");
+            if(user.getLoginType().equals(LOGIN_EMAIL)) {
+                if(!loginEmail(user, bdUser)) {
+                    throw new IllegalArgumentException("ERROR! PASSWORD NOT EQUALS FOR EMAIL LOGIN");
+                }
+            }
             JSONObject result = new JSONObject();
             result.put(RESULT, SUCCESS);
             result.put(MESSAGE, "User Already Registered!");
@@ -95,6 +100,11 @@ public class UsersController {
             result.put(USER, gson.toJson(newUser));
             return result.toString();
         }
+    }
+
+    private boolean loginEmail (AppUser jsonUser, AppUser bdUser) {
+        if(jsonUser.getPassword() != null && jsonUser.getPassword().equals(bdUser.getPassword())) return true;
+        return false;
     }
 
     //EXCEPTION
