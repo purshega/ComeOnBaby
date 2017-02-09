@@ -56,24 +56,21 @@ public class UsersController {
             case LOGIN_KAKAO: {
                 System.out.println("KAKAO");
                 if (user.getSocialId() != null) {
-                    System.out.println("KAKAO1");
                     bdUser = userService.findBySocialID(LOGIN_KAKAO, user.getSocialId());
-                }
+                } else throw new IllegalArgumentException("ERROR! NO SOCIAL ID FOR KAKAO LOGIN TYPE");
             }
             case LOGIN_FACEBOOK: {
                 System.out.println("FACEBOOK");
                 if (user.getSocialId() != null) {
-                    System.out.println("FACEBOOK1");
                     bdUser = userService.findBySocialID(LOGIN_FACEBOOK, user.getSocialId());
-                }
+                } else throw new IllegalArgumentException("ERROR! NO SOCIAL ID FOR FACEBOOK LOGIN TYPE");
                 break;
             }
             case LOGIN_EMAIL: {
                 System.out.println("EMAIL");
                 if (user.getEmail() != null) {
-                    System.out.println("EMAIL1");
                     bdUser = userService.findByEmail(user.getEmail());
-                }
+                } else throw new IllegalArgumentException("ERROR! NO EMAIL FOR EMAIL LOGIN TYPE");
                 break;
             }
             default: {
