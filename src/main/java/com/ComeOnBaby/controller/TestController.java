@@ -2,48 +2,79 @@
 package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.model.AppUser;
+import com.ComeOnBaby.model.User;
 import com.ComeOnBaby.service.AppUserService;
 
+import com.google.gson.Gson;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.servlet.http.HttpServletResponse;
+import java.util.IllegalFormatException;
 
-//@Secured({"ROLE_USER"})
 @Controller
+@RequestMapping("/users")
 @SessionAttributes("roles")
 public class TestController {
 
     @Autowired
     AppUserService userService;
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST,  produces="application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody String login(@RequestBody String body) {
+        JSONObject json = new JSONObject(body);
+        AppUser user = null;
+        if(json.has("user")) {
+            Gson gson = new Gson();
+            try {
+                JSONObject jsonUser = json.getJSONObject("user");
+                user = gson.fromJson(jsonUser.toString(), AppUser.class);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            if(user == null) {
+                throw new IllegalArgumentException();
+            }
+        } else {
+            throw new IllegalArgumentException();
+        }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST,  produces="application/json")
-    public @ResponseBody String test(@RequestBody String operation) {
-    //public String test(@RequestBody String request) {
-        System.out.println("CreateNew User");
-        System.out.println("ACTION" + operation);
-        //System.out.println("REQUEST" + request);
+        if(user.getId() == null) {
+            user = registerUser(user);
+        } else {
 
-        AppUser user = new AppUser();
-        user.setEmail("email");
-        user.setLoginType(3);
-        user.setPassword("aaaa");
-        user.setSocialId(1234l);
+        }
+//
+//        AppUser user = new AppUser();
+//        user.setEmail("email");
+//        user.setLoginType(3);
+//        user.setPassword("aaaa");
+//        user.setSocialId(1234l);
+//
+//        userService.addNewUser(user);
 
-
-        userService.addNewUser(user);
-
-
-        System.out.println(" =============================");
-        return operation;
+        return body;
     }
+
+    private AppUser registerUser(AppUser user) {
+        return user;
+    }
+
+    //EXCEPTION
+    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Illegal Argument Exception")
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String illegalArgument() {
+        System.out.println("Illegal Argument Exception");
+        return "Illegal Argument Exception";
+    }
+
+
+
 
   /*  @RequestMapping(value = "/test1", method = RequestMethod.GET)
     public ModelAndView test1() {
