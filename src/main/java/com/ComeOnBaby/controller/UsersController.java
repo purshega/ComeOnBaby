@@ -98,11 +98,12 @@ public class UsersController {
     }
 
     //EXCEPTION
-    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Illegal Argument Exception")
     @ExceptionHandler(IllegalArgumentException.class)
-    public String illegalArgument() {
-        System.out.println("Illegal Argument Exception");
-        return "Illegal Argument Exception";
+    public @ResponseBody String illegalArgument(Exception exc) {
+        exc.printStackTrace();
+        JSONObject result = new JSONObject();
+        result.put(RESULT, FAILURE);
+        return result.toString();
     }
 
 
