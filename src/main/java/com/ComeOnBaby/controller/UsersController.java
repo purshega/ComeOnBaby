@@ -80,7 +80,7 @@ public class UsersController {
         if(bdUser != null) {
             System.out.println("USER EXIST");
             JSONObject result = new JSONObject();
-            result.put(RESULT, FAILURE);
+            result.put(RESULT, SUCCESS);
             result.put(MESSAGE, "User Already Registered!");
             result.put(USER, gson.toJson(bdUser));
             return result.toString();
