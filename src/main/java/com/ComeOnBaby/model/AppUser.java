@@ -17,10 +17,8 @@ public class AppUser {
     @Column(name = "id")
     private Long id;
 
-    @NotEmpty
     @Column(name="email", nullable = true)
     private String email;
-
 
     @Column(name="password", nullable=true)
     private String password;

@@ -2,6 +2,7 @@ package com.ComeOnBaby.service;
 
 
 import com.ComeOnBaby.model.AppUser;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
