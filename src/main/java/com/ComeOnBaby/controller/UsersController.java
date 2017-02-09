@@ -49,7 +49,7 @@ public class UsersController {
             throw new IllegalArgumentException();
         }
 
-        System.out.println("GET USER: " + user.toString());
+        System.out.println("USER FROM JSON: " + user.toString());
 
         AppUser bdUser = null;
         switch (user.getLoginType()) {
@@ -103,6 +103,7 @@ public class UsersController {
         exc.printStackTrace();
         JSONObject result = new JSONObject();
         result.put(RESULT, FAILURE);
+        result.put(MESSAGE, exc.getMessage());
         return result.toString();
     }
 
