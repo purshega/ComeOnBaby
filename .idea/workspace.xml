@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53667948-9fb0-48a7-85f2-7336010854a4" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/ExceptionHandlingController.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/dao/AppUserDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/dao/AppUserDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/dao/AppUserDaoImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/dao/AppUserDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/model/AppUser.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/model/AppUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/service/AppUserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/service/AppUserService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/service/AppUserServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/service/AppUserServiceImpl.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/TestController.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/UsersController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/UsersController.java" afterPath="$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/UsersController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,12 +22,10 @@
       <file leaf-file-name="UsersController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/UsersController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="30" column="28" lean-forward="true" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+            <state relative-caret-position="1296">
+              <caret line="100" column="5" lean-forward="false" selection-start-line="100" selection-start-column="5" selection-end-line="100" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3952#3953#0" expanded="true" />
-                <element signature="e#3979#3980#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -997,7 +989,7 @@
       <workItem from="1486454838596" duration="12937000" />
       <workItem from="1486472421250" duration="4274000" />
       <workItem from="1486628216535" duration="33000" />
-      <workItem from="1486632274501" duration="26665000" />
+      <workItem from="1486632274501" duration="26950000" />
     </task>
     <task id="LOCAL-00001" summary="Dao and DaoImpl add">
       <created>1486388724926</created>
@@ -1034,11 +1026,18 @@
       <option name="project" value="LOCAL" />
       <updated>1486644862468</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Security">
+      <created>1486655891652</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1486655891652</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55259000" />
+    <option name="totallyTimeSpent" value="55544000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1543,12 +1542,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ComeOnBaby/controller/UsersController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="30" column="28" lean-forward="true" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+        <state relative-caret-position="1296">
+          <caret line="100" column="5" lean-forward="false" selection-start-line="100" selection-start-column="5" selection-end-line="100" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3952#3953#0" expanded="true" />
-            <element signature="e#3979#3980#0" expanded="true" />
           </folding>
         </state>
       </provider>

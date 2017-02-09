@@ -84,7 +84,7 @@ public class UsersController {
             System.out.println("USER EXIST");
             JSONObject result = new JSONObject();
             result.put(RESULT, FAILURE);
-            result.put(MESSAGE, "User Already Registered !");
+            result.put(MESSAGE, "User Already Registered!");
             result.put(USER, gson.toJson(bdUser));
             return result.toString();
         }
@@ -98,18 +98,6 @@ public class UsersController {
             result.put(USER, gson.toJson(newUser));
             return result.toString();
         }
-    }
-
-    private AppUser registerUser(AppUser user) {
-        userService.addNewUser(user);
-
-        Long id = userService.addNewUser(user);
-
-        return user;
-    }
-
-    private AppUser loginUser(AppUser user) {
-        return user;
     }
 
     //EXCEPTION
