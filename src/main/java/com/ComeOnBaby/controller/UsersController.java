@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 @Controller
 @SessionAttributes("roles")
 public class UsersController {
@@ -116,7 +119,7 @@ public class UsersController {
         String email = inUser.getEmail();
         String password = inUser.getPassword();
         String loginType = inUser.getLoginType();
-        if(email == null || password == null || loginType == null || !loginType.equals(LOGIN_EMAIL)) {
+        if(email == null || password == null || loginType == null) {
             throw new IllegalArgumentException("EXCEPTION! Data error. Email login failure");
         }
         JSONObject outJSON = new JSONObject();
@@ -180,103 +183,45 @@ public class UsersController {
         AppUser inUser = gson.fromJson(inJSON.getJSONObject(USER).toString(), AppUser.class);
         Long socialID = inUser.getSocialId();
         String loginType = inUser.getLoginType();
+        String email = inUser.getEmail();
         if(socialID == null || loginType == null ||
                 !(loginType.equals(LOGIN_KAKAO) || loginType.equals(LOGIN_FACEBOOK))) {
             throw new IllegalArgumentException("EXCEPTION! Data error. Social registration failure");
         }
         JSONObject outJSON = new JSONObject();
         outJSON.put(OPERATION, SOCIAL_OPERATION);
-        AppUser bdUser = userService.findBySocialID(loginType, socialID);
-        if(bdUser == null) {
-            inUser.setPassword(null); inUser.setEmail(null);  //TODO дублирование мыла
+
+        //Ищем пользователя с таким socialID в БД
+        AppUser bdIdUser = userService.findBySocialID(loginType, socialID);
+
+        //Если указан email, ищем пользователя с таким мылом в БД
+        AppUser bdEmailUser = null;
+        if(email != null) {
+            bdEmailUser = userService.findByEmail(email);
+        }
+
+        //Если пользователя с таким socialID нет, то создаем его
+        if(bdIdUser == null) {
+            //Если пользователя с таким мылом нет, то используем его и генерируем пароль
+            if(bdEmailUser == null && email != null) {
+                SecureRandom random = new SecureRandom();
+                inUser.setPassword(new BigInteger(130, random).toString(32));
+            //Если пользователь с такой почтой существует, то не используем её
+            } else {
+                inUser.setEmail(null);
+                inUser.setPassword(null);
+            }
+            //Создаем пользователя
             Long userid = userService.addNewUser(inUser);
-            bdUser = userService.findById(userid);
+            bdIdUser = userService.findById(userid);
             outJSON.put(MESSAGE, "Success. New user registered");
+        //Если пользователь с таким socialID уже есть
         } else {
             outJSON.put(MESSAGE, "Success. User verified");
         }
         outJSON.put(RESULT, SUCCESS);
-        outJSON.put(USER, getUserJSON(bdUser));
+        outJSON.put(USER, getUserJSON(bdIdUser));
         return outJSON;
-    }
-
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST,  produces="application/json")
-    @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody String login(@RequestBody String body) {
-        JSONObject json = new JSONObject(body);
-        Gson gson = new Gson();
-        AppUser user = null;
-        if(json.has("user")) {
-            try {
-                JSONObject jsonUser = json.getJSONObject("user");
-                user = gson.fromJson(jsonUser.toString(), AppUser.class);
-            } catch (Exception exc) {
-                exc.printStackTrace();
-            }
-            if(user == null) {
-                throw new IllegalArgumentException("ERROR PARSING USER FROM JSON");
-            }
-        } else {
-            throw new IllegalArgumentException("ERROR PARSING USER FROM JSON");
-        }
-
-        System.out.println("USER FROM JSON: " + user.toString());
-
-        AppUser bdUser = null;
-        switch (user.getLoginType()) {
-            case LOGIN_KAKAO: {
-                System.out.println("KAKAO");
-                if (user.getSocialId() != null) {
-                    bdUser = userService.findBySocialID(LOGIN_KAKAO, user.getSocialId());
-                } else throw new IllegalArgumentException("ERROR! NO SOCIAL ID FOR KAKAO LOGIN TYPE");
-            }
-            case LOGIN_FACEBOOK: {
-                System.out.println("FACEBOOK");
-                if (user.getSocialId() != null) {
-                    bdUser = userService.findBySocialID(LOGIN_FACEBOOK, user.getSocialId());
-                } else throw new IllegalArgumentException("ERROR! NO SOCIAL ID FOR FACEBOOK LOGIN TYPE");
-                break;
-            }
-            case LOGIN_EMAIL: {
-                System.out.println("EMAIL");
-                if (user.getEmail() != null && user.getPassword() != null) {
-                    bdUser = userService.findByEmail(user.getEmail());
-                } else throw new IllegalArgumentException("ERROR! NO EMAIL OR PASSWORD FOR EMAIL LOGIN TYPE");
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException("ERROR! NO LOGINTYPE FOR USER");
-            }
-        }
-        if(bdUser != null) {
-            System.out.println("USER EXIST");
-            if(user.getLoginType().equals(LOGIN_EMAIL)) {
-                if(!loginEmail(user, bdUser)) {
-                    throw new IllegalArgumentException("ERROR! PASSWORD NOT EQUALS FOR EMAIL LOGIN");
-                }
-            }
-            JSONObject result = new JSONObject();
-            result.put(RESULT, SUCCESS);
-            result.put(MESSAGE, "User Already Registered!");
-            result.put(USER, gson.toJson(bdUser));
-            return result.toString();
-        }
-        else {
-            System.out.println("NEW USER");
-            Long userid = userService.addNewUser(user);
-            AppUser newUser = userService.findById(userid);
-            JSONObject result = new JSONObject();
-            result.put(RESULT, SUCCESS);
-            result.put(MESSAGE, "User Registered Successfully !");
-            result.put(USER, gson.toJson(newUser));
-            return result.toString();
-        }
-    }
-
-    private boolean loginEmail (AppUser jsonUser, AppUser bdUser) {
-        if(jsonUser.getPassword() != null && jsonUser.getPassword().equals(bdUser.getPassword())) return true;
-        return false;
     }
 
     //EXCEPTION
