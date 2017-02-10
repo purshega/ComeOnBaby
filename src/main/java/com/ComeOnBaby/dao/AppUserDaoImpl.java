@@ -48,7 +48,6 @@ public class AppUserDaoImpl extends AbstractDao<Integer, AppUser> implements App
         Session session = sessionFactory.getCurrentSession();
         Criteria crit = createEntityCriteria();
         crit.add(Restrictions.eq("email", email));
-        System.out.println("FIND BY EMAIL: " + email );
         AppUser user = (AppUser) crit.uniqueResult();
         return user;
     }
@@ -67,7 +66,6 @@ public class AppUserDaoImpl extends AbstractDao<Integer, AppUser> implements App
     public void update(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
         session.update(appUser);
-        session.getTransaction().commit();
         logger.error("AppUser update successfully, AppUser=" + appUser);
     }
 

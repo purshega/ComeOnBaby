@@ -24,6 +24,7 @@ public class UsersController {
     private final static String CHPASS_OPERATION = "changepass";
     private final static String FORGET_OPERATION = "forgetpass";
     private final static String SOCIAL_OPERATION = "loginsocial";
+    private final static String NEW_PASSWORD = "newpass";
     private final static String RESULT = "result";
     private final static String MESSAGE = "message";
     private final static String SUCCESS = "success";
@@ -49,15 +50,18 @@ public class UsersController {
                 break;
             }
             case LOGIN_OPERATION: {
+                outJSON = emailLogin(inJSON);
                 break;
             }
             case CHPASS_OPERATION: {
+                outJSON = changePassword(inJSON);
                 break;
             }
             case FORGET_OPERATION: {
                 break;
             }
             case SOCIAL_OPERATION: {
+                outJSON = socialLogin(inJSON);
                 break;
             }
             default: {
@@ -67,17 +71,27 @@ public class UsersController {
         return outJSON.toString();
     }
 
-    //Registration via EMAIL
+    //Make JSON from AppUser
+    private JSONObject getUserJSON(AppUser appUser) {
+        JSONObject outUser = new JSONObject();
+        outUser.put("id", appUser.getId());
+        outUser.put("email", appUser.getEmail());
+        outUser.put("password", appUser.getPassword());
+        outUser.put("socialID" , appUser.getSocialId());
+        outUser.put("loginType", appUser.getLoginType());
+        return outUser;
+    }
+
+    //Registration via EMAIL operation
     private JSONObject emailRegistration(JSONObject inJSON) {
         Gson gson = new Gson();
         AppUser inUser = gson.fromJson(inJSON.getJSONObject(USER).toString(), AppUser.class);
         String email = inUser.getEmail();
         String password = inUser.getPassword();
         String loginType = inUser.getLoginType();
-        if(email == null || password == null || !loginType.equals(LOGIN_EMAIL)) {
+        if(email == null || password == null || loginType == null || !loginType.equals(LOGIN_EMAIL)) {
             throw new IllegalArgumentException("EXCEPTION! Data error. Email registration failure");
         }
-
         JSONObject outJSON = new JSONObject();
         outJSON.put(OPERATION, REG_OPERATION);
         //Check if user with specified email allready exists in BD
@@ -89,8 +103,8 @@ public class UsersController {
             Long userid = userService.addNewUser(inUser);
             AppUser newUser = userService.findById(userid);
             outJSON.put(RESULT, SUCCESS);
-            outJSON.put(MESSAGE, "Succes. New user registered");
-            outJSON.put(USER, gson.toJson(newUser));
+            outJSON.put(MESSAGE, "Success. New user registered");
+            outJSON.put(USER, getUserJSON(newUser));
         }
         return outJSON;
     }
@@ -102,19 +116,94 @@ public class UsersController {
         String email = inUser.getEmail();
         String password = inUser.getPassword();
         String loginType = inUser.getLoginType();
-        if(email == null || password == null || !loginType.equals(LOGIN_EMAIL)) {
+        if(email == null || password == null || loginType == null || !loginType.equals(LOGIN_EMAIL)) {
             throw new IllegalArgumentException("EXCEPTION! Data error. Email login failure");
         }
         JSONObject outJSON = new JSONObject();
-        outJSON.put(OPERATION, REG_OPERATION);
+        outJSON.put(OPERATION, LOGIN_OPERATION);
         //Check if user with specified email exists in BD
+        AppUser bdUser = userService.findByEmail(email);
+        if(bdUser == null) {
+            outJSON.put(RESULT, FAILURE);
+            outJSON.put(MESSAGE, "Error. User with this email not exists");
+        } else {
+            if(bdUser.getPassword() == null || !bdUser.getPassword().equals(password)) {
+                outJSON.put(RESULT, FAILURE);
+                outJSON.put(MESSAGE, "Error. No password or password incorrect for this user");
+            } else {
+                outJSON.put(RESULT, SUCCESS);
+                outJSON.put(MESSAGE, "Success. User verified");
+                outJSON.put(USER, getUserJSON(bdUser));
+            }
+        }
         return outJSON;
     }
+
+    //Change password operation
+    private JSONObject changePassword(JSONObject inJSON) {
+        //Check required key NEW_PASSWORD in json
+        if(!inJSON.has(NEW_PASSWORD)) {
+            throw new IllegalArgumentException("EXCEPTION! No new password argument");
+        }
+        Gson gson = new Gson();
+        AppUser inUser = gson.fromJson(inJSON.getJSONObject(USER).toString(), AppUser.class);
+        String newPassword = inJSON.getString(NEW_PASSWORD);
+        String oldPassword = inUser.getPassword();
+        String email = inUser.getEmail();
+        //Check required fields not null
+        if(email == null || oldPassword == null || newPassword == null) {
+            throw new IllegalArgumentException("EXCEPTION! Data error. Change password failure");
+        }
+        JSONObject outJSON = new JSONObject();
+        outJSON.put(OPERATION, CHPASS_OPERATION);
+        //Check if user with specified email exists in BD
+        AppUser bdUser = userService.findByEmail(email);
+        if(bdUser == null) {                                        //no such user email in BD
+            outJSON.put(RESULT, FAILURE);
+            outJSON.put(MESSAGE, "Error. User with this email not exists");
+        } else if (!bdUser.getPassword().equals(oldPassword)) {     //old password incorrect
+            outJSON.put(RESULT, FAILURE);
+            outJSON.put(MESSAGE, "Error. Old password incorrect");
+        } else {                                                    //all good
+            bdUser.setPassword(newPassword);
+            userService.updateUser(bdUser);
+            outJSON.put(RESULT, SUCCESS);
+            outJSON.put(MESSAGE, "Success. User password changed");
+            outJSON.put(USER, getUserJSON(bdUser));
+        }
+        return outJSON;
+    }
+
+    //Login or register user with socialID operation
+    private JSONObject socialLogin(JSONObject inJSON) {
+        Gson gson = new Gson();
+        AppUser inUser = gson.fromJson(inJSON.getJSONObject(USER).toString(), AppUser.class);
+        Long socialID = inUser.getSocialId();
+        String loginType = inUser.getLoginType();
+        if(socialID == null || loginType == null ||
+                !(loginType.equals(LOGIN_KAKAO) || loginType.equals(LOGIN_FACEBOOK))) {
+            throw new IllegalArgumentException("EXCEPTION! Data error. Social registration failure");
+        }
+        JSONObject outJSON = new JSONObject();
+        outJSON.put(OPERATION, SOCIAL_OPERATION);
+        AppUser bdUser = userService.findBySocialID(loginType, socialID);
+        if(bdUser == null) {
+            inUser.setPassword(null); inUser.setEmail(null);  //TODO дублирование мыла
+            Long userid = userService.addNewUser(inUser);
+            bdUser = userService.findById(userid);
+            outJSON.put(MESSAGE, "Success. New user registered");
+        } else {
+            outJSON.put(MESSAGE, "Success. User verified");
+        }
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(USER, getUserJSON(bdUser));
+        return outJSON;
+    }
+
 
     @RequestMapping(value = "/login", method = RequestMethod.POST,  produces="application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public @ResponseBody String login(@RequestBody String body) {
-        System.out.println("ISIDE CONTROLLER");
         JSONObject json = new JSONObject(body);
         Gson gson = new Gson();
         AppUser user = null;

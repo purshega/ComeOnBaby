@@ -70,6 +70,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>com.squareup.retrofit</groupId>-->
+            <!--<artifactId>converter-gson</artifactId>-->
+            <!--<version>2.0.0-beta1</version>-->
+        <!--</dependency>-->
+
 
         <!-- Hibernate -->
         <dependency>
