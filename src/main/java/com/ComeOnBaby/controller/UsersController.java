@@ -5,6 +5,7 @@ import com.ComeOnBaby.model.AppUser;
 import com.ComeOnBaby.service.AppUserService;
 
 import com.google.gson.Gson;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,21 +13,103 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/users")
 @SessionAttributes("roles")
 public class UsersController {
 
     private final static String LOGIN_EMAIL = "EMAIL";
     private final static String LOGIN_KAKAO = "KAKAO";
     private final static String LOGIN_FACEBOOK = "FACEBOOK";
-    private static final String RESULT = "result";
-    private static final String MESSAGE = "message";
-    private static final String SUCCESS = "success";
-    private static final String FAILURE = "failure";
-    private static final String USER = "user";
+    private final static String REG_OPERATION = "registration";
+    private final static String LOGIN_OPERATION = "loginemail";
+    private final static String CHPASS_OPERATION = "changepass";
+    private final static String FORGET_OPERATION = "forgetpass";
+    private final static String SOCIAL_OPERATION = "loginsocial";
+    private final static String RESULT = "result";
+    private final static String MESSAGE = "message";
+    private final static String SUCCESS = "success";
+    private final static String FAILURE = "failure";
+    private final static String USER = "user";
+    private final static String OPERATION = "operation";
 
     @Autowired
     AppUserService userService;
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST,  produces="application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public @ResponseBody String userAction (@RequestBody String body) {
+        System.out.println("Get json: " + body.toString());
+        JSONObject inJSON = new JSONObject(body);
+        JSONObject outJSON = new JSONObject();
+
+        if(!inJSON.has(OPERATION)) throw new IllegalArgumentException("EXCEPTION! No operation.");
+        if(!inJSON.has(USER)) throw new IllegalArgumentException("EXCEPTION! No user.");
+        switch (inJSON.getString(OPERATION)) {
+            case REG_OPERATION: {
+                outJSON = emailRegistration(inJSON);
+                break;
+            }
+            case LOGIN_OPERATION: {
+                break;
+            }
+            case CHPASS_OPERATION: {
+                break;
+            }
+            case FORGET_OPERATION: {
+                break;
+            }
+            case SOCIAL_OPERATION: {
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("EXCEPTION! Unknown operation.");
+            }
+        }
+        return outJSON.toString();
+    }
+
+    //Registration via EMAIL
+    private JSONObject emailRegistration(JSONObject inJSON) {
+        Gson gson = new Gson();
+        AppUser inUser = gson.fromJson(inJSON.getJSONObject(USER).toString(), AppUser.class);
+        String email = inUser.getEmail();
+        String password = inUser.getPassword();
+        String loginType = inUser.getLoginType();
+        if(email == null || password == null || !loginType.equals(LOGIN_EMAIL)) {
+            throw new IllegalArgumentException("EXCEPTION! Data error. Email registration failure");
+        }
+
+        JSONObject outJSON = new JSONObject();
+        outJSON.put(OPERATION, REG_OPERATION);
+        //Check if user with specified email allready exists in BD
+        AppUser bdUser = userService.findByEmail(email);
+        if(bdUser != null) {
+            outJSON.put(RESULT, FAILURE);
+            outJSON.put(MESSAGE, "Error. User with this email allready exists");
+        } else {
+            Long userid = userService.addNewUser(inUser);
+            AppUser newUser = userService.findById(userid);
+            outJSON.put(RESULT, SUCCESS);
+            outJSON.put(MESSAGE, "Succes. New user registered");
+            outJSON.put(USER, gson.toJson(newUser));
+        }
+        return outJSON;
+    }
+
+    //Login via EMAIL operation
+    private JSONObject emailLogin(JSONObject inJSON) {
+        Gson gson = new Gson();
+        AppUser inUser = gson.fromJson(inJSON.getJSONObject(USER).toString(), AppUser.class);
+        String email = inUser.getEmail();
+        String password = inUser.getPassword();
+        String loginType = inUser.getLoginType();
+        if(email == null || password == null || !loginType.equals(LOGIN_EMAIL)) {
+            throw new IllegalArgumentException("EXCEPTION! Data error. Email login failure");
+        }
+        JSONObject outJSON = new JSONObject();
+        outJSON.put(OPERATION, REG_OPERATION);
+        //Check if user with specified email exists in BD
+        return outJSON;
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST,  produces="application/json")
     @ResponseStatus(value = HttpStatus.OK)
@@ -108,7 +191,7 @@ public class UsersController {
     }
 
     //EXCEPTION
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, JSONException.class})
     public @ResponseBody String illegalArgument(Exception exc) {
         exc.printStackTrace();
         JSONObject result = new JSONObject();
@@ -116,8 +199,6 @@ public class UsersController {
         result.put(MESSAGE, exc.getMessage());
         return result.toString();
     }
-
-
 
 
   /*  @RequestMapping(value = "/test1", method = RequestMethod.GET)
