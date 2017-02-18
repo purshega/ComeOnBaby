@@ -44,7 +44,6 @@ public class PreferencesDaoImpl implements PreferencesDao {
     public void update(Preferences aPreferences) {
         Session session = sessionFactory.getCurrentSession();
         session.update(aPreferences);
-        session.getTransaction().commit();
         logger.error("Preferences update successfully, Preferences=" + aPreferences);
     }
 

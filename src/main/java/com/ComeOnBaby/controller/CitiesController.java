@@ -39,7 +39,7 @@ public class CitiesController {
         JSONObject outJSON = new JSONObject();
         outJSON.put(RESULT, FAILURE);
         outJSON.put(OPERATION, inJSON.getString(OPERATION));
-        outJSON.put(MESSAGE, Strings.MSG_SERVER_ERROR);
+        outJSON.put(MESSAGE, Strings.ERR_SERVER_ERROR);
 
         switch (inJSON.getString(OPERATION)) {
             case LIST_CITIES_OPERATION: {

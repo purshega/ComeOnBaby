@@ -2,7 +2,6 @@
 package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.model.AppUser;
-import com.ComeOnBaby.model.City;
 import com.ComeOnBaby.model.Preferences;
 import com.ComeOnBaby.service.AppUserService;
 
@@ -21,33 +20,35 @@ import java.security.SecureRandom;
 @SessionAttributes("roles")
 public class UsersController {
 
+    //Login types
     private final static String LOGIN_EMAIL = "EMAIL";
     private final static String LOGIN_KAKAO = "KAKAO";
     private final static String LOGIN_FACEBOOK = "FACEBOOK";
-    private final static String REG_OPERATION = "registration";
-    private final static String LOGIN_OPERATION = "loginemail";
-    private final static String CHPASS_OPERATION = "changepass";
-    private final static String FORGET_OPERATION = "forgetpass";
-    private final static String SOCIAL_OPERATION = "loginsocial";
+
+    //Operations
+    private final static String REG_EMAIL_OPERATION = "registration";
+    private final static String LOGIN_EMAIL_OPERATION = "loginemail";
+    private final static String CHANGE_PASS_OPERATION = "changepass";
+    private final static String FORGET_PASS_OPERATION = "forgetpass";
+    private final static String SOCIAL_LOGIN_OPERATION = "loginsocial";
     private final static String UPDATE_EMAIL_OPERATION = "emailupdate";
     private final static String UPDATE_PASSWORD_OPERATION = "passwordupdate";
+    private final static String GET_PROFILE_OPERATION = "getprofile";
+    private final static String UPDATE_PROFILE_OPERATION = "updateprofile";
+    private final static String ADD_CALENDAR_DAY_ACTIONS = "addcalendar";
+
+    //JSON KEYS
+    private final static String OPERATION = "operation";
     private final static String RESULT = "result";
     private final static String MESSAGE = "message";
     private final static String SUCCESS = "success";
     private final static String FAILURE = "failure";
     private final static String MODEL = "model";
     private final static String USER = "user";
+    private final static String PROFILE = "profile";
     private final static String DATA = "data";
-    private final static String OPERATION = "operation";
-
     private final static String NEW_EMAIL = "newemail";
     private final static String NEW_PASSWORD = "newpassword";
-
-    private final static String GET_PROFILE = "getprofile";
-    private final static String UPDATE_PROFILE = "updateprofile";
-    private final static String ADD_CALENDAR_DAY_ACTIONS = "addcalendar";
-
-
 
     @Autowired
     AppUserService userService;
@@ -60,31 +61,31 @@ public class UsersController {
     public @ResponseBody String userAction (@RequestBody String body) {
         System.out.println("Get json: " + body.toString());
         JSONObject inJSON = new JSONObject(body);
-        if(!inJSON.has(OPERATION)) throw new IllegalArgumentException("EXCEPTION! No operation.");
-        if(!inJSON.has(USER)) throw new IllegalArgumentException("EXCEPTION! No user.");
+        if(!inJSON.has(OPERATION)) throw new IllegalArgumentException(Strings.ERR_NO_OPERATION);
+        if(!inJSON.has(USER)) throw new IllegalArgumentException(Strings.ERR_NO_USER);
         //Default response values
         JSONObject outJSON = new JSONObject();
         outJSON.put(RESULT, FAILURE);
         outJSON.put(OPERATION, inJSON.getString(OPERATION));
-        outJSON.put(MESSAGE, Strings.MSG_SERVER_ERROR);
+        outJSON.put(MESSAGE, Strings.ERR_SERVER_ERROR);
 
         switch (inJSON.getString(OPERATION)) {
-            case REG_OPERATION: {
+            case REG_EMAIL_OPERATION: {
                 emailRegister(inJSON, outJSON);
                 break;
             }
-            case LOGIN_OPERATION: {
+            case LOGIN_EMAIL_OPERATION: {
                 emailLogin(inJSON, outJSON);
                 break;
             }
-            case CHPASS_OPERATION: {
+            case CHANGE_PASS_OPERATION: {
                 changePassword(inJSON, outJSON);
                 break;
             }
-            case FORGET_OPERATION: {
+            case FORGET_PASS_OPERATION: {
                 break;
             }
-            case SOCIAL_OPERATION: {
+            case SOCIAL_LOGIN_OPERATION: {
                 socialLogin(inJSON, outJSON);
                 break;
             }
@@ -96,11 +97,11 @@ public class UsersController {
                 passwordUpdate(inJSON, outJSON);
                 break;
             }
-            case UPDATE_PROFILE: {
+            case UPDATE_PROFILE_OPERATION: {
                 updateprofile(inJSON, outJSON);
                 break;
             }
-            case GET_PROFILE: {
+            case GET_PROFILE_OPERATION: {
                 getProfile(inJSON, outJSON);
                 break;
             }
@@ -109,22 +110,11 @@ public class UsersController {
                 break;
             }
             default: {
-                throw new IllegalArgumentException("EXCEPTION! Unknown operation.");
+                throw new IllegalArgumentException(Strings.ERR_UNKNOWN_OPERATION);
             }
         }
         System.out.println("Out JSON: " + outJSON.toString()  + "\n");
         return outJSON.toString();
-    }
-
-    //Make JSON from AppUser
-    private JSONObject getUserJSON(AppUser appUser) {
-        JSONObject outUser = new JSONObject();
-        outUser.put("id", appUser.getId());
-        outUser.put("email", appUser.getEmail());
-        outUser.put("password", appUser.getPassword());
-        outUser.put("socialID" , appUser.getSocialId());
-        outUser.put("loginType", appUser.getLoginType());
-        return outUser;
     }
 
     //NEW
@@ -136,9 +126,14 @@ public class UsersController {
         AppUser inUser = gson.fromJson(jsonuser.toString(), AppUser.class);
         String newEmail = data.getString(NEW_EMAIL);
         AppUser idUser = userService.findById(inUser.getId());
+        //Если пользователя с таким ID нет, тогда ошибка
+        if(idUser == null) {
+            outJSON.put(MESSAGE, Strings.ERR_USER_NOT_FOUND);
+            return outJSON;
+        }
         AppUser emailUser = userService.findByEmail(newEmail);
         //Если пользователя с этим мылом нет
-        if(idUser != null && emailUser == null) {
+        if(emailUser == null) {
             idUser.setEmail(newEmail);
             userService.updateUser(idUser);
             outJSON.put(RESULT, SUCCESS);
@@ -146,12 +141,12 @@ public class UsersController {
             outJSON.put(USER, getUserJSON(idUser).toString());
             outJSON.put(DATA, data.toString());
         //Если мыло не изменилось
-        } else if (idUser.getId() == emailUser.getId()){
+        } else if (idUser.getId() == emailUser.getId()) {
             outJSON.put(RESULT, SUCCESS);
             outJSON.put(MESSAGE, Strings.MSG_EMAIL_UPDATE_SUCCESS);
             outJSON.put(USER, getUserJSON(idUser).toString());
             outJSON.put(DATA, data.toString());
-        //Если такое мыло уже у другого пользователя
+            //Если такое мыло уже у другого пользователя
         } else {
             outJSON.put(MESSAGE, Strings.MSG_EMAIL_UPDATE_FAIL);
         }
@@ -167,16 +162,15 @@ public class UsersController {
         AppUser inUser = gson.fromJson(jsonuser.toString(), AppUser.class);
         String newPassword = data.getString(NEW_PASSWORD);
         AppUser idUser = userService.findById(inUser.getId());
-        //Если пользователя с этим мылом нет
-        if(idUser != null) {
+        //Если пользователя с таким ID нет, тогда ошибка
+        if(idUser == null) {
+            outJSON.put(MESSAGE, Strings.ERR_USER_NOT_FOUND);
+        } else {
             idUser.setPassword(newPassword);
             userService.updateUser(idUser);
             outJSON.put(RESULT, SUCCESS);
             outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_SUCCESS);
             outJSON.put(USER, getUserJSON(idUser).toString());
-            outJSON.put(DATA, data.toString());
-        } else {
-            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_FAIL);
         }
         return outJSON;
     }
@@ -191,7 +185,7 @@ public class UsersController {
         String password = inUser.getPassword();
         String loginType = inUser.getLoginType();
         if(email == null || password == null || loginType == null || !loginType.equals(LOGIN_EMAIL)) {
-            throw new IllegalArgumentException("Server error. Email registration failure");
+            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
         }
         //Check if user with specified email allready exists in BD
         AppUser bdUser = userService.findByEmail(email);
@@ -207,6 +201,8 @@ public class UsersController {
             Preferences preferences = new Preferences();
             preferences.setId(userid);
             prefService.addNewPreferences(preferences);
+            JSONObject profile = getPreferencesJSON(prefService.findById(userid));
+            outJSON.put(DATA, profile.toString());
         }
         return outJSON;
     }
@@ -221,7 +217,7 @@ public class UsersController {
         String password = inUser.getPassword();
         String loginType = inUser.getLoginType();
         if(email == null || password == null || loginType == null) {
-            throw new IllegalArgumentException("Server error. Email login failure");
+            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
         }
         //Check if user with specified email exists in BD
         AppUser bdUser = userService.findByEmail(email);
@@ -234,6 +230,9 @@ public class UsersController {
                 outJSON.put(RESULT, SUCCESS);
                 outJSON.put(MESSAGE, Strings.MSG_LOGIN_EMAIL_SUCCESS);
                 outJSON.put(USER, getUserJSON(bdUser).toString());
+                JSONObject profile = getPreferencesJSON(prefService.findById(bdUser.getId()));
+                outJSON.put(DATA, profile.toString());
+
             }
         }
         return outJSON;
@@ -243,7 +242,7 @@ public class UsersController {
     private JSONObject changePassword(JSONObject inJSON, JSONObject outJSON) {
         //Check required key NEW_PASSWORD in json
         if(!inJSON.has(NEW_PASSWORD)) {
-            throw new IllegalArgumentException("EXCEPTION! No new password argument");
+            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
         }
         Gson gson = new Gson();
         AppUser inUser = gson.fromJson(inJSON.getJSONObject(MODEL).toString(), AppUser.class);
@@ -252,22 +251,22 @@ public class UsersController {
         String email = inUser.getEmail();
         //Check required fields not null
         if(email == null || oldPassword == null || newPassword == null) {
-            throw new IllegalArgumentException("Server error. Change password failure");
+            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
         }
-        outJSON.put(OPERATION, CHPASS_OPERATION);
+        outJSON.put(OPERATION, CHANGE_PASS_OPERATION);
         //Check if user with specified email exists in BD
         AppUser bdUser = userService.findByEmail(email);
         if(bdUser == null) {                                        //no such user email in BD
             outJSON.put(RESULT, FAILURE);
-            outJSON.put(MESSAGE, "Error. User with this email not exists");
+            outJSON.put(MESSAGE, Strings.ERR_USER_NOT_FOUND);
         } else if (!bdUser.getPassword().equals(oldPassword)) {     //old password incorrect
             outJSON.put(RESULT, FAILURE);
-            outJSON.put(MESSAGE, "Error. Old password incorrect");
+            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_FAIL);
         } else {                                                    //all good
             bdUser.setPassword(newPassword);
             userService.updateUser(bdUser);
             outJSON.put(RESULT, SUCCESS);
-            outJSON.put(MESSAGE, "Success. User password changed");
+            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_SUCCESS);
             outJSON.put(MODEL, getUserJSON(bdUser));
         }
         return outJSON;
@@ -282,7 +281,7 @@ public class UsersController {
         String loginType = inUser.getLoginType();
         String email = inUser.getEmail();
         if(socialID == null || loginType == null || !(loginType.equals(LOGIN_KAKAO) || loginType.equals(LOGIN_FACEBOOK))) {
-            throw new IllegalArgumentException("Server error. Social registration failure");
+            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
         }
         //Ищем пользователя с таким socialID в БД
         AppUser bdIdUser = userService.findBySocialID(loginType, socialID);
@@ -314,8 +313,10 @@ public class UsersController {
         } else {
             outJSON.put(MESSAGE, Strings.MSG_LOGIN_SOCIAL_SUCCESS);
         }
+        JSONObject profile = getPreferencesJSON(prefService.findById(bdIdUser.getId()));
         outJSON.put(RESULT, SUCCESS);
         outJSON.put(USER, getUserJSON(bdIdUser).toString());
+        outJSON.put(DATA, profile.toString());
         return outJSON;
     }
 
@@ -324,40 +325,28 @@ public class UsersController {
         user.setPassword(new BigInteger(32, random).toString(32));
     }
 
-    //EXCEPTION
-    @ExceptionHandler(Exception.class)
-    public @ResponseBody String exception(Exception exc) {
-        exc.printStackTrace();
-        JSONObject result = new JSONObject();
-        result.put(RESULT, FAILURE);
-        result.put(MESSAGE, exc.getMessage());
-        System.out.println("Out JSON: " + result.toString() + "\n");
-        return result.toString();
-    }
-
     //set Profile data to server
     private JSONObject updateprofile(JSONObject inJSON, JSONObject outJSON){
         Gson gson = new Gson();
         JSONObject data = new JSONObject(inJSON.getString(DATA));
         JSONObject jsonuser = new JSONObject(inJSON.getString(USER));
         AppUser inUser = gson.fromJson(jsonuser.toString(), AppUser.class);
-        Long id_user = inUser.getId();
+        Long userID = inUser.getId();
 
-        Preferences preferences = new Preferences();
-        preferences.setId(id_user);
-        if (prefService.findById(id_user)!=null) {
-            prefService.deletePreferences(preferences);
-        }
-        if (id_user==null) {
-            throw new IllegalArgumentException("Error. User not found");
+        if (userID == null) {
+            throw new IllegalArgumentException(Strings.ERR_USER_NOT_FOUND);
         } else {
             Preferences pref = gson.fromJson(data.toString(), Preferences.class);
-            pref.setId(id_user);
-            prefService.addNewPreferences(pref);
+            pref.setId(userID);
+            if (prefService.findById(userID) == null) {
+                prefService.addNewPreferences(pref);
+            } else {
+                prefService.updatePreferences(pref);
+            }
             outJSON.put(RESULT, SUCCESS);
-            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_SUCCESS);
+            outJSON.put(MESSAGE, Strings.MSG_PROFILE_UPDATE_SUCCESS);
             outJSON.put(USER, getUserJSON(inUser).toString());
-
+            outJSON.put(DATA, getPreferencesJSON(pref).toString());
         }
         return outJSON;
     }
@@ -369,17 +358,27 @@ public class UsersController {
         AppUser inUser = gson.fromJson(jsonuser.toString(), AppUser.class);
         Long id_user = inUser.getId();
 
-        Preferences pref = new Preferences();
-        pref = prefService.findById(id_user);
+        Preferences pref = prefService.findById(id_user);
         if (pref==null) {
-            outJSON.put(MESSAGE, Strings.MSG_PROFILE_NOT_FOUND);
+            outJSON.put(MESSAGE, Strings.ERR_PROFILE_NOT_FOUND);
         } else {
             outJSON.put(RESULT, SUCCESS);
-            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_SUCCESS);
+            outJSON.put(MESSAGE, Strings.MSG_PROFILE_UPDATE_SUCCESS);
             outJSON.put(USER, getUserJSON(inUser).toString());
             outJSON.put(DATA, getPreferencesJSON(pref).toString());
         }
         return outJSON;
+    }
+
+    //Make JSON from AppUser
+    private JSONObject getUserJSON(AppUser appUser) {
+        JSONObject outUser = new JSONObject();
+        outUser.put("id", appUser.getId());
+        outUser.put("email", appUser.getEmail());
+        outUser.put("password", appUser.getPassword());
+        outUser.put("socialID" , appUser.getSocialId());
+        outUser.put("loginType", appUser.getLoginType());
+        return outUser;
     }
 
     //Make JSON from Preferences
@@ -399,7 +398,6 @@ public class UsersController {
         outPreferences.put("avatar", pref.getAvatar());
         outPreferences.put("is_agreement", pref.getIs_agreement());
         outPreferences.put("is_finish_question", pref.getIs_finish_question());
-
         return outPreferences;
     }
 
@@ -409,6 +407,16 @@ public class UsersController {
         return outJSON;
     }
 
+    //EXCEPTION
+    @ExceptionHandler(Exception.class)
+    public @ResponseBody String exception(Exception exc) {
+        exc.printStackTrace();
+        JSONObject result = new JSONObject();
+        result.put(RESULT, FAILURE);
+        result.put(MESSAGE, exc.getMessage());
+        System.out.println("Out JSON: " + result.toString() + "\n");
+        return result.toString();
+    }
 
   /*  @RequestMapping(value = "/test1", method = RequestMethod.GET)
     public ModelAndView test1() {

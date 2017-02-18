@@ -58,10 +58,9 @@ public class AppUser {
     public String toString() {
         return "AppUser{" +
                 "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", email=" + email +
+                ", password=" + password +
                 ", socialID=" + socialID +
-                ", loginType=" + loginType +
-                '}';
+                ", loginType=" + loginType + '}';
     }
 }
