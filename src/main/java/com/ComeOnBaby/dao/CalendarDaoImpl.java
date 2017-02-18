@@ -37,7 +37,7 @@ public class CalendarDaoImpl implements CalendarDao {
     public Calendar read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Calendar calendar = (Calendar) session.get(Calendar.class, id);
-        logger.error("Calendar read successfully, Calendar=" + calendar);
+        logger.error("Calendar findById successfully, Calendar=" + calendar);
         return calendar;
     }
 

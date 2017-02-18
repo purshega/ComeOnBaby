@@ -1,214 +1,193 @@
-CREATE TABLE `s_messages` (
-	`message_id` INT NOT NULL AUTO_INCREMENT,
-	`case_id` INT NOT NULL,
+CREATE TABLE `users` (
+	`id` INT NOT NULL,
+	`email` VARCHAR(255) NOT NULL,
+	`password` VARCHAR(255) NOT NULL,
+	`social_id` INT NOT NULL,
+	`login_type` INT NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `preferences` (
 	`user_id` INT NOT NULL,
-	`message_time` DATETIME NOT NULL,
-	`message_text` TEXT NOT NULL,
-	PRIMARY KEY (`message_id`)
-);
-
-CREATE TABLE `s_projects` (
-	`project_id` INT NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(255) NOT NULL,
-	`user_customer_id` INT NOT NULL,
-	`date_create` DATETIME NOT NULL,
-	`status_id` VARCHAR(255) NOT NULL,
-	`technology_type` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`project_id`)
-);
-
-CREATE TABLE `s_cases` (
-	`project_id` INT NOT NULL,
-	`case_id` INT NOT NULL AUTO_INCREMENT,
-	`user_manager_id` INT NOT NULL,
-	`title` TEXT NOT NULL,
-	`status_id` VARCHAR(255) NOT NULL,
-	`progress` INT NOT NULL,
-	`date_create` DATETIME NOT NULL,
-	PRIMARY KEY (`case_id`)
-);
-
-CREATE TABLE `s_manager_info` (
-	`user_id` INT NOT NULL,
-	`first_name` VARCHAR(255) NOT NULL,
-	`last_name` VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE `s_customer_info` (
-	`user_id` INT NOT NULL,
-	`first_name` VARCHAR(255) NOT NULL,
-	`last_name` VARCHAR(255) NOT NULL,
-	`company` VARCHAR(255) NOT NULL,
+	`city` VARCHAR(255) NOT NULL,
+	`nickname` VARCHAR(255) NOT NULL,
+	`gender` VARCHAR(255) NOT NULL,
+	`birthday` INT NOT NULL,
+	`adress` VARCHAR(255) NOT NULL,
+	`menstrual_cycle` INT NOT NULL,
+	`red_days` INT NOT NULL,
+	`last_menstruation_start_day` DATE NOT NULL,
+	`weigth` FLOAT NOT NULL,
+	`height` FLOAT NOT NULL,
 	`avatar` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `s_estimates` (
-	`estimate_id` INT NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(255) NOT NULL,
-	`email` VARCHAR(255) NOT NULL,
-	`estimate_request` TEXT NOT NULL,
-	`status_id` VARCHAR(255) NOT NULL,
-	`date_request` DATETIME NOT NULL,
-	PRIMARY KEY (`estimate_id`)
+CREATE TABLE `calendar` (
+	`user_id` INT NOT NULL,
+	`date` DATE NOT NULL,
+	`basic_body_temperature` FLOAT NOT NULL,
+	`recommended_food` VARCHAR(255) NOT NULL,
+	`recommended_nuts` VARCHAR(255) NOT NULL,
+	`has_nuts` BOOLEAN NOT NULL,
+	`recommended_tea` VARCHAR(255) NOT NULL,
+	`has_tea` BOOLEAN NOT NULL,
+	`recommended_exercise` VARCHAR(255) NOT NULL,
+	`has_exercise` BOOLEAN NOT NULL,
+	`going_to_bed_from` VARCHAR(255) NOT NULL,
+	`going_to_bed_to` VARCHAR(255) NOT NULL,
+	`water_intake` VARCHAR(255) NOT NULL,
+	`heating_bathing` VARCHAR(255) NOT NULL,
+	`vitamin` BOOLEAN NOT NULL,
+	`folic_acid` BOOLEAN NOT NULL,
+	`coffee_intake` BOOLEAN NOT NULL,
+	`alcohol_intake` BOOLEAN NOT NULL,
+	`smoking` BOOLEAN NOT NULL,
+	`emotional_state` VARCHAR(255) NOT NULL,
+	`bmi` FLOAT NOT NULL
+);
+
+CREATE TABLE `basic_questions` (
+	`user_id` INT,
+	`passed_questions` BOOLEAN NOT NULL,
+	`years_not_been_pregnant` VARCHAR(255),
+	`children` VARCHAR(255),
+	`treatment` VARCHAR(255),
+	`causes_infertility_female` VARCHAR(255),
+	`causes_infertility_male` VARCHAR(255),
+	`need_help` VARCHAR(255),
+	`plans_for_family` VARCHAR(255)
 );
 
 CREATE TABLE `app_user` (
-	`id` BIGINT NOT NULL AUTO_INCREMENT,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`sso_id` VARCHAR(255) NOT NULL,
 	`email` VARCHAR(255) NOT NULL,
 	`password` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`id`),
-    UNIQUE (sso_id)
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `app_user_user_profile` (
+	`user_id` INT NOT NULL,
+	`user_profile_id` INT NOT NULL
 );
 
 CREATE TABLE `user_profile` (
-	`id` BIGINT NOT NULL AUTO_INCREMENT,
+	`id` INT NOT NULL AUTO_INCREMENT,
 	`type` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`id`),
-    UNIQUE (type)
+	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE APP_USER_USER_PROFILE (
-    user_id BIGINT NOT NULL,
-    user_profile_id BIGINT NOT NULL,
-    PRIMARY KEY (user_id, user_profile_id),
-	CONSTRAINT FK_APP_USER FOREIGN KEY (user_id) REFERENCES APP_USER (id),
-    CONSTRAINT FK_USER_PROFILE FOREIGN KEY (user_profile_id) REFERENCES USER_PROFILE (id)
+CREATE TABLE `notice` (
+	`id` INT NOT NULL,
+	`date` DATE NOT NULL,
+	`title` VARCHAR(255),
+	`text` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `status` (
-	`status_id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE `recipe_guide` (
+	`id` INT NOT NULL,
+	`title` VARCHAR(255) NOT NULL,
+	`date` DATE NOT NULL,
+	`image_thumbnail` VARCHAR(255) NOT NULL,
+	`url_naver` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `fertilization_guide` (
+	`id` INT NOT NULL,
+	`title` VARCHAR(255) NOT NULL,
+	`date` DATE NOT NULL,
+	`image` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `images` (
+	`id_body` INT NOT NULL,
 	`type` VARCHAR(255) NOT NULL,
-	PRIMARY KEY (`status_id`)
+	`images_0` VARCHAR(255) NOT NULL,
+	`images_1` VARCHAR(255) NOT NULL,
+	`images_2` VARCHAR(255) NOT NULL,
+	`images_3` VARCHAR(255) NOT NULL,
+	`images_4` VARCHAR(255) NOT NULL,
+	`images_5` VARCHAR(255) NOT NULL,
+	`images_6` VARCHAR(255) NOT NULL,
+	`images_7` VARCHAR(255) NOT NULL,
+	`images_8` VARCHAR(255) NOT NULL,
+	`images_9` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE persistent_logins (
-    username VARCHAR(64) NOT NULL,
-    series VARCHAR(64) NOT NULL,
-    token VARCHAR(64) NOT NULL,
-    last_used TIMESTAMP NOT NULL,
-    PRIMARY KEY (series)
+CREATE TABLE `blog` (
+	`id` INT NOT NULL,
+	`id_user` INT NOT NULL,
+	`type` VARCHAR(255) NOT NULL,
+	`title` VARCHAR(255) NOT NULL,
+	`text` VARCHAR(255) NOT NULL,
+	`datetime` DATETIME NOT NULL
 );
 
-INSERT INTO USER_PROFILE(type)
+CREATE TABLE `comments` (
+	`id_blog` INT NOT NULL,
+	`id_user` INT NOT NULL,
+	`text` VARCHAR(255) NOT NULL,
+	`datetime` DATETIME NOT NULL
+);
+
+CREATE TABLE `likes` (
+	`id_blog` INT NOT NULL,
+	`id_user` INT NOT NULL,
+	`like` BOOLEAN NOT NULL
+);
+
+CREATE TABLE `q_a` (
+	`id` INT NOT NULL,
+	`id_user` INT NOT NULL,
+	`date` DATE NOT NULL,
+	`title` VARCHAR(255) NOT NULL,
+	`text` VARCHAR(255) NOT NULL,
+	`is_access` BOOLEAN NOT NULL,
+	`answer` VARCHAR(255) NOT NULL
+);
+
+INSERT INTO `user_profile`(type)
 VALUES ('CUSTOMER');
 
-INSERT INTO USER_PROFILE(type)
+INSERT INTO `user_profile`(type)
 VALUES ('ADMIN');
 
-INSERT INTO USER_PROFILE(type)
+INSERT INTO `user_profile`(type)
 VALUES ('MANAGER');
 
-INSERT INTO APP_USER(sso_id, password, email)
+INSERT INTO `app_user`(sso_id, password, email)
 VALUES ('admin@mail.com',123, 'admin@mail.com');
 
-INSERT INTO APP_USER(sso_id, password, email)
+INSERT INTO `app_user`(sso_id, password, email)
 VALUES ('manager1@mail.com',123, 'manager1@mail.com');
 
-INSERT INTO APP_USER(sso_id, password, email)
+INSERT INTO `app_user`(sso_id, password, email)
 VALUES ('manager2@mail.com',123, 'manager2@mail.com');
 
-INSERT INTO APP_USER(sso_id, password, email)
+INSERT INTO `app_user`(sso_id, password, email)
 VALUES ('customer1@mail.com',123, 'customer1@mail.com');
 
-INSERT INTO APP_USER(sso_id, password, email)
+INSERT INTO `app_user`(sso_id, password, email)
 VALUES ('customer2@mail.com',123, 'customer2@mail.com');
 
-INSERT INTO APP_USER(sso_id, password, email)
+INSERT INTO `app_user`(sso_id, password, email)
 VALUES ('customer3@mail.com',123, 'customer3@mail.com');
 
-INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)
-  SELECT user.id, profile.id FROM app_user user, user_profile profile
-  where user.sso_id='admin@mail.com' and profile.type='ADMIN';
+INSERT INTO `app_user_user_profile` (user_id, user_profile_id)
+  value(4,1);
 
-  INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)
-  SELECT user.id, profile.id FROM app_user user, user_profile profile
-  where user.sso_id='manager1@mail.com' and profile.type='MANAGER';
+  INSERT INTO `app_user_user_profile` (user_id, user_profile_id)
+	value(5,1);
 
-   INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)
-  SELECT user.id, profile.id FROM app_user user, user_profile profile
-  where user.sso_id='manager2@mail.com' and profile.type='MANAGER';
+   INSERT INTO `app_user_user_profile` (user_id, user_profile_id)
+  value(6,1);
 
-    INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)
-  SELECT user.id, profile.id FROM app_user user, user_profile profile
-  where user.sso_id='customer1@mail.com' and profile.type='CUSTOMER';
+    INSERT INTO `app_user_user_profile` (user_id, user_profile_id)
+  value(2,3);
 
-  INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)
-  SELECT user.id, profile.id FROM app_user user, user_profile profile
-  where user.sso_id='customer2@mail.com' and profile.type='CUSTOMER';
+  INSERT INTO `app_user_user_profile` (user_id, user_profile_id)
+  value(3,1);
 
-  INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)
-    SELECT user.id, profile.id FROM app_user user, user_profile profile
-    where user.sso_id='customer3@mail.com' and profile.type='CUSTOMER';
+  INSERT INTO `app_user_user_profile` (user_id, user_profile_id)
+    value(1,2);
 
-INSERT INTO s_customer_info(user_id, first_name, last_name, company, avatar)
-VALUES (4, 'sasha','customer1','skoda','avatar2');
-
-INSERT INTO s_customer_info(user_id, first_name, last_name, company, avatar)
-VALUES (5, 'maxim','customer2','google','avatar3');
-
-INSERT INTO s_customer_info(user_id, first_name, last_name, company, avatar)
-VALUES (5, 'oksana','customer3','target','avatar4');
-
-INSERT INTO s_manager_info(user_id, first_name, last_name)
-VALUES (2, 'petya','manager1');
-
-INSERT INTO s_manager_info(user_id, first_name, last_name)
-VALUES (3, 'masha','manager2');
-
-INSERT INTO s_projects(name, user_customer_id, date_create, status_id, technology_type)
-VALUES ('AMMATA', 4,'2017-01-20 13:00:00', 1, 'JAVA');
-
-INSERT INTO s_projects(name, user_customer_id, date_create, status_id, technology_type)
-VALUES ('ComonBaby', 4,'2017-01-25 13:00:00', 1, 'C++');
-
-INSERT INTO s_projects(name, user_customer_id, date_create, status_id, technology_type)
-VALUES ('DRONE', 5,'2017-01-27 13:00:00', 1, 'JS');
-
-INSERT INTO s_projects(name, user_customer_id, date_create, status_id, technology_type)
-VALUES ('#$GENERAL', 6,'2017-01-27 13:00:00', 1, 'IOS');
-
-INSERT INTO s_cases(project_id, user_manager_id, title, status_id, progress, date_create)
-VALUES (1, 2, 'database1', 2, 10, '2017-01-25 13:00:00');
-
-INSERT INTO s_cases(project_id, user_manager_id, title, status_id, progress, date_create)
-VALUES (1, 2, 'database2', 1, 20, '2017-01-25 13:00:00');
-
-INSERT INTO s_cases(project_id, user_manager_id, title, status_id, progress, date_create)
-VALUES (1, 2, 'database3', 1, 30, '2017-01-25 13:00:00');
-
-INSERT INTO s_cases(project_id, user_manager_id, title, status_id, progress, date_create)
-VALUES (2, 3, 'database1', 1, 40, '2017-01-25 13:00:00');
-
-INSERT INTO s_messages(case_id, user_id, message_time, message_text)
-VALUES (1, 4, '2017-01-25 13:00:00','hello, i need.....');
-
-INSERT INTO s_messages(case_id, user_id, message_time, message_text)
-VALUES (1, 2, '2017-01-25 13:00:00','hello. ok, we try do it.');
-
-INSERT INTO s_messages(case_id, user_id, message_time, message_text)
-VALUES (1, 4, '2017-01-25 13:00:00','thanks');
-
-INSERT INTO s_messages(case_id, user_id, message_time, message_text)
-VALUES (2, 4, '2017-01-25 13:00:00','text.....');
-
-INSERT INTO s_messages(case_id, user_id, message_time, message_text)
-VALUES (2, 3, '2017-01-25 13:00:00','yayayaya');
-
-INSERT INTO s_messages(case_id, user_id, message_time, message_text)
-VALUES (3, 5, '2017-01-25 13:00:00','hello, i need.....');
-
-INSERT INTO status(type)
-VALUES ('considered');
-
-INSERT INTO status(type)
-VALUES ('open');
-
-INSERT INTO status(type)
-VALUES ('close');
-
-INSERT INTO s_estimates(name, email, estimate_request, status_id, date_request)
-VALUES ('Ammata', 'mr_jeka@bk.ru', 'text of first request', 1, '2017-01-25 13:00:00');
-
-INSERT INTO s_estimates(name, email, estimate_request, status_id, date_request)
-VALUES ('CamonBaby', 'z.murenko@gmail.com', 'text of second request', 2, '2017-01-25 13:00:00');

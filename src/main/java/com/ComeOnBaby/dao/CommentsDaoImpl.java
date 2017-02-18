@@ -36,7 +36,7 @@ public class CommentsDaoImpl implements CommentsDao {
     public Comments read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Comments comments = (Comments) session.get(Comments.class, id);
-        logger.error("CommentsService read successfully, CommentsService=" + comments);
+        logger.error("CommentsService findById successfully, CommentsService=" + comments);
         return comments;
     }
 

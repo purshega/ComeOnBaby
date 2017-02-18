@@ -9,5 +9,6 @@ public interface PreferencesService {
     void addNewPreferences(Preferences preferences);
     void updatePreferences(Preferences preferences);
     void deletePreferences(Preferences preferences);
+    Preferences findById(Long id);
     List<Preferences> getAllPreferences();
 }

@@ -36,7 +36,7 @@ public class BasicQuestionsDaoImpl implements BasicQuestionsDao {
     public BasicQuestions read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         BasicQuestions basicQuestions = (BasicQuestions) session.get(BasicQuestions.class, id);
-        logger.error("BasicQuestions read successfully, BasicQuestions=" + basicQuestions);
+        logger.error("BasicQuestions findById successfully, BasicQuestions=" + basicQuestions);
         return basicQuestions;
     }
 

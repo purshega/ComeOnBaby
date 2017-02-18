@@ -8,1011 +8,459 @@
 <%@ page session="false" %>
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <%--    Csrf token information--%>
-    <sec:csrfMetaTags />
-
-    <link rel="shortcut icon" href="resources/indexPage/ico/favicon.png">
-
-    <title><spring:message code="locale.title"/></title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="resources/indexPage/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap flags CSS -->
-    <link href="resources/indexPage/css/languages.min.css" rel="stylesheet">
-
-    <!-- Bootstrap select CSS -->
-    <link href="resources/indexPage/css/bootstrap-select.min.css" rel="stylesheet">
-
-    <!-- Custom bootstrap styles -->
-    <link href="resources/indexPage/css/overwrite.css" rel="stylesheet">
-
-    <!-- Font -->
-    <link href="resources/indexPage/fonts/open-sans/stylesheet.css" rel="stylesheet">
-
-    <!-- Font icons -->
-    <link href="resources/indexPage/css/font-awesome.css" rel="stylesheet">
-    <link href="resources/indexPage/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" rel="stylesheet">
-    <link href="resources/indexPage/fonts/pe-icon-7-stroke/css/helper.css" rel="stylesheet">
-
-    <!-- Animate css -->
-    <link href="resources/indexPage/css/animate.css" rel="stylesheet">
-
-    <!-- prettyPhoto -->
-    <link href="resources/indexPage/css/prettyPhoto.css" rel="stylesheet"/>
-
-    <!-- flexslider -->
-    <link href="resources/indexPage/css/flexslider.css" rel="stylesheet">
-
-    <!-- Owl carousel -->
-    <link href="resources/indexPage/css/owl.carousel.css" rel="stylesheet">
-    <link href="resources/indexPage/css/owl.theme.css" rel="stylesheet">
-    <link href="resources/indexPage/css/owl.transitions.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="resources/indexPage/css/style.css" rel="stylesheet">
-
-    <!-- Theme skin -->
-    <link href="resources/indexPage/skins/default.css" rel="stylesheet"/>
-
-    <%--Javascripts--%>
-    <link href="resources/indexPage/js/custom.js">
-
-</head>
-
-<body>
-<!-- Start preloading -->
-<div id="loading" class="loading-invisible">
-    <i class="pe-7s-refresh pe-spin pe-3x pe-va"></i><br/>
-</div>
-<!-- End preloading -->
-
-<!-- Start header -->
-<header>
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <div class="row">
-                    <a class="navbar-brand" href="javascript:void(0);"><img src="resources/indexPage/img/logo.png"
-                                                                            class="img-responsive" alt=""/></a>
-                </div>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a id="GoToHome" href="#home" class="selected"><spring:message code="locale.about"/></a></li>
-                    <li><a id="GoToFeatures" href="#features"><spring:message code="locale.business"/></a></li>
-                    <li><a id="GoToDesc" href="#description"><spring:message code="locale.technology"/></a></li>
-                    <li><a id="GoToGallery" href="#screenshot"><spring:message
-                            code="locale.developmentEnvironment"/></a></li>
-                    <!--
-                    <li><a id="GoToPricing" href="#pricing">포트폴리오</a></li>
-                    <li><a id="GoToTestimoni" href="#testimoni">Testimoni</a></li>
-                    <li><a id="GoToContact" href="#contact">Contact</a></li>
-                    -->
-                </ul>
-                <div class="navbar-right">
-                    <!-- <a href="signin.html" class="btn btn-bordered">Sign in</a> -->
-                    <a href="javascript:void(0);" data-toggle="modal" data-target=".authorization-form"
-                       class="btn btn-primary">
-                        <spring:message code="locale.loginBtn"/>
-                    </a>
-
-                    <!-- Lang section -->
-                    <div class="btn-group">
-
-                        <!--
-                         If you want to change a lang, you must change: lang="ko" to the different lang name, for example: lang="ru"
-                         -->
-
-                        <!-- Selected lang -->
-                        <%String lang = RequestContextUtils.getLocale(request).toString();%>
-                        <%System.out.println("lang = " + lang);%>
-                        <%if (lang.equals("en")) {%>
-                        <a href="?lang=en;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span class="lang-sm lang-lbl" lang="en"></span>
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="?lang=ko"><span class="lang-sm lang-lbl" lang="ko"><%lang = "ko";%></span></a>
-                            </li>
-                            <li><a href="?lang=ru"><span class="lang-sm lang-lbl" lang="ru"><%lang = "ru";%></span></a>
-                            </li>
-                        </ul>
-                        <%} else if (lang.equals("ko")) {%>
-                        <a href="?lang=ko;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span class="lang-sm lang-lbl" lang="ko"></span>
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="?lang=en"><span class="lang-sm lang-lbl" lang="en"><%lang = "en";%></span></a>
-                            </li>
-                            <li><a href="?lang=ru"><span class="lang-sm lang-lbl" lang="ru"><%lang = "ru";%></span></a>
-                            </li>
-                        </ul>
-                        <% } else {%>
-                        <a href="?lang=ru;" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span class="lang-sm lang-lbl" lang="ru"></span>
-                            <span class="caret"></span>
-                        </a>
-
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="?lang=en"><span class="lang-sm lang-lbl" lang="en"><%lang = "en";%></span></a>
-                            </li>
-                            <li><a href="?lang=ko"><span class="lang-sm lang-lbl" lang="ko"><%lang = "ko";%></span></a>
-                            </li>
-                        </ul>
-                        <%}%>
-                        <!-- Lang list -->
-
-                    </div>
-                    <!-- #End Lang section -->
-
-                </div>
-
-                <div>
-
-
-                </div>
-
-            </div><!--/.nav-collapse -->
-        </div>
-    </div>
-</header>
-<!-- End header -->
-
-<!-- End home -->
-<section id="home" class="home-wrapper parallax image-bg">
-    <div class="home-contain">
-        <div class="container">
-            <div class="row text-center wow fadeInUp" data-wow-delay="0.4s">
-                <div class="col-md-10 col-md-offset-1">
-                    <h3><span><spring:message code="locale.AboutText1"/></span>
-                        <spring:message code="locale.AboutText2"/></h3>
-                    <p class="btn-inline">
-                        <a href="https://www.youtube.com/watch?v=9bZkp7q19f0" data-pretty="prettyPhoto"
-                           class="btn btn-bordered btn-lg zoom"><spring:message code="locale.videoBtn"/></a>
-                        <%--<a href="javascript:void(0);" class="btn btn-primary btn-lg">회원 가입</a>--%>
-                    </p>
-                    <div class="home-slider">
-                        <div class="slider-wrapper">
-                            <div class="imac-device">
-                                <ul class="slides">
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/slider/img1.png" alt=""/></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/slider/img3.png" alt=""/></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/slider/img4.png" alt=""/></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <img src="resources/indexPage/img/imac.png" class="img-responsive" alt=""/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End home -->
-
-<div class="clearfix"></div>
-
-<!-- Start features -->
-<section id="features" class="contain desc-wrapp gray-bg">
-    <div class="container">
-        <div class="row text-center wow fadeInUp" data-wow-delay="0.4s">
-            <div class="col-md-8 col-md-offset-2">
-                <h3 class="heading"><span><spring:message code="locale.bussinesText1"/></span><spring:message
-                        code="locale.bussinesText2"/></h3>
-            </div>
-        </div>
-        <div class="row wow fadeInDown" data-wow-delay="0.4s">
-            <div class="col-md-4 feature-box">
-                <i class="pe-7s-phone pe-feature"></i>
-                <h5><spring:message code="locale.bussinesThema1"/></h5>
-                <p>
-                    <spring:message code="locale.bussinesThema1text"/>
-                </p>
-                <a href="javascript:void(0);">Learn more</a>
-            </div>
-            <div class="col-md-4 feature-box">
-                <i class="pe-7s-edit pe-feature"></i>
-                <h5><spring:message code="locale.bussinesThema2"/></h5>
-                <p>
-                    <spring:message code="locale.bussinesThema2text"/>
-                </p>
-                <a href="javascript:void(0);">Learn more</a>
-            </div>
-            <div class="col-md-4 feature-box">
-                <i class="pe-7s-graph1 pe-feature"></i>
-                <h5><spring:message code="locale.bussinesThema3"/></h5>
-                <p>
-                    <spring:message code="locale.bussinesThema3text"/>
-                </p>
-                <a href="javascript:void(0);">Learn more</a>
-            </div>
-            <div class="col-md-4 feature-box">
-                <i class="pe-7s-paper-plane pe-feature"></i>
-                <h5><spring:message code="locale.bussinesThema4"/></h5>
-                <p>
-                    <spring:message code="locale.bussinesThema4text"/>
-                </p>
-                <a href="javascript:void(0);">Learn more</a>
-            </div>
-            <div class="col-md-4 feature-box">
-                <i class="pe-7s-share pe-feature"></i>
-                <h5><spring:message code="locale.bussinesThema5"/></h5>
-                <p>
-                    <spring:message code="locale.bussinesThema5text"/>
-                </p>
-                <a href="javascript:void(0);">Learn more</a>
-            </div>
-            <div class="col-md-4 feature-box">
-                <i class="pe-7s-paperclip pe-feature"></i>
-                <h5><spring:message code="locale.bussinesThema6"/></h5>
-                <p>
-                    <spring:message code="locale.bussinesThema6text"/>
-                </p>
-                <a href="javascript:void(0);">Learn more</a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End features -->
-
-<div class="clearfix"></div>
-
-<!-- Start description -->
-<section id="description" class="contain">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-7 wow fadeInLeft" data-wow-delay="0.4s"><img src="resources/indexPage/img/device.png"
-                                                                            class="img-responsive" alt=""/></div>
-
-            <div class="col-md-5 margintop40 wow fadeInRight" data-wow-delay="0.4s">
-                <div class="accordion clearfix" id="accordion1">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                               href="#collapse1"><i class="pe-7s-angle-down"></i> <spring:message
-                                    code="locale.technologyThema1"/></a>
-                        </div>
-                        <div id="collapse1" class="accordion-body collapse in">
-                            <div class="accordion-inner">
-                                <p><spring:message code="locale.technologyThema1text"/></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                               href="#collapse2">
-                                <i class="pe-7s-angle-down"></i> <spring:message code="locale.technologyThema2"/>
-                            </a>
-                        </div>
-                        <div id="collapse2" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <p><spring:message code="locale.technologyThema2text"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
-                               href="#collapse3">
-                                <i class="pe-7s-angle-down"></i> <spring:message code="locale.technologyThema3"/>
-                            </a>
-                        </div>
-                        <div id="collapse3" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <p><spring:message code="locale.technologyThema3text"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End description -->
-
-<div class="clearfix"></div>
-
-<!-- Start counter -->
-<section id="counter-wrapper">
-    <div class="counter-contain">
-        <div class="container">
-            <div class="row text-center appear stats wow fadeInUp" data-wow-delay="0.4s">
-                <div class="col-md-12">
-                    <h3><spring:message code="locale.counterText1"/></h3>
-                    <p><spring:message code="locale.counterText2"/></p>
-                </div>
-            </div>
-            <div class="row text-center appear stats wow fadeInDown" data-wow-delay="0.4s">
-                <div class="col-md-2 col-md-offset-2">
-                    <span id="counter-download" class="counter-number"><spring:message
-                            code="locale.counterText3"/></span>
-                    <span class="counter-text"><spring:message code="locale.counterText4"/></span>
-                </div>
-                <div class="col-md-2">
-                    <span id="counter-view" class="counter-number"><spring:message code="locale.counterText5"/></span>
-                    <span class="counter-text"><spring:message code="locale.counterText6"/></span>
-                </div>
-                <div class="col-md-2">
-                    <span id="counter-android" class="counter-number"><spring:message
-                            code="locale.counterText7"/></span>
-                    <span class="counter-text"><spring:message code="locale.counterText8"/></span>
-                </div>
-                <div class="col-md-2">
-                    <span id="counter-ios" class="counter-number"><spring:message code="locale.counterText9"/></span>
-                    <span class="counter-text"><spring:message code="locale.counterText10"/></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End counter -->
-
-<div class="clearfix"></div>
-
-<!-- Start screenshot -->
-<section id="screenshot" class="contain">
-    <div class="container">
-        <div class="row text-center wow fadeInUp" data-wow-delay="0.4s">
-            <div class="col-md-10 col-md-offset-1 wow fadeInUp" data-wow-delay="0.4s">
-                <h3 class="heading"><span> <spring:message code="locale.screenshotText1"/></span> <spring:message
-                        code="locale.screenshotText2"/></h3>
-            </div>
-        </div>
-    </div>
-    <div id="screenshot-contain" class="wow fadeInDown" data-wow-delay="0.4s">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="screenshot-slider">
-                        <div class="screenshot-wrapper">
-                            <div class="flexslider text-center">
-                                <ul class="slides">
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/screenshot/img1.png"
-                                                                           alt=""/></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/screenshot/img2.png"
-                                                                           alt=""/></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/screenshot/img3.png"
-                                                                           alt=""/></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/screenshot/img4.png"
-                                                                           alt=""/></a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);"><img src="resources/indexPage/img/screenshot/img5.png"
-                                                                           alt=""/></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <img src="resources/indexPage/img/browser.png" class="img-responsive" alt=""/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End screenshot -->
-
-<div class="clearfix"></div>
-
-<!-- Start pricing -->
-<!--   <section id="pricing" class="contain gray-bg">
-      <div class="container">
-         <div class="row text-center">
-            <div class="col-md-10 col-md-offset-1 wow fadeInUp" data-wow-delay="0.4s">
-               <h3 class="heading"><span>Pricing table</span>Choose download package</h3>
-            </div>
-         </div>
-         <div class="row wow fadeInDown" data-wow-delay="0.4s">
-            <div class="col-md-4">
-               <div class="pricing-wrapper">
-                  <div class="pricing-head">
-                     <span class="pricing-price">$0</span>
-                     <h4>Free</h4>
-                     <p>Free trial 30 days</p>
-                  </div>
-                  <ul>
-                     <li><strong>30 day</strong> trail</li>
-                     <li><strong>No</strong> support</li>
-                     <li><strong>No</strong> update</li>
-                     <li><strong>1 user</strong> accses</li>
-                     <li><strong>32 MB</strong> bandwidth</li>
-                     <li><strong>1 user</strong> only</li>
-                     <li><strong>No</strong> security</li>
-                  </ul>
-                  <div class="pricing-bottom">
-                     <a href="javascript:void(0);" class="btn btn-default btn-bordered btn-lg">Get it now</a>
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-4">
-               <div class="pricing-wrapper">
-                  <div class="pricing-head popular">
-                     <span class="pricing-price">$17</span>
-                     <h4>Personal</h4>
-                     <p>Best for personal</p>
-                  </div>
-                  <ul>
-                     <li><strong>Unlimited</strong> use</li>
-                     <li><strong>Free</strong> support</li>
-                     <li><strong>Free</strong> update</li>
-                     <li><strong>Up to 10 user</strong> accses</li>
-                     <li><strong>10 GB</strong> bandwidth</li>
-                     <li><strong>Up to 10 user</strong> only</li>
-                     <li><strong>security</strong> suite</li>
-                  </ul>
-                  <div class="pricing-bottom">
-                     <a href="javascript:void(0);" class="btn btn-primary btn-lg">Get it now</a>
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-4">
-               <div class="pricing-wrapper">
-                  <div class="pricing-head">
-                     <span class="pricing-price">$35</span>
-                     <h4>Business</h4>
-                     <p>Best for corporate</p>
-                  </div>
-                  <ul>
-                     <li><strong>Unlimited</strong> use</li>
-                     <li><strong>Free</strong> support</li>
-                     <li><strong>Free</strong> update</li>
-                     <li><strong>Up to 40 user</strong> accses</li>
-                     <li><strong>100 GB</strong> bandwidth</li>
-                     <li><strong>Up to 100 user</strong> only</li>
-                     <li><strong>security</strong> suite</li>
-                  </ul>
-                  <div class="pricing-bottom">
-                     <a href="javascript:void(0);" class="btn btn-default btn-bordered btn-lg">Get it now</a>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </section> -->
-<!-- End pricing -->
-
-<div class="clearfix"></div>
-
-<!-- Start download -->
 <!--
-<section id="download">
-    <div class="download-wrapper">
-        <div class="container">
-            <div class="row wow fadeInUp" data-wow-delay="0.4s">
-                <div class="col-md-8 col-md-offset-2">
-                    <h3>Try for Free 30 days</h3>
-                    <p>Risk Free. 60 Day Money Back Guarantee.</p>
-                    <form>
-                        <fieldset class="subscribe-form">
-                            <input class="subscribe" type="text" placeholder="Enter your email address">
-                            <button class="subscribe-button" type="button">Download</button>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
-<!-- End download -->
-
-<div class="clearfix"></div>
-
-<!-- Start testimoni -->
-<section id="testimoni" class="contain">
-    <div class="container">
-        <div class="row text-center wow fadeInUp" data-wow-delay="0.4s">
-            <div class="col-md-12">
-                <h3 class="heading"><span><spring:message code="locale.testimonialsText1"/></span><spring:message
-                        code="locale.testimonialsText2"/></h3>
-            </div>
-        </div>
-    </div>
-    <div id="owl-testimoni" class="owl-carousel wow fadeInDown" data-wow-delay="0.4s">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            <spring:message code="locale.testimonialsText3"/>
-                        </blockquote>
-                        <span class="testimoni-sparator"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="testimoni-author">
-                        <div class="author-info">
-                            <h5><spring:message code="locale.testimonialsName1"/></h5>
-                            <p><a href="javascript:void(0);"><spring:message code="locale.testimanials1"/></a></p>
-                        </div>
-                        <img src="resources/indexPage/img/testimoni/avatar1.png" alt=""/>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            <spring:message code="locale.testimonialsText4"/>
-                        </blockquote>
-                        <span class="testimoni-sparator"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="testimoni-author">
-                        <div class="author-info">
-                            <h5><spring:message code="locale.testimonialsName2"/>Ence iif</h5>
-                            <p><a href="javascript:void(0);"><spring:message code="locale.testimanials2"/></a></p>
-                        </div>
-                        <img src="resources/indexPage/img/testimoni/avatar2.png" alt=""/>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            <spring:message code="locale.testimonialsText5"/>
-                        </blockquote>
-                        <span class="testimoni-sparator"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="testimoni-author">
-                        <div class="author-info">
-                            <h5><spring:message code="locale.testimonialsName3"/></h5>
-                            <p><a href="javascript:void(0);"><spring:message code="locale.testimanials3"/></a></p>
-                        </div>
-                        <img src="resources/indexPage/img/testimoni/avatar3.png" alt=""/>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            <spring:message code="locale.testimonialsText6"/>
-                        </blockquote>
-                        <span class="testimoni-sparator"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="testimoni-author">
-                        <div class="author-info">
-                            <h5><spring:message code="locale.testimonialsName4"/></h5>
-                            <p><a href="javascript:void(0);"><spring:message code="locale.testimanials4"/></a></p>
-                        </div>
-                        <img src="resources/indexPage/img/testimoni/avatar4.png" alt=""/>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            <spring:message code="locale.testimonialsText7"/>
-                        </blockquote>
-                        <span class="testimoni-sparator"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="testimoni-author">
-                        <div class="author-info">
-                            <h5><spring:message code="locale.testimonialsName5"/></h5>
-                            <p><a href="javascript:void(0);"><spring:message code="locale.testimanials5"/></a></p>
-                        </div>
-                        <img src="resources/indexPage/img/testimoni/avatar5.png" alt=""/>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial">
-                        <blockquote>
-                            <spring:message code="locale.testimonialsText8"/>
-                        </blockquote>
-                        <span class="testimoni-sparator"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="testimoni-author">
-                        <div class="author-info">
-                            <h5><spring:message code="locale.testimonialsName6"/>Ceu onah</h5>
-                            <p><a href="javascript:void(0);"><spring:message code="locale.testimanials6"/></a></p>
-                        </div>
-                        <img src="resources/indexPage/img/testimoni/avatar6.png" alt=""/>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End testimoni -->
-
-<div class="clearfix"></div>
-
-<!-- Start client -->
-<section id="client" class="contain gray-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 wow fadeInUp" data-wow-delay="0.4s">
-                <ul class="client-list">
-                    <li>
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo1-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo1.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo2-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo2.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo3-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo3.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo4-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo4.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li class="last">
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo5-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo5.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="bottom-list">
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo6-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo6.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo7-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo7.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo8-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo8.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo9-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo9.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                            <li class="last">
-                                <a href="javascript:void(0);" class="client-link">
-                                    <span class="logo-hover"><img src="resources/indexPage/img/client/logo10-hover.png"
-                                                                  alt=""/></span>
-                                    <img src="resources/indexPage/img/client/logo10.png" class="client-logo" alt=""/>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End client -->
-
-<div class="clearfix"></div>
-
-<!-- Start contact -->
-<!--
-<section id="contact">
-    <div class="contact-contain">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-12 wow fadeInUp" data-wow-delay="0.4s">
-                    <h3 class="heading"><span>접촉</span>우리와 연락</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1 wow fadeInDown" data-wow-delay="0.4s">
-                    <form id="contactform" action="contact/contact.php" method="post" class="validateform" name="leaveContact">
-                        <div class="clearfix"></div>
-                        <div id="sendmessage">
-                            <div class="alert alert-info marginbot35">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                귀하의 메시지가 전송되었습니다. 감사합니다!
-                            </div>
-                        </div>
-                        <ul class="listForm">
-                            <li>
-                                <i class="pe-7s-users"></i>
-                                <input class="form-control input-name" type="text" name="name" data-rule="required" data-msg="Required field" placeholder="전체 이름을 입력" />
-                                <div class="validation"></div>
-                            </li>
-                            <li>
-                                <i class="pe-7s-mail"></i>
-                                <input class="form-control input-email" type="text" name="email" data-rule="email" data-msg="Please enter a valid email" placeholder="귀하의 이메일 주소를 입력" />
-                                <div class="validation"></div>
-                            </li>
-                            <li class="push">
-                                <i class="pe-7s-paper-plane"></i>
-                                <textarea class="form-control input-message" rows="6" name="message" data-rule="required" data-msg="Please write something for us" placeholder="우리를 위해 뭔가를 쓰기"></textarea>
-                                <div class="validation"></div>
-                            </li>
-                            <li class="push text-center">
-                                <input type="submit" value="메시지 보내기" class="btn btn-primary btn-lg" name="Submit" />
-                            </li>
-                        </ul>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.5
+Version: 3.3.0
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
 -->
-<!-- End contact -->
-
-<div class="clearfix"></div>
-
-<!-- Start footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="social-network">
-                    <a href="javascript:void(0);"><i class="fa fa-facebook"></i></a>
-                    <a href="javascript:void(0);"><i class="fa fa-twitter"></i></a>
-                    <a href="javascript:void(0);"><i class="fa fa-google-plus"></i></a>
-                    <a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a>
-                    <a href="javascript:void(0);"><i class="fa fa-skype"></i></a>
-                    <a href="javascript:void(0);"><i class="fa fa-pinterest"></i></a>
-                </div>
-                <p><spring:message code="locale.copyrightText"/> <!-- <a href="http://99webpage.com/">nce18cex.</a> -->
-                    <spring:message code="locale.reservedText"/></p>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>Metronic | Login Options - Login Form 1</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+    <link href="resources/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link href="resources/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css"/>
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <!-- BEGIN THEME STYLES -->
+    <link href="resources/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+    <link href="resources/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css" id="style_color"/>
+    <link href="resources/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+    <!-- END THEME STYLES -->
+    <link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="login">
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGO -->
+<div class="logo">
+    <a href="index.html">
+        <img src="resources/assets/admin/layout/img/logo-big.png" alt="" height="100px" />
+    </a>
+</div>
+<!-- END LOGO -->
+<!-- BEGIN LOGIN -->
+<div class="content">
+    <!-- BEGIN LOGIN FORM -->
+    <c:url var="loginUrl" value="/login?${_csrf.parameterName}=${_csrf.token}"/>
+    <form action="${loginUrl}" id="authorizationForm" method="post" class="login-form" >
+        <h3 class="form-title">Sign In</h3>
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+            <span>
+			Enter any username and password. </span>
+        </div>
+        <div class="form-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">Username</label>
+            <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="ssoId"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Password</label>
+            <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password"/>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success uppercase">Login</button>
+            <label class="rememberme check">
+                <input type="checkbox" name="remember" value="1"/>Remember </label>
+            <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
+        </div>
+        <!-- 		<div class="login-options">
+                    <h4>Or login with</h4>
+                    <ul class="social-icons">
+                        <li>
+                            <a class="social-icon-color facebook" data-original-title="facebook" href="javascript:;"></a>
+                        </li>
+                        <li>
+                            <a class="social-icon-color twitter" data-original-title="Twitter" href="javascript:;"></a>
+                        </li>
+                        <li>
+                            <a class="social-icon-color googleplus" data-original-title="Goole Plus" href="javascript:;"></a>
+                        </li>
+                        <li>
+                            <a class="social-icon-color linkedin" data-original-title="Linkedin" href="javascript:;"></a>
+                        </li>
+                    </ul>
+                </div> -->
+        <!-- 		<div class="create-account">
+                    <p>
+                        <a href="javascript:;" id="register-btn" class="uppercase">Create an account</a>
+                    </p>
+                </div> -->
+    </form>
+    <!-- END LOGIN FORM -->
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+    <form class="forget-form" action="index.html" method="post">
+        <h3>Forget Password ?</h3>
+        <p>
+            Enter your e-mail address below to reset your password.
+        </p>
+        <div class="form-group">
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email"/>
+        </div>
+        <div class="form-actions">
+            <button type="button" id="back-btn" class="btn btn-default">Back</button>
+            <button type="submit" class="btn btn-success uppercase pull-right">Submit</button>
+        </div>
+    </form>
+    <!-- END FORGOT PASSWORD FORM -->
+    <!-- BEGIN REGISTRATION FORM -->
+    <form class="register-form" action="index.html" method="post">
+        <h3>Sign Up</h3>
+        <p class="hint">
+            Enter your personal details below:
+        </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Full Name</label>
+            <input class="form-control placeholder-no-fix" type="text" placeholder="Full Name" name="fullname"/>
+        </div>
+        <div class="form-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">Email</label>
+            <input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Address</label>
+            <input class="form-control placeholder-no-fix" type="text" placeholder="Address" name="address"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">City/Town</label>
+            <input class="form-control placeholder-no-fix" type="text" placeholder="City/Town" name="city"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Country</label>
+            <select name="country" class="form-control">
+                <option value="">Country</option>
+                <option value="AF">Afghanistan</option>
+                <option value="AL">Albania</option>
+                <option value="DZ">Algeria</option>
+                <option value="AS">American Samoa</option>
+                <option value="AD">Andorra</option>
+                <option value="AO">Angola</option>
+                <option value="AI">Anguilla</option>
+                <option value="AR">Argentina</option>
+                <option value="AM">Armenia</option>
+                <option value="AW">Aruba</option>
+                <option value="AU">Australia</option>
+                <option value="AT">Austria</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BS">Bahamas</option>
+                <option value="BH">Bahrain</option>
+                <option value="BD">Bangladesh</option>
+                <option value="BB">Barbados</option>
+                <option value="BY">Belarus</option>
+                <option value="BE">Belgium</option>
+                <option value="BZ">Belize</option>
+                <option value="BJ">Benin</option>
+                <option value="BM">Bermuda</option>
+                <option value="BT">Bhutan</option>
+                <option value="BO">Bolivia</option>
+                <option value="BA">Bosnia and Herzegowina</option>
+                <option value="BW">Botswana</option>
+                <option value="BV">Bouvet Island</option>
+                <option value="BR">Brazil</option>
+                <option value="IO">British Indian Ocean Territory</option>
+                <option value="BN">Brunei Darussalam</option>
+                <option value="BG">Bulgaria</option>
+                <option value="BF">Burkina Faso</option>
+                <option value="BI">Burundi</option>
+                <option value="KH">Cambodia</option>
+                <option value="CM">Cameroon</option>
+                <option value="CA">Canada</option>
+                <option value="CV">Cape Verde</option>
+                <option value="KY">Cayman Islands</option>
+                <option value="CF">Central African Republic</option>
+                <option value="TD">Chad</option>
+                <option value="CL">Chile</option>
+                <option value="CN">China</option>
+                <option value="CX">Christmas Island</option>
+                <option value="CC">Cocos (Keeling) Islands</option>
+                <option value="CO">Colombia</option>
+                <option value="KM">Comoros</option>
+                <option value="CG">Congo</option>
+                <option value="CD">Congo, the Democratic Republic of the</option>
+                <option value="CK">Cook Islands</option>
+                <option value="CR">Costa Rica</option>
+                <option value="CI">Cote d'Ivoire</option>
+                <option value="HR">Croatia (Hrvatska)</option>
+                <option value="CU">Cuba</option>
+                <option value="CY">Cyprus</option>
+                <option value="CZ">Czech Republic</option>
+                <option value="DK">Denmark</option>
+                <option value="DJ">Djibouti</option>
+                <option value="DM">Dominica</option>
+                <option value="DO">Dominican Republic</option>
+                <option value="EC">Ecuador</option>
+                <option value="EG">Egypt</option>
+                <option value="SV">El Salvador</option>
+                <option value="GQ">Equatorial Guinea</option>
+                <option value="ER">Eritrea</option>
+                <option value="EE">Estonia</option>
+                <option value="ET">Ethiopia</option>
+                <option value="FK">Falkland Islands (Malvinas)</option>
+                <option value="FO">Faroe Islands</option>
+                <option value="FJ">Fiji</option>
+                <option value="FI">Finland</option>
+                <option value="FR">France</option>
+                <option value="GF">French Guiana</option>
+                <option value="PF">French Polynesia</option>
+                <option value="TF">French Southern Territories</option>
+                <option value="GA">Gabon</option>
+                <option value="GM">Gambia</option>
+                <option value="GE">Georgia</option>
+                <option value="DE">Germany</option>
+                <option value="GH">Ghana</option>
+                <option value="GI">Gibraltar</option>
+                <option value="GR">Greece</option>
+                <option value="GL">Greenland</option>
+                <option value="GD">Grenada</option>
+                <option value="GP">Guadeloupe</option>
+                <option value="GU">Guam</option>
+                <option value="GT">Guatemala</option>
+                <option value="GN">Guinea</option>
+                <option value="GW">Guinea-Bissau</option>
+                <option value="GY">Guyana</option>
+                <option value="HT">Haiti</option>
+                <option value="HM">Heard and Mc Donald Islands</option>
+                <option value="VA">Holy See (Vatican City State)</option>
+                <option value="HN">Honduras</option>
+                <option value="HK">Hong Kong</option>
+                <option value="HU">Hungary</option>
+                <option value="IS">Iceland</option>
+                <option value="IN">India</option>
+                <option value="ID">Indonesia</option>
+                <option value="IR">Iran (Islamic Republic of)</option>
+                <option value="IQ">Iraq</option>
+                <option value="IE">Ireland</option>
+                <option value="IL">Israel</option>
+                <option value="IT">Italy</option>
+                <option value="JM">Jamaica</option>
+                <option value="JP">Japan</option>
+                <option value="JO">Jordan</option>
+                <option value="KZ">Kazakhstan</option>
+                <option value="KE">Kenya</option>
+                <option value="KI">Kiribati</option>
+                <option value="KP">Korea, Democratic People's Republic of</option>
+                <option value="KR">Korea, Republic of</option>
+                <option value="KW">Kuwait</option>
+                <option value="KG">Kyrgyzstan</option>
+                <option value="LA">Lao People's Democratic Republic</option>
+                <option value="LV">Latvia</option>
+                <option value="LB">Lebanon</option>
+                <option value="LS">Lesotho</option>
+                <option value="LR">Liberia</option>
+                <option value="LY">Libyan Arab Jamahiriya</option>
+                <option value="LI">Liechtenstein</option>
+                <option value="LT">Lithuania</option>
+                <option value="LU">Luxembourg</option>
+                <option value="MO">Macau</option>
+                <option value="MK">Macedonia, The Former Yugoslav Republic of</option>
+                <option value="MG">Madagascar</option>
+                <option value="MW">Malawi</option>
+                <option value="MY">Malaysia</option>
+                <option value="MV">Maldives</option>
+                <option value="ML">Mali</option>
+                <option value="MT">Malta</option>
+                <option value="MH">Marshall Islands</option>
+                <option value="MQ">Martinique</option>
+                <option value="MR">Mauritania</option>
+                <option value="MU">Mauritius</option>
+                <option value="YT">Mayotte</option>
+                <option value="MX">Mexico</option>
+                <option value="FM">Micronesia, Federated States of</option>
+                <option value="MD">Moldova, Republic of</option>
+                <option value="MC">Monaco</option>
+                <option value="MN">Mongolia</option>
+                <option value="MS">Montserrat</option>
+                <option value="MA">Morocco</option>
+                <option value="MZ">Mozambique</option>
+                <option value="MM">Myanmar</option>
+                <option value="NA">Namibia</option>
+                <option value="NR">Nauru</option>
+                <option value="NP">Nepal</option>
+                <option value="NL">Netherlands</option>
+                <option value="AN">Netherlands Antilles</option>
+                <option value="NC">New Caledonia</option>
+                <option value="NZ">New Zealand</option>
+                <option value="NI">Nicaragua</option>
+                <option value="NE">Niger</option>
+                <option value="NG">Nigeria</option>
+                <option value="NU">Niue</option>
+                <option value="NF">Norfolk Island</option>
+                <option value="MP">Northern Mariana Islands</option>
+                <option value="NO">Norway</option>
+                <option value="OM">Oman</option>
+                <option value="PK">Pakistan</option>
+                <option value="PW">Palau</option>
+                <option value="PA">Panama</option>
+                <option value="PG">Papua New Guinea</option>
+                <option value="PY">Paraguay</option>
+                <option value="PE">Peru</option>
+                <option value="PH">Philippines</option>
+                <option value="PN">Pitcairn</option>
+                <option value="PL">Poland</option>
+                <option value="PT">Portugal</option>
+                <option value="PR">Puerto Rico</option>
+                <option value="QA">Qatar</option>
+                <option value="RE">Reunion</option>
+                <option value="RO">Romania</option>
+                <option value="RU">Russian Federation</option>
+                <option value="RW">Rwanda</option>
+                <option value="KN">Saint Kitts and Nevis</option>
+                <option value="LC">Saint LUCIA</option>
+                <option value="VC">Saint Vincent and the Grenadines</option>
+                <option value="WS">Samoa</option>
+                <option value="SM">San Marino</option>
+                <option value="ST">Sao Tome and Principe</option>
+                <option value="SA">Saudi Arabia</option>
+                <option value="SN">Senegal</option>
+                <option value="SC">Seychelles</option>
+                <option value="SL">Sierra Leone</option>
+                <option value="SG">Singapore</option>
+                <option value="SK">Slovakia (Slovak Republic)</option>
+                <option value="SI">Slovenia</option>
+                <option value="SB">Solomon Islands</option>
+                <option value="SO">Somalia</option>
+                <option value="ZA">South Africa</option>
+                <option value="GS">South Georgia and the South Sandwich Islands</option>
+                <option value="ES">Spain</option>
+                <option value="LK">Sri Lanka</option>
+                <option value="SH">St. Helena</option>
+                <option value="PM">St. Pierre and Miquelon</option>
+                <option value="SD">Sudan</option>
+                <option value="SR">Suriname</option>
+                <option value="SJ">Svalbard and Jan Mayen Islands</option>
+                <option value="SZ">Swaziland</option>
+                <option value="SE">Sweden</option>
+                <option value="CH">Switzerland</option>
+                <option value="SY">Syrian Arab Republic</option>
+                <option value="TW">Taiwan, Province of China</option>
+                <option value="TJ">Tajikistan</option>
+                <option value="TZ">Tanzania, United Republic of</option>
+                <option value="TH">Thailand</option>
+                <option value="TG">Togo</option>
+                <option value="TK">Tokelau</option>
+                <option value="TO">Tonga</option>
+                <option value="TT">Trinidad and Tobago</option>
+                <option value="TN">Tunisia</option>
+                <option value="TR">Turkey</option>
+                <option value="TM">Turkmenistan</option>
+                <option value="TC">Turks and Caicos Islands</option>
+                <option value="TV">Tuvalu</option>
+                <option value="UG">Uganda</option>
+                <option value="UA">Ukraine</option>
+                <option value="AE">United Arab Emirates</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="UM">United States Minor Outlying Islands</option>
+                <option value="UY">Uruguay</option>
+                <option value="UZ">Uzbekistan</option>
+                <option value="VU">Vanuatu</option>
+                <option value="VE">Venezuela</option>
+                <option value="VN">Viet Nam</option>
+                <option value="VG">Virgin Islands (British)</option>
+                <option value="VI">Virgin Islands (U.S.)</option>
+                <option value="WF">Wallis and Futuna Islands</option>
+                <option value="EH">Western Sahara</option>
+                <option value="YE">Yemen</option>
+                <option value="ZM">Zambia</option>
+                <option value="ZW">Zimbabwe</option>
+            </select>
+        </div>
+        <p class="hint">
+            Enter your account details below:
+        </p>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Username</label>
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Password</label>
+            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" id="register_password" placeholder="Password" name="password"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>
+            <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Re-type Your Password" name="rpassword"/>
+        </div>
+        <div class="form-group margin-top-20 margin-bottom-20">
+            <label class="check">
+                <input type="checkbox" name="tnc"/> I agree to the <a href="javascript:;">
+                Terms of Service </a>
+                & <a href="javascript:;">
+                Privacy Policy </a>
+            </label>
+            <div id="register_tnc_error">
             </div>
         </div>
-    </div>
-</footer>
-<!-- End footer -->
-
-<!-- Back to top -->
-<a href="javascript:void(0);" class="cd-top">Top</a>
-<!-- #End Back to top -->
-
-<!-- Estimate button -->
-<a href="javascript:void(0);" id="toEstim" data-toggle="modal" data-target=".estimation-form">
-    <span class="btn-text"><b><spring:message code="locale.estimateText"/></b></span>
-</a>
-<!-- #End Estimate button -->
-
-<!-- Estimate modal window -->
-<div id="estimationModal" class="modal fade estimation-form">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <c:set var="estimateValidationText1"><spring:message code="locale.estimateValidationText1"/></c:set>
-            <input id="localeEstimateValidationText1" type="hidden" value="${estimateValidationText1}"/>
-
-            <c:set var="estimateValidationText2"><spring:message code="locale.estimateValidationText2"/></c:set>
-            <input id="localeEstimateValidationText2" type="hidden" value="${estimateValidationText2}"/>
-
-            <c:set var="estimateValidationText3"><spring:message code="locale.estimateValidationText3"/></c:set>
-            <input id="localeEstimateValidationText3" type="hidden" value="${estimateValidationText3}"/>
-
-            <c:set var="estimateValidationText4"><spring:message code="locale.estimateValidationText4"/></c:set>
-            <input id="localeEstimateValidationText4" type="hidden" value="${estimateValidationText4}"/>
-
-
-            <!-- Estimate modal title -->
-            <form id="estimationForm" method="post" class="form-horizontal">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4><i class="fa fa-address-card-o" aria-hidden="true"></i> <spring:message code="locale.estimateText"/></h4>
-                </div>
-
-                <!-- Estimate modal -->
-                <div class="thanks">Спасибо за что-то...</div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col-lg-12 text-left">
-                            <input type="text" name="name" class="form-control form-block" placeholder="<spring:message code="locale.estimateName"/>" required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-12 text-left">
-                            <input type="email" name="email" class="form-control form-block" placeholder="<spring:message code="locale.estimateEmail"/>"
-                                   required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-12 text-left">
-                            <textarea class="form-control form-block" name="message" rows="4" placeholder="<spring:message code="locale.estimateQuery"/>"
-                                      required></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Estimate modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="estimClose" data-dismiss="modal"><spring:message code="locale.estimateClose"/></button>
-                    <button type="submit" class="btn btn-primary" id="estimGo"><spring:message code="locale.estimateSend"/></button>
-                </div>
-            </form>
+        <div class="form-actions">
+            <button type="button" id="register-back-btn" class="btn btn-default">Back</button>
+            <button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Submit</button>
         </div>
-    </div>
+    </form>
+    <!-- END REGISTRATION FORM -->
 </div>
-<!-- #End Estimate modal window -->
-
-<!-- Authorization modal window -->
-<div id="authorizationModal" class="modal fade authorization-form">
-
-    <c:set var="authorizationValidationText1"><spring:message code="locale.authorizationValidationText1"/></c:set>
-    <input id="localeAuthorizationValidationText1" type="hidden" value="${authorizationValidationText1}"/>
-
-    <c:set var="authorizationValidationText2"><spring:message code="locale.authorizationValidationText2"/></c:set>
-    <input id="localeAuthorizationValidationText2" type="hidden" value="${authorizationValidationText2}"/>
-
-    <c:set var="authorizationValidationText3"><spring:message code="locale.authorizationValidationText3"/></c:set>
-    <input id="localeAuthorizationValidationText3" type="hidden" value="${authorizationValidationText3}"/>
-
-    <c:set var="authorizationValidationText4"><spring:message code="locale.authorizationValidationText4"/></c:set>
-    <input id="localeAuthorizationValidationText4" type="hidden" value="${authorizationValidationText4}"/>
-
-    <c:set var="authorizationValidationText5"><spring:message code="locale.authorizationValidationText5"/></c:set>
-    <input id="localeAuthorizationValidationText5" type="hidden" value="${authorizationValidationText5}"/>
-
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-
-
-            <!-- Authorization modal title -->
-            <c:url var="loginUrl" value="/login"/>
-
-            <form action="${loginUrl}" id="authorizationForm" method="post" class="form-horizontal">
-
-                <c:if test="${param.error != null}">
-                    <div class="alert alert-danger">
-                        <p>Invalid username and password.</p>
-                    </div>
-                </c:if>
-                <c:if test="${param.logout != null}">
-                    <div class="alert alert-success">
-                        <p>You have been logged out successfully.</p>
-                    </div>
-                </c:if>
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4><i class="fa fa-user-o" aria-hidden="true"></i> <spring:message code="locale.authorizationText"/></h4>
-                </div>
-
-                <!-- Authorization modal -->
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="col-lg-12 text-left">
-                            <input type="email" name="ssoId" class="form-control form-block" placeholder="<spring:message code="locale.estimateEmail"/>"
-                                   required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-12 text-left">
-                            <input type="password" name="password" class="form-control form-block" placeholder="<spring:message code="locale.authorizationPassword"/>"
-                                   required/>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                <!-- Authorization modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="locale.estimateClose"/></button>
-                    <button type="submit" value="Log in" class="btn btn-primary"><spring:message code="locale.authorizationLogin"/></button>
-                </div>
-            </form>
-        </div>
-    </div>
+<div class="copyright">
+    2017 © ComeOnBaby. Admin Website.
 </div>
-<!-- #End Authorization modal window -->
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="resources/indexPage/js/jquery.js"></script>
-<script src="resources/indexPage/js/bootstrap.min.js"></script>
-<script src="resources/indexPage/js/jquery-easing-1.3.js"></script>
-
-<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- END LOGIN -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
-<script src="resources/indexPage/js/html5shiv.js"></script>
-<script src="resources/indexPage/js/respond.min.js"></script>
+<script src="resources/assets/global/plugins/respond.min.js"></script>
+<script src="assets/global/plugins/excanvas.min.js"></script>
 <![endif]-->
-
-<script type="resources/indexPage/text/javascript">
-    document.getElementById("loading").className = "loading-visible";
-    var hideDiv = function(){document.getElementById("loading").className = "loading-invisible";};
-    var oldLoad = window.onload;
-    var newLoad = oldLoad ? function(){hideDiv.call(this);oldLoad.call(this);} : hideDiv;
-    window.onload = newLoad;
+<script src="resources/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="resources/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="resources/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="resources/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="resources/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="resources/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="resources/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="resources/assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="resources/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="resources/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="resources/assets/admin/pages/scripts/login.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+<script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        Login.init();
+        Demo.init();
+    });
 </script>
-
-<!-- Fixed navigation -->
-<script src="resources/indexPage/js/navigation/waypoints.min.js"></script>
-<script src="resources/indexPage/js/navigation/jquery.smooth-scroll.js"></script>
-<script src="resources/indexPage/js/navigation/navbar.js"></script>
-
-<!-- Wow -->
-<script src="resources/indexPage/js/wow/wow.min.js"></script>
-<script src="resources/indexPage/js/wow/setting.js"></script>
-
-<!-- Parallax -->
-<script src="resources/indexPage/js/parallax/jquery.parallax-1.1.3.js"></script>
-<script src="resources/indexPage/js/parallax/setting.js"></script>
-
-<!-- flexslider -->
-<script src="resources/indexPage/js/flexslider/jquery.flexslider.js"></script>
-<script src="resources/indexPage/js/flexslider/setting.js"></script>
-
-<!-- selectpicker -->
-<script src="resources/indexPage/js/bootstrap-select.min.js"></script>
-
-<!-- prettyPhoto -->
-<script src="resources/indexPage/js/prettyPhoto/jquery.prettyPhoto.js"></script>
-<script src="resources/indexPage/js/prettyPhoto/setting.js"></script>
-
-<!-- counters -->
-<script src="resources/indexPage/js/counters/jquery.appear.js"></script>
-<script src="resources/indexPage/js/counters/stellar.js"></script>
-<script src="resources/indexPage/js/counters/setting.js"></script>
-
-<!-- Owl carousel -->
-<script src="resources/indexPage/js/owlcarousel/owl.carousel.js"></script>
-<script src="resources/indexPage/js/owlcarousel/setting.js"></script>
-
-<!-- youtube player -->
-<script src="resources/indexPage/js/youtube-player/jquery.swfobject.1-1-1.min.js"></script>
-<script src="resources/indexPage/js/youtube-player/youTubeEmbed-jquery.js"></script>
-<script src="resources/indexPage/js/youtube-player/setting.js"></script>
-
-<!-- Contact validation -->
-<script src="resources/indexPage/js/validation.js"></script>
-<script src="resources/indexPage/js/formValidation.min.js"></script>
-
-<!-- Customn javascript -->
-<script src="resources/indexPage/js/custom.js"></script>
-
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

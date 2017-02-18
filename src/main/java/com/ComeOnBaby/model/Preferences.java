@@ -1,11 +1,9 @@
 package com.ComeOnBaby.model;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -14,13 +12,16 @@ import java.util.Date;
 
 public class Preferences {
 
-    @Id
-    @NotEmpty
-    @Column(name="user_id", nullable=false)
-    private Long user_id;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @PrimaryKeyJoinColumn
+//    private AppUser user;
 
-    @Column(name="city")
-    private String city;
+    @Id
+    @Column(name="user_id", nullable=false)
+    private Long id;
+
+    @Column(name="city_id")
+    private Long city;
 
     @Column(name="nickname")
     private String nickname;
@@ -29,10 +30,10 @@ public class Preferences {
     private String gender;
 
     @Column(name="birthday")
-    private Integer birthday;
+    private Integer birth_year;
 
     @Column(name="adress")
-    private String adress;
+    private String address;
 
     @Column(name="menstrual_cycle")
     private Integer menstrual_cycle;
@@ -41,10 +42,10 @@ public class Preferences {
     private Integer red_days;
 
     @Column(name="last_menstruation_start_day")
-    private Date last_menstruation_start_day;
+    private String last_cycle;
 
     @Column(name="weigth")
-    private Float weigth;
+    private Float weight;
 
     @Column(name="height")
     private Float height;
@@ -52,23 +53,28 @@ public class Preferences {
     @Column(name="avatar")
     private String avatar;
 
+    @Column(name="is_agreement")
+    private Boolean is_agreement;
+
+    @Column(name="is_finish_question")
+    private Boolean is_finish_question;
+
     public Preferences(){
-
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getCity() {
+    public Long getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(Long city) {
         this.city = city;
     }
 
@@ -88,20 +94,20 @@ public class Preferences {
         this.gender = gender;
     }
 
-    public Integer getBirthday() {
-        return birthday;
+    public Integer getBirth_year() {
+        return birth_year;
     }
 
-    public void setBirthday(Integer birthday) {
-        this.birthday = birthday;
+    public void setBirth_year(Integer birth_year) {
+        this.birth_year = birth_year;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Integer getMenstrual_cycle() {
@@ -120,20 +126,20 @@ public class Preferences {
         this.red_days = red_days;
     }
 
-    public Date getLast_menstruation_start_day() {
-        return last_menstruation_start_day;
+    public String getLast_cycle() {
+        return last_cycle;
     }
 
-    public void setLast_menstruation_start_day(Date last_menstruation_start_day) {
-        this.last_menstruation_start_day = last_menstruation_start_day;
+    public void setLast_cycle(String last_cycle) {
+        this.last_cycle = last_cycle;
     }
 
-    public Float getWeigth() {
-        return weigth;
+    public Float getWeight() {
+        return weight;
     }
 
-    public void setWeigth(Float weigth) {
-        this.weigth = weigth;
+    public void setWeight(Float weight) {
+        this.weight = weight;
     }
 
     public Float getHeight() {
@@ -152,20 +158,56 @@ public class Preferences {
         this.avatar = avatar;
     }
 
-    public Preferences(Long user_id, String city, String nickname, String gender, Integer birthday,
-                       String adress, Integer menstrual_cycle, Integer red_days, Date last_menstruation_start_day,
-                       Float weigth, Float height, String avatar) {
-        this.user_id = user_id;
+    public Boolean getIs_agreement() {
+        return is_agreement;
+    }
+
+    public void setIs_agreement(Boolean is_agreement) {
+        this.is_agreement = is_agreement;
+    }
+
+    public Boolean getIs_finish_question() {
+        return is_finish_question;
+    }
+
+    public void setIs_finish_question(Boolean is_finish_question) {
+        this.is_finish_question = is_finish_question;
+    }
+
+    public Preferences(Long id, Long city, String nickname, String gender, Integer birth_year, String address, Integer menstrual_cycle, Integer red_days, String last_cycle, Float weight, Float height, String avatar, Boolean is_agreement, Boolean is_finish_question) {
+        this.id = id;
         this.city = city;
         this.nickname = nickname;
         this.gender = gender;
-        this.birthday = birthday;
-        this.adress = adress;
+        this.birth_year = birth_year;
+        this.address = address;
         this.menstrual_cycle = menstrual_cycle;
         this.red_days = red_days;
-        this.last_menstruation_start_day = last_menstruation_start_day;
-        this.weigth = weigth;
+        this.last_cycle = last_cycle;
+        this.weight = weight;
         this.height = height;
         this.avatar = avatar;
+        this.is_agreement = is_agreement;
+        this.is_finish_question = is_finish_question;
+    }
+
+    @Override
+    public String toString() {
+        return "Preferences{" +
+                "id=" + id +
+                ", city=" + city +
+                ", nickname='" + nickname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birth_year=" + birth_year +
+                ", address='" + address + '\'' +
+                ", menstrual_cycle=" + menstrual_cycle +
+                ", red_days=" + red_days +
+                ", last_cycle='" + last_cycle + '\'' +
+                ", weight=" + weight +
+                ", height=" + height +
+                ", avatar='" + avatar + '\'' +
+                ", is_agreement=" + is_agreement +
+                ", is_finish_question=" + is_finish_question +
+                '}';
     }
 }

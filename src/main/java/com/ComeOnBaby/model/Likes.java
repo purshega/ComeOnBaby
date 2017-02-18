@@ -57,4 +57,13 @@ public class Likes {
         this.id_user = id_user;
         this.like = like;
     }
+
+    @Override
+    public String toString() {
+        return "Likes{" +
+                "id_blog=" + id_blog +
+                ", id_user=" + id_user +
+                ", like=" + like +
+                '}';
+    }
 }

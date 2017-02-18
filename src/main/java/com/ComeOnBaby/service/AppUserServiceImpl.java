@@ -20,36 +20,35 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    @Transactional
+    @Transactional()
     public Long addNewUser(AppUser appUser) {
         return appUserDao.create(appUser);
     }
 
     @Override
-    public AppUser findById(Long id) {
-        return appUserDao.read(id);
-    }
+    @Transactional()
+    public AppUser findById(Long id) {return appUserDao.read(id);}
 
     @Override
-    @Transactional
+    @Transactional()
     public AppUser findByEmail(String email) {
         return appUserDao.findByEmail(email);
     }
 
     @Override
-    @Transactional
+    @Transactional()
     public AppUser findBySocialID(String loginType, Long socialID) {
         return appUserDao.findBySocialID(loginType, socialID);
     }
 
     @Override
-    @Transactional
+    @Transactional()
     public void updateUser(AppUser appUser) {
         appUserDao.update(appUser);
     }
 
     @Override
-    @Transactional
+    @Transactional()
     public void deleteUser(AppUser appUser) {
         appUserDao.delete(appUser);
     }

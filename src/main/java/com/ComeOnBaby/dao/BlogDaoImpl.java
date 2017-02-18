@@ -35,7 +35,7 @@ public class BlogDaoImpl implements BlogDao{
     public Blog read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Blog blog = (Blog) session.get(Blog.class, id);
-        logger.error("BlogService read successfully, BlogService=" + blog);
+        logger.error("BlogService findById successfully, BlogService=" + blog);
         return blog;
     }
 

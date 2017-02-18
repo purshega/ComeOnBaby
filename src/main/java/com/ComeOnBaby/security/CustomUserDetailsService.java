@@ -1,5 +1,7 @@
 package com.ComeOnBaby.security;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ComeOnBaby.model.User;
 import com.ComeOnBaby.model.UserProfile;
@@ -15,8 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 @Service("customUserDetailsService")

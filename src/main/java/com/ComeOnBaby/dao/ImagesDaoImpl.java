@@ -34,7 +34,7 @@ public class ImagesDaoImpl implements ImagesDao { private static final Logger lo
     public Images read(Long id) {
         Session session = sessionFactory.getCurrentSession();
         Images images = (Images) session.get(Images.class, id);
-        logger.error("Images read successfully, Images=" + images);
+        logger.error("Images findById successfully, Images=" + images);
         return images;
     }
 
