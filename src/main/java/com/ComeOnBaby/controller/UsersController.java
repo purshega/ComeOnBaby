@@ -28,7 +28,7 @@ public class UsersController {
     //Operations
     private final static String REG_EMAIL_OPERATION = "registration";
     private final static String LOGIN_EMAIL_OPERATION = "loginemail";
-    private final static String CHANGE_PASS_OPERATION = "changepass";
+//    private final static String CHANGE_PASS_OPERATION = "changepass";
     private final static String FORGET_PASS_OPERATION = "forgetpass";
     private final static String SOCIAL_LOGIN_OPERATION = "loginsocial";
     private final static String UPDATE_EMAIL_OPERATION = "emailupdate";
@@ -49,6 +49,7 @@ public class UsersController {
     private final static String DATA = "data";
     private final static String NEW_EMAIL = "newemail";
     private final static String NEW_PASSWORD = "newpassword";
+    private final static String NICKNAME = "nickname";
 
     @Autowired
     AppUserService userService;
@@ -78,10 +79,10 @@ public class UsersController {
                 emailLogin(inJSON, outJSON);
                 break;
             }
-            case CHANGE_PASS_OPERATION: {
-                changePassword(inJSON, outJSON);
-                break;
-            }
+//            case CHANGE_PASS_OPERATION: {
+//                changePassword(inJSON, outJSON);
+//                break;
+//            }
             case FORGET_PASS_OPERATION: {
                 break;
             }
@@ -180,10 +181,13 @@ public class UsersController {
     private JSONObject emailRegister(JSONObject inJSON, JSONObject outJSON) {
         Gson gson = new Gson();
         JSONObject jsonuser = new JSONObject(inJSON.getString(USER));
+        JSONObject jsdata = new JSONObject(inJSON.getString(DATA));
         AppUser inUser = gson.fromJson(jsonuser.toString(), AppUser.class);
         String email = inUser.getEmail();
         String password = inUser.getPassword();
         String loginType = inUser.getLoginType();
+        String nickname = null;
+        if(jsdata.has(NICKNAME)) nickname = jsdata.getString(NICKNAME);
         if(email == null || password == null || loginType == null || !loginType.equals(LOGIN_EMAIL)) {
             throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
         }
@@ -200,6 +204,8 @@ public class UsersController {
             //создаем настройки юзера
             Preferences preferences = new Preferences();
             preferences.setId(userid);
+            preferences.setIs_agreement(true);
+            if(nickname != null) preferences.setNickname(nickname);
             prefService.addNewPreferences(preferences);
             JSONObject profile = getPreferencesJSON(prefService.findById(userid));
             outJSON.put(DATA, profile.toString());
@@ -238,39 +244,39 @@ public class UsersController {
         return outJSON;
     }
 
-    //Change password operation
-    private JSONObject changePassword(JSONObject inJSON, JSONObject outJSON) {
-        //Check required key NEW_PASSWORD in json
-        if(!inJSON.has(NEW_PASSWORD)) {
-            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
-        }
-        Gson gson = new Gson();
-        AppUser inUser = gson.fromJson(inJSON.getJSONObject(MODEL).toString(), AppUser.class);
-        String newPassword = inJSON.getString(NEW_PASSWORD);
-        String oldPassword = inUser.getPassword();
-        String email = inUser.getEmail();
-        //Check required fields not null
-        if(email == null || oldPassword == null || newPassword == null) {
-            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
-        }
-        outJSON.put(OPERATION, CHANGE_PASS_OPERATION);
-        //Check if user with specified email exists in BD
-        AppUser bdUser = userService.findByEmail(email);
-        if(bdUser == null) {                                        //no such user email in BD
-            outJSON.put(RESULT, FAILURE);
-            outJSON.put(MESSAGE, Strings.ERR_USER_NOT_FOUND);
-        } else if (!bdUser.getPassword().equals(oldPassword)) {     //old password incorrect
-            outJSON.put(RESULT, FAILURE);
-            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_FAIL);
-        } else {                                                    //all good
-            bdUser.setPassword(newPassword);
-            userService.updateUser(bdUser);
-            outJSON.put(RESULT, SUCCESS);
-            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_SUCCESS);
-            outJSON.put(MODEL, getUserJSON(bdUser));
-        }
-        return outJSON;
-    }
+//    //Change password operation
+//    private JSONObject changePassword(JSONObject inJSON, JSONObject outJSON) {
+//        //Check required key NEW_PASSWORD in json
+//        if(!inJSON.has(NEW_PASSWORD)) {
+//            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
+//        }
+//        Gson gson = new Gson();
+//        AppUser inUser = gson.fromJson(inJSON.getJSONObject(MODEL).toString(), AppUser.class);
+//        String newPassword = inJSON.getString(NEW_PASSWORD);
+//        String oldPassword = inUser.getPassword();
+//        String email = inUser.getEmail();
+//        //Check required fields not null
+//        if(email == null || oldPassword == null || newPassword == null) {
+//            throw new IllegalArgumentException(Strings.ERR_ILLEGAL_ARGUMENT);
+//        }
+//        outJSON.put(OPERATION, CHANGE_PASS_OPERATION);
+//        //Check if user with specified email exists in BD
+//        AppUser bdUser = userService.findByEmail(email);
+//        if(bdUser == null) {                                        //no such user email in BD
+//            outJSON.put(RESULT, FAILURE);
+//            outJSON.put(MESSAGE, Strings.ERR_USER_NOT_FOUND);
+//        } else if (!bdUser.getPassword().equals(oldPassword)) {     //old password incorrect
+//            outJSON.put(RESULT, FAILURE);
+//            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_FAIL);
+//        } else {                                                    //all good
+//            bdUser.setPassword(newPassword);
+//            userService.updateUser(bdUser);
+//            outJSON.put(RESULT, SUCCESS);
+//            outJSON.put(MESSAGE, Strings.MSG_PASSWORD_UPDATE_SUCCESS);
+//            outJSON.put(MODEL, getUserJSON(bdUser));
+//        }
+//        return outJSON;
+//    }
 
     //Login or register user with socialID operation
     private JSONObject socialLogin(JSONObject inJSON, JSONObject outJSON) {
