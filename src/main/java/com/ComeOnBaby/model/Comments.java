@@ -68,4 +68,8 @@ public class Comments {
         this.text = text;
         this.datetime = datetime;
     }
+
+    public Comments() {
+    }
 }
+
