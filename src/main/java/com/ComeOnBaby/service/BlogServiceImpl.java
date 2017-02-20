@@ -43,4 +43,8 @@ public class BlogServiceImpl implements BlogService{
     public List<Blog> getAllBlog() {
         return blogDao.findAll();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Blog> findBlogByType(String type){return blogDao.findBlogByType(type);}
 }

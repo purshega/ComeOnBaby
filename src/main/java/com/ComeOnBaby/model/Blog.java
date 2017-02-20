@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -98,5 +99,22 @@ public class Blog {
         this.title = title;
         this.text = text;
         this.datetime = datetime;
+    }
+    public String getStringToTable(){
+        SimpleDateFormat formatDate = new SimpleDateFormat("MM.dd.yyyy");
+        String strDate = formatDate.format(datetime);
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("<tr>");
+        sb.append("<td> id </td>");
+        sb.append("<td> xX </td>");
+        sb.append("<td> xX </td>");
+        sb.append("<td> "+strDate+"</td>");
+        sb.append("<td> "+title+" </td>");
+        sb.append("<td> "+text+"</td>");
+        sb.append("</tr>");
+
+        return sb.toString();
     }
 }

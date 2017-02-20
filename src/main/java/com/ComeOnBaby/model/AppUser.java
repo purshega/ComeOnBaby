@@ -63,4 +63,18 @@ public class AppUser {
                 ", socialID=" + socialID +
                 ", loginType=" + loginType + '}';
     }
+    public String getStringToTable(){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("<tr>");
+        sb.append("<td> id </td>");
+        sb.append("<td> <a href=\"/cabinet/user/"+id+"\">"+email+"</a> </td>");
+        sb.append("<td> </td>");
+        sb.append("<td> </td>");
+        sb.append("<td> "+getLoginType()+" </td>");
+        sb.append("<td> !! need add</td>");
+        sb.append("</tr>");
+
+        return sb.toString();
+    }
 }

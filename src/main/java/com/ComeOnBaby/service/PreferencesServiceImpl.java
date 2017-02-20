@@ -47,4 +47,8 @@ public class PreferencesServiceImpl implements PreferencesService{
     public List<Preferences> getAllPreferences() {
         return preferencesDao.findAll();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Preferences findFirstByUserId(Long id){return preferencesDao.findFirstByUserId(id);}
 }

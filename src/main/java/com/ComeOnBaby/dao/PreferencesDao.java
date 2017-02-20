@@ -15,4 +15,5 @@ public interface PreferencesDao {
     void update(Preferences cases);
     void delete(Preferences cases);
     List<Preferences> findAll();
+    Preferences findFirstByUserId(Long id);
 }

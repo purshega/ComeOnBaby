@@ -2,9 +2,11 @@ package com.ComeOnBaby.dao;
 
 
 import com.ComeOnBaby.model.Blog;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +60,12 @@ public class BlogDaoImpl implements BlogDao{
         Session session = sessionFactory.getCurrentSession();
         Query query =  session.createQuery("from Blog");
         return query.list();
+    }
+    @Override
+    public List<Blog> findBlogByType(String type){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Blog.class).add(Restrictions.like("type","%"+type+"%"));
+        List<Blog> list = criteria.list();
+        return list;
     }
 }

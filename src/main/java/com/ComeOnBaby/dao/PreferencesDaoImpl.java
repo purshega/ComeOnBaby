@@ -5,6 +5,7 @@ import com.ComeOnBaby.model.Preferences;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +62,15 @@ public class PreferencesDaoImpl implements PreferencesDao {
         return query.list();
     }
 
+    @Override
+    public Preferences findFirstByUserId(Long id) {
+        Preferences pref = null;
+        Session session = sessionFactory.getCurrentSession();
+
+        List<Preferences> list =  session.createCriteria(Preferences.class)
+                .add(Restrictions.eq("id", id))
+                .list();
+        if(list !=null && list.size()>0) return list.get(0);
+        return pref;
+    }
 }

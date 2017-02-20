@@ -11,4 +11,5 @@ public interface PreferencesService {
     void deletePreferences(Preferences preferences);
     Preferences findById(Long id);
     List<Preferences> getAllPreferences();
+    Preferences findFirstByUserId(Long id);
 }

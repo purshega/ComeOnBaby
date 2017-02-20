@@ -3,13 +3,16 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.ComeOnBaby.model.AppUser" %><%--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>--%>
+<%@ page
+        import="com.ComeOnBaby.model.AppUser" %><%--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>--%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page session="false" %>
+
+<% String addPath = (String) request.getAttribute("addPath"); %>
 
 <!DOCTYPE html>
 <!--
@@ -38,25 +41,36 @@ License: You must have a valid license purchased only from themeforest(the above
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet"
+          type="text/css"/>
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PAGE LEVEL STYLES -->
-    <link rel="stylesheet" type="text/css" href="../resources/assets/global/plugins/select2/select2.css"/>
-    <link rel="stylesheet" type="text/css" href="../resources/assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../resources/assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../resources/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="<%out.print(addPath);%>resources/assets/global/plugins/select2/select2.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%out.print(addPath);%>resources/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
     <!-- END PAGE LEVEL STYLES -->
     <!-- BEGIN THEME STYLES -->
-    <link href="../resources/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
-    <link id="style_color" href="../resources/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
-    <link href="../resources/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/css/components.css" id="style_components" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+    <link id="style_color" href="<%out.print(addPath);%>resources/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -79,7 +93,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="index.html">
-                <img src="../resources/assets/admin/layout/img/logo.png" alt="logo" class="logo-default"/>
+                <img src="<%out.print(addPath);%>resources/assets/admin/layout/img/logo.png" alt="logo" class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler hide">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -87,7 +101,8 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
+           data-target=".navbar-collapse">
         </a>
         <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
@@ -393,8 +408,9 @@ License: You must have a valid license purchased only from themeforest(the above
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                 <li class="dropdown dropdown-user">
-                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img alt="" class="img-circle" src="../resources/assets/admin/layout/img/avatar.png"/>
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                       data-close-others="true">
+                        <img alt="" class="img-circle" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar.png"/>
                         <span class="username username-hide-on-mobile">
 					Admin </span>
                         <i class="fa fa-angle-down"></i>
@@ -490,8 +506,21 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </form> -->
                 <!-- END RESPONSIVE QUICK SEARCH FORM -->
                 <!-- </li> -->
+                <%
+
+                    ArrayList<String> menuUrls = (ArrayList<String>) request.getAttribute("menuUrls");
+                    String menuUrl1 = menuUrls.get(0);
+                    String menuUrl2 = menuUrls.get(1);
+                    String menuUrl3 = menuUrls.get(2);
+                    String menuUrl4 = menuUrls.get(3);
+                    String menuUrl5 = menuUrls.get(4);
+                    String menuUrl6 = menuUrls.get(5);
+                    String menuUrl7 = menuUrls.get(6);
+                    String menuUrl8 = menuUrls.get(7);
+
+                %>
                 <li class="start ">
-                    <a href="javascript:;">
+                    <a href="<% out.print(menuUrl1);%>">
                         <i class="icon-user"></i>
                         <span class="title">Users</span>
                         <!-- <span class="arrow "></span> -->
@@ -522,12 +551,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl2);%>">
                                 <!-- <i class="icon-minus"></i> -->
                                 Featured recipes</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl3);%>">
                                 <!-- <i class="icon-minus"></i> -->
                                 Fertilization guide</a>
                         </li>
@@ -541,23 +570,23 @@ License: You must have a valid license purchased only from themeforest(the above
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl4);%>">
                                 Notice / Event</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl5);%>">
                                 My success story</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl6);%>">
                                 My recipes</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl7);%>">
                                 Husband story</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="<% out.print(menuUrl8);%>">
                                 Q &amp; A list</a>
                         </li>
                     </ul>
@@ -1041,7 +1070,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <div class="page-content-wrapper">
         <div class="page-content">
             <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1164,7 +1194,8 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- END STYLE CUSTOMIZER -->
             <!-- BEGIN PAGE HEADER-->
             <h3 class="page-title">
-                Users of ComeOnBaby <small> list users</small>
+                <% String nameTitle = (String) request.getAttribute("nameTitle"); %>
+                <% out.print(nameTitle);%>
             </h3>
             <div class="page-bar">
                 <ul class="page-breadcrumb">
@@ -1174,7 +1205,11 @@ License: You must have a valid license purchased only from themeforest(the above
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>
-                        <a href="#">Users</a>
+                        <a href="/cabinet/">Users</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">User</a>
                     </li>
                 </ul>
                 <div class="page-toolbar">
@@ -1203,98 +1238,45 @@ License: You must have a valid license purchased only from themeforest(the above
             </div>
             <!-- END PAGE HEADER-->
             <!-- BEGIN PAGE CONTENT-->
+            <%
+                String namePage = (String) request.getAttribute("namePage");
+            %>
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
                     <div class="portlet box blue-hoki">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-user"></i>User table
+                                <i class="fa fa-user"></i><% out.print(namePage); %>
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="reload">
                                 </a>
                             </div>
                         </div>
-
-
-                        <div class="portlet-body">
-                            <table class="table table-striped table-bordered table-hover" id="sample_1">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        ID
-                                    </th>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <th>
-                                        Nickname
-                                    </th>
-                                    <th>
-                                        Birthyear
-                                    </th>
-                                    <th>
-                                        Login type
-                                    </th>
-                                    <th>
-                                        Gender
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                <% ArrayList<AppUser> appUsers = (ArrayList<AppUser>) request.getAttribute("appUsersList"); %>
-                                <% for (int i=0;i<appUsers.size();i++) {
-                                    AppUser appUser= appUsers.get(i);
-                                %>
-
-                                <tr>
-                                    <td>
-                                        <%out.print(appUser.getId());%>
-                                    </td>
-                                    <td>
-                                        <%out.print(appUser.getEmail());%>
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                    <td>
-                                        <%out.print(appUser.getLoginType());%>
-                                    </td>
-                                    <td>
-                                        female
-                                    </td>
-                                </tr>
-                                <%}%>
-                                <%--<tr>--%>
-                                    <%--<td>--%>
-                                        <%--2--%>
-                                    <%--</td>--%>
-                                    <%--<td>--%>
-                                        <%--eva@gmail.com--%>
-                                    <%--</td>--%>
-                                    <%--<td>--%>
-                                        <%--Eva--%>
-                                    <%--</td>--%>
-                                    <%--<td>--%>
-                                        <%--1995--%>
-                                    <%--</td>--%>
-                                    <%--<td>--%>
-                                        <%--Facebook--%>
-                                    <%--</td>--%>
-                                    <%--<td>--%>
-                                        <%--female--%>
-                                    <%--</td>--%>
-                                <%--</tr>--%>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
+
+
+                    <%
+                        ArrayList<String> fields = (ArrayList<String>) request.getAttribute("fields");
+                        String[] values = (String[]) request.getAttribute("values");
+
+                    %>
+
+                    <form class="form-horizontal" role="form">
+                        <% for (int i = 0; i < fields.size(); i++) {%>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-3">
+                                <% out.println(fields.get(i)); %>
+                            </div>
+                            <div class="col-sm-7">
+                                <% out.println(values[i]);%>
+                            </div>
+                        </div>
+                        <%}%>
+                    </form>
+
 
                 </div>
             </div>
@@ -1346,14 +1328,16 @@ License: You must have a valid license purchased only from themeforest(the above
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active page-quick-sidebar-chat" id="quick_sidebar_tab_1">
-                        <div class="page-quick-sidebar-chat-users" data-rail-color="#ddd" data-wrapper-class="page-quick-sidebar-list">
+                        <div class="page-quick-sidebar-chat-users" data-rail-color="#ddd"
+                             data-wrapper-class="page-quick-sidebar-list">
                             <h3 class="list-heading">Staff</h3>
                             <ul class="media-list list-items">
                                 <li class="media">
                                     <div class="media-status">
                                         <span class="badge badge-success">8</span>
                                     </div>
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar3.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Bob Nilson</h4>
                                         <div class="media-heading-sub">
@@ -1362,7 +1346,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar1.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar1.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Nick Larson</h4>
                                         <div class="media-heading-sub">
@@ -1374,7 +1359,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-danger">3</span>
                                     </div>
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar4.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar4.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Deon Hubert</h4>
                                         <div class="media-heading-sub">
@@ -1383,7 +1369,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar2.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Ella Wong</h4>
                                         <div class="media-heading-sub">
@@ -1398,7 +1385,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-warning">2</span>
                                     </div>
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar6.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar6.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Lara Kunis</h4>
                                         <div class="media-heading-sub">
@@ -1413,7 +1401,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="label label-sm label-success">new</span>
                                     </div>
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar7.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar7.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Ernie Kyllonen</h4>
                                         <div class="media-heading-sub">
@@ -1423,7 +1412,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar8.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar8.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Lisa Stone</h4>
                                         <div class="media-heading-sub">
@@ -1438,7 +1428,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-success">7</span>
                                     </div>
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar9.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar9.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Deon Portalatin</h4>
                                         <div class="media-heading-sub">
@@ -1447,7 +1438,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar10.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar10.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Irina Savikova</h4>
                                         <div class="media-heading-sub">
@@ -1459,7 +1451,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-danger">4</span>
                                     </div>
-                                    <img class="media-object" src="../resources/assets/admin/layout/img/avatar11.jpg" alt="...">
+                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar11.jpg"
+                                         alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Maria Gomez</h4>
                                         <div class="media-heading-sub">
@@ -1475,11 +1468,13 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="page-quick-sidebar-item">
                             <div class="page-quick-sidebar-chat-user">
                                 <div class="page-quick-sidebar-nav">
-                                    <a href="javascript:;" class="page-quick-sidebar-back-to-list"><i class="icon-arrow-left"></i>Back</a>
+                                    <a href="javascript:;" class="page-quick-sidebar-back-to-list"><i
+                                            class="icon-arrow-left"></i>Back</a>
                                 </div>
                                 <div class="page-quick-sidebar-chat-user-messages">
                                     <div class="post out">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar3.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Bob Nilson</a>
@@ -1489,7 +1484,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post in">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar2.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Ella Wong</a>
@@ -1499,7 +1495,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post out">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar3.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Bob Nilson</a>
@@ -1509,7 +1506,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post in">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar2.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Ella Wong</a>
@@ -1519,7 +1517,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post out">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar3.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Bob Nilson</a>
@@ -1529,7 +1528,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post in">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar2.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Ella Wong</a>
@@ -1539,7 +1539,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post out">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar3.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Bob Nilson</a>
@@ -1549,7 +1550,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post in">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar2.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Ella Wong</a>
@@ -1559,7 +1561,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="post out">
-                                        <img class="avatar" alt="" src="../resources/assets/admin/layout/img/avatar3.jpg"/>
+                                        <img class="avatar" alt=""
+                                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"/>
                                         <div class="message">
                                             <span class="arrow"></span>
                                             <a href="javascript:;" class="name">Bob Nilson</a>
@@ -1573,7 +1576,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="Type a message here...">
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn blue"><i class="icon-paper-clip"></i></button>
+                                            <button type="button" class="btn blue"><i class="icon-paper-clip"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1594,7 +1598,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </div>
                                             <div class="cont-col2">
                                                 <div class="desc">
-                                                    You have 4 pending tasks. <span class="label label-sm label-warning ">
+                                                    You have 4 pending tasks. <span
+                                                        class="label label-sm label-warning ">
 													Take action <i class="fa fa-share"></i>
 													</span>
                                                 </div>
@@ -1704,7 +1709,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </div>
                                             <div class="cont-col2">
                                                 <div class="desc">
-                                                    Web server hardware needs to be upgraded. <span class="label label-sm label-warning">
+                                                    Web server hardware needs to be upgraded. <span
+                                                        class="label label-sm label-warning">
 													Overdue </span>
                                                 </div>
                                             </div>
@@ -1752,7 +1758,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </div>
                                             <div class="cont-col2">
                                                 <div class="desc">
-                                                    You have 4 pending tasks. <span class="label label-sm label-warning ">
+                                                    You have 4 pending tasks. <span
+                                                        class="label label-sm label-warning ">
 													Take action <i class="fa fa-share"></i>
 													</span>
                                                 </div>
@@ -1862,7 +1869,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </div>
                                             <div class="cont-col2">
                                                 <div class="desc">
-                                                    Web server hardware needs to be upgraded. <span class="label label-sm label-default ">
+                                                    Web server hardware needs to be upgraded. <span
+                                                        class="label label-sm label-default ">
 													Overdue </span>
                                                 </div>
                                             </div>
@@ -1905,19 +1913,30 @@ License: You must have a valid license purchased only from themeforest(the above
                             <h3 class="list-heading">General Settings</h3>
                             <ul class="list-items borderless">
                                 <li>
-                                    Enable Notifications <input type="checkbox" class="make-switch" checked data-size="small" data-on-color="success" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Enable Notifications <input type="checkbox" class="make-switch" checked
+                                                                data-size="small" data-on-color="success"
+                                                                data-on-text="ON" data-off-color="default"
+                                                                data-off-text="OFF">
                                 </li>
                                 <li>
-                                    Allow Tracking <input type="checkbox" class="make-switch" data-size="small" data-on-color="info" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Allow Tracking <input type="checkbox" class="make-switch" data-size="small"
+                                                          data-on-color="info" data-on-text="ON"
+                                                          data-off-color="default" data-off-text="OFF">
                                 </li>
                                 <li>
-                                    Log Errors <input type="checkbox" class="make-switch" checked data-size="small" data-on-color="danger" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Log Errors <input type="checkbox" class="make-switch" checked data-size="small"
+                                                      data-on-color="danger" data-on-text="ON" data-off-color="default"
+                                                      data-off-text="OFF">
                                 </li>
                                 <li>
-                                    Auto Sumbit Issues <input type="checkbox" class="make-switch" data-size="small" data-on-color="warning" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Auto Sumbit Issues <input type="checkbox" class="make-switch" data-size="small"
+                                                              data-on-color="warning" data-on-text="ON"
+                                                              data-off-color="default" data-off-text="OFF">
                                 </li>
                                 <li>
-                                    Enable SMS Alerts <input type="checkbox" class="make-switch" checked data-size="small" data-on-color="success" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Enable SMS Alerts <input type="checkbox" class="make-switch" checked
+                                                             data-size="small" data-on-color="success" data-on-text="ON"
+                                                             data-off-color="default" data-off-text="OFF">
                                 </li>
                             </ul>
                             <h3 class="list-heading">System Settings</h3>
@@ -1931,16 +1950,24 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </select>
                                 </li>
                                 <li>
-                                    Failed Email Attempts <input class="form-control input-inline input-sm input-small" value="5"/>
+                                    Failed Email Attempts <input class="form-control input-inline input-sm input-small"
+                                                                 value="5"/>
                                 </li>
                                 <li>
-                                    Secondary SMTP Port <input class="form-control input-inline input-sm input-small" value="3560"/>
+                                    Secondary SMTP Port <input class="form-control input-inline input-sm input-small"
+                                                               value="3560"/>
                                 </li>
                                 <li>
-                                    Notify On System Error <input type="checkbox" class="make-switch" checked data-size="small" data-on-color="danger" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Notify On System Error <input type="checkbox" class="make-switch" checked
+                                                                  data-size="small" data-on-color="danger"
+                                                                  data-on-text="ON" data-off-color="default"
+                                                                  data-off-text="OFF">
                                 </li>
                                 <li>
-                                    Notify On SMTP Error <input type="checkbox" class="make-switch" checked data-size="small" data-on-color="warning" data-on-text="ON" data-off-color="default" data-off-text="OFF">
+                                    Notify On SMTP Error <input type="checkbox" class="make-switch" checked
+                                                                data-size="small" data-on-color="warning"
+                                                                data-on-text="ON" data-off-color="default"
+                                                                data-off-text="OFF">
                                 </li>
                             </ul>
                             <div class="inner-content">
@@ -1968,37 +1995,45 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
-<script src="../resources/assets/global/plugins/respond.min.js"></script>
-<script src="../resources/assets/global/plugins/excanvas.min.js"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/respond.min.js"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/excanvas.min.js"></script>
 <![endif]-->
-<script src="../resources/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<script src="../resources/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="../resources/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"
+        type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js"
+        type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js"
+        type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../resources/assets/global/plugins/select2/select2.min.js"></script>
-<script type="text/javascript" src="../resources/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="../resources/assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
-<script type="text/javascript" src="../resources/assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
-<script type="text/javascript" src="../resources/assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
-<script type="text/javascript" src="../resources/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="<%out.print(addPath);%>resources/assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript"
+        src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+        src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript"
+        src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript"
+        src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript"
+        src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../resources/assets/global/scripts/metronic.js" type="text/javascript"></script>
-<script src="../resources/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="../resources/assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
-<script src="../resources/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
-<script src="../resources/assets/admin/pages/scripts/table-advanced.js"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/admin/pages/scripts/table-advanced.js"></script>
 <script>
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
         QuickSidebar.init(); // init quick sidebar
