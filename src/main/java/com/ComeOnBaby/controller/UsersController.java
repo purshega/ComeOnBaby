@@ -2,11 +2,14 @@
 package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.model.AppUser;
+import com.ComeOnBaby.model.Note;
 import com.ComeOnBaby.model.Preferences;
 import com.ComeOnBaby.service.AppUserService;
 
+import com.ComeOnBaby.service.NoteService;
 import com.ComeOnBaby.service.PreferencesService;
 import com.google.gson.Gson;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @Controller
 @SessionAttributes("roles")
@@ -36,6 +41,7 @@ public class UsersController {
     private final static String GET_PROFILE_OPERATION = "getprofile";
     private final static String UPDATE_PROFILE_OPERATION = "updateprofile";
     private final static String ADD_CALENDAR_DAY_ACTIONS = "addcalendar";
+    private final static String SAVE_NOTE_OPERATION = "savenote";
 
     //JSON KEYS
     private final static String OPERATION = "operation";
@@ -56,6 +62,9 @@ public class UsersController {
 
     @Autowired
     PreferencesService prefService;
+
+    @Autowired
+    NoteService noteService;
 
     @RequestMapping(value = "/users", method = RequestMethod.POST,  produces="application/json")
     @ResponseStatus(value = HttpStatus.OK)
@@ -106,6 +115,10 @@ public class UsersController {
                 getProfile(inJSON, outJSON);
                 break;
             }
+            case SAVE_NOTE_OPERATION: {
+                saveNote(inJSON, outJSON);
+                break;
+            }
             case ADD_CALENDAR_DAY_ACTIONS: {
                 getProfile(inJSON, outJSON);
                 break;
@@ -116,6 +129,32 @@ public class UsersController {
         }
         System.out.println("Out JSON: " + outJSON.toString()  + "\n");
         return outJSON.toString();
+    }
+
+    //Save note operation
+    private JSONObject saveNote(JSONObject inJSON, JSONObject outJSON) {
+        Gson gson = new Gson();
+        JSONObject jsuser = new JSONObject(inJSON.getString(USER));
+        AppUser inUser = gson.fromJson(jsuser.toString(), AppUser.class);
+        JSONObject jsnote = new JSONObject(inJSON.getString(DATA));
+        Note note = parseNoteFromJson(jsnote.toString());
+        if(inUser.getId() == null || note == null) {
+            outJSON.put(MESSAGE, Strings.ERR_SAVE_NOTE);
+            return outJSON;
+        }
+        note.setUser_id(inUser.getId());
+        Note bdNote = noteService.findByUserDate(inUser, note.getDate());
+        if(bdNote == null) {
+            noteService.addNewNote(note);
+            System.out.println("Add new note");
+        } else {
+            System.out.println("Update note");
+            note.setId(bdNote.getId());
+            noteService.updateNote(note);
+        }
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_NOTE_SAVE_SUCCESS);
+        return outJSON;
     }
 
     //NEW
@@ -405,6 +444,145 @@ public class UsersController {
         outPreferences.put("is_agreement", pref.getIs_agreement());
         outPreferences.put("is_finish_question", pref.getIs_finish_question());
         return outPreferences;
+    }
+
+    private JSONObject getNoteJSON(Note note) {
+        JSONObject js = new JSONObject();
+        try {
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(note.getDate());
+            js.put("year", cal.get(Calendar.YEAR));
+            js.put("month", cal.get(Calendar.MONTH) + 1);
+            js.put("day", cal.get(Calendar.DAY_OF_MONTH));
+            if(note.getBbt() != null) js.put("bbt", String.valueOf(note.getBbt()));
+            if(note.getRecommended_food() != null) js.put("recommended_foods", note.getRecommended_food());
+            if(note.getHas_nuts() != null) js.put("has_nut", String.valueOf(note.getHas_nuts()));
+            if(note.getRecommended_nuts() != null) js.put("recommended_nuts", note.getRecommended_nuts());
+            if(note.getHas_tea() != null) js.put("has_tea", String.valueOf(note.getHas_tea()));
+            if(note.getRecommended_tea() != null) js.put("recommended_teas", note.getRecommended_tea());
+            if(note.getHas_exercise() != null) js.put("has_exercise", String.valueOf(note.getHas_exercise()));
+            if(note.getRecommended_exercise() != null) js.put("recommended_exercise", note.getRecommended_exercise());
+            if(note.getGoing_to_bed_from() != null) js.put("going_to_bed_from", note.getGoing_to_bed_from());
+            if(note.getGoing_to_bed_to() != null) js.put("going_to_bed_to", note.getGoing_to_bed_to());
+            if(note.getWater_intake() != null) js.put("water_intake", String.valueOf(note.getWater_intake()));
+            if(note.getHeating_bathing() != null) js.put("hip_bath", String.valueOf(note.getHeating_bathing()));
+            if(note.getVitamin() != null) js.put("vitamin", String.valueOf(note.getVitamin()));
+            if(note.getFolic_acid() != null) js.put("folate", String.valueOf(note.getFolic_acid()));
+            if(note.getCoffee_intake() != null) js.put("coffee_intake", String.valueOf(note.getCoffee_intake()));
+            if(note.getAlcohol_intake() != null) js.put("alcohol_consumption", String.valueOf(note.getAlcohol_intake()));
+            if(note.getSmoking() != null) js.put("smoking", String.valueOf(note.getSmoking()));
+            if(note.getEmotional_state() != null) js.put("emotional_state", String.valueOf(note.getEmotional_state()));
+            if(note.getBmi() != null) js.put("bmi", String.valueOf(note.getBmi()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return js;
+    }
+
+    public Note parseNoteFromJson(String data) {
+        Note note = new Note();
+        try {
+            JSONObject js = new JSONObject(data);
+            if (js.has("year") && js.has("month") && js.has("day")) {
+                int year = js.getInt("year");
+                int month = js.getInt("month");
+                int day = js.getInt("day");
+                Calendar cal = new GregorianCalendar(year, month-1, day);
+                note.setDate(cal.getTime());
+            } else {
+                System.out.println("NoteDTO: Error parsing from JSON - invalid date");
+                return null;
+            }
+            if (js.has("bbt")) {
+                String bbt = checkNoJsonData(js.getString("bbt"));
+                if(bbt != null) note.setBbt(Float.valueOf(bbt));
+            }
+            if (js.has("recommended_foods")) {
+                String recommended_foods = checkNoJsonData(js.getString("recommended_foods"));
+                if(recommended_foods != null) note.setRecommended_food(recommended_foods);
+            }
+            if (js.has("has_nut")) {
+                String has_nut = checkNoJsonData(js.getString("has_nut"));
+                if(has_nut != null) note.setHas_nuts(Boolean.valueOf(has_nut));
+            }
+            if (js.has("recommended_nuts")) {
+                String recommended_nuts = checkNoJsonData(js.getString("recommended_nuts"));
+                if(recommended_nuts != null) note.setRecommended_nuts(recommended_nuts);
+            }
+            if (js.has("has_tea")) {
+                String has_tea = checkNoJsonData(js.getString("has_tea"));
+                if(has_tea != null) note.setHas_tea(Boolean.valueOf(has_tea));
+            }
+            if (js.has("recommended_teas")) {
+                String recommended_teas = checkNoJsonData(js.getString("recommended_teas"));
+                if(recommended_teas != null) note.setRecommended_tea(recommended_teas);
+            }
+            if (js.has("has_exercise")) {
+                String has_exercise = checkNoJsonData(js.getString("has_exercise"));
+                if(has_exercise != null) note.setHas_exercise(Boolean.valueOf(has_exercise));
+            }
+            if (js.has("recommended_exercise")) {
+                String recommended_exercise = checkNoJsonData(js.getString("recommended_exercise"));
+                if(recommended_exercise != null) note.setRecommended_exercise(recommended_exercise);
+            }
+            if (js.has("going_to_bed_from") && js.has("going_to_bed_to")) {
+                String going_to_bed_from = checkNoJsonData(js.getString("going_to_bed_from"));
+                String going_to_bed_to = checkNoJsonData(js.getString("going_to_bed_to"));
+                if(going_to_bed_from != null && going_to_bed_to != null) {
+                    note.setGoing_to_bed_from(going_to_bed_from);
+                    note.setGoing_to_bed_to(going_to_bed_to);
+                }
+            }
+            if (js.has("water_intake")) {
+                String water_intake = checkNoJsonData(js.getString("water_intake"));
+                if(water_intake != null) note.setWater_intake(Double.parseDouble(water_intake));
+            }
+            if (js.has("hip_bath")) {
+                String hip_bath = checkNoJsonData(js.getString("hip_bath"));
+                if(hip_bath != null) note.setHeating_bathing(Integer.valueOf(hip_bath));
+            }
+            if (js.has("vitamin")) {
+                String vitamin = checkNoJsonData(js.getString("vitamin"));
+                if(vitamin != null) note.setVitamin(Boolean.valueOf(vitamin));
+            }
+            if (js.has("folate")) {
+                String folate = checkNoJsonData(js.getString("folate"));
+                if(folate != null) note.setFolic_acid(Boolean.valueOf(folate));
+            }
+            if (js.has("coffee_intake")) {
+                String coffee_intake = checkNoJsonData(js.getString("coffee_intake"));
+                if(coffee_intake != null) note.setCoffee_intake(Integer.parseInt(coffee_intake));
+            }
+            if (js.has("alcohol_consumption")) {
+                String alcohol_consumption = checkNoJsonData(js.getString("alcohol_consumption"));
+                if(alcohol_consumption != null) note.setAlcohol_intake(Integer.parseInt(alcohol_consumption));
+            }
+            if (js.has("smoking")) {
+                String smoking = checkNoJsonData(js.getString("smoking"));
+                if(smoking != null) note.setSmoking(Boolean.valueOf(smoking));
+            }
+            if (js.has("emotional_state")) {
+                String emotional_state = checkNoJsonData(js.getString("emotional_state"));
+                if(emotional_state != null) note.setEmotional_state(Integer.parseInt(emotional_state));
+            }
+            if (js.has("bmi")) {
+                String bmi = checkNoJsonData(js.getString("bmi"));
+                if(bmi != null) note.setBmi(Float.parseFloat(bmi));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return note;
+    }
+
+    private String checkNoJsonData(String str) {
+        if(str.isEmpty() || str.equals("null")) {
+            return null;
+        } else {
+            return str;
+        }
     }
 
     private JSONObject addCalendarDayActions(JSONObject inJSON, JSONObject outJSON){
