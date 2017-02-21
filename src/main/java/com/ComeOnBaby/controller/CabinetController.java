@@ -227,4 +227,7 @@ public class CabinetController {
 
         return modelAndView;
     }
+    public void temporary(){
+
+    }
 }
