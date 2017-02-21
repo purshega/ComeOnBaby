@@ -12,5 +12,7 @@ public interface NoteService {
     void updateNote(Note note);
     void deleteNote(Note note);
     public Note findByUserDate(AppUser user, Date date);
+    public List<Note> findUserNotes(AppUser user);
+    public List<Note> findUserNotesInterval(AppUser user, Date startDate, Date endDate);
     List<Note> getAllNotes();
 }

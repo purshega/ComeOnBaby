@@ -9,6 +9,7 @@ import com.ComeOnBaby.service.AppUserService;
 import com.ComeOnBaby.service.NoteService;
 import com.ComeOnBaby.service.PreferencesService;
 import com.google.gson.Gson;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 @Controller
 @SessionAttributes("roles")
@@ -42,6 +45,7 @@ public class UsersController {
     private final static String UPDATE_PROFILE_OPERATION = "updateprofile";
     private final static String ADD_CALENDAR_DAY_ACTIONS = "addcalendar";
     private final static String SAVE_NOTE_OPERATION = "savenote";
+    private final static String GET_USER_NOTES_OPERATION = "getnotes";
 
     //JSON KEYS
     private final static String OPERATION = "operation";
@@ -49,13 +53,15 @@ public class UsersController {
     private final static String MESSAGE = "message";
     private final static String SUCCESS = "success";
     private final static String FAILURE = "failure";
-    private final static String MODEL = "model";
+    //private final static String MODEL = "model";
     private final static String USER = "user";
     private final static String PROFILE = "profile";
     private final static String DATA = "data";
     private final static String NEW_EMAIL = "newemail";
     private final static String NEW_PASSWORD = "newpassword";
     private final static String NICKNAME = "nickname";
+    private final static String YEAR = "year";
+    private final static String MONTH = "month";
 
     @Autowired
     AppUserService userService;
@@ -119,6 +125,10 @@ public class UsersController {
                 saveNote(inJSON, outJSON);
                 break;
             }
+            case GET_USER_NOTES_OPERATION: {
+                getUserNotes(inJSON, outJSON);
+                break;
+            }
             case ADD_CALENDAR_DAY_ACTIONS: {
                 getProfile(inJSON, outJSON);
                 break;
@@ -154,6 +164,59 @@ public class UsersController {
         }
         outJSON.put(RESULT, SUCCESS);
         outJSON.put(MESSAGE, Strings.MSG_NOTE_SAVE_SUCCESS);
+        return outJSON;
+    }
+
+    //Get user notes operation
+    private JSONObject getUserNotes(JSONObject inJSON, JSONObject outJSON) {
+        Gson gson = new Gson();
+        JSONObject jsdata = new JSONObject(inJSON.getString(DATA));
+        JSONObject jsonuser = new JSONObject(inJSON.getString(USER));
+        AppUser inUser = gson.fromJson(jsonuser.toString(), AppUser.class);
+        if(inUser.getId() == null || userService.findById(inUser.getId()) == null) {
+            outJSON.put(MESSAGE, Strings.ERR_GET_NOTES);
+            return outJSON;
+        }
+        Integer year = null, month = null;
+        if(jsdata != null) {
+            if(jsdata.has(YEAR)) year = jsdata.getInt(YEAR);
+            if(jsdata.has(MONTH)) year = jsdata.getInt(MONTH);
+        }
+        List<Note> listNotes;
+        Date startDate, endDate;
+        //Set user notes for month
+        if(year != null && month != null) {
+            Calendar cal = new GregorianCalendar(year, month-1, 1);
+            System.out.println(cal.toString());
+            startDate = cal.getTime();
+            cal.add(Calendar.MONTH, 1);
+            endDate = cal.getTime();
+            listNotes = noteService.findUserNotesInterval(inUser, startDate, endDate);
+        }
+        //Get user notes for year
+        else if (year != null) {
+            Calendar cal = new GregorianCalendar(year, 0, 1);
+            startDate = cal.getTime();
+            cal.add(Calendar.YEAR, 1);
+            endDate = cal.getTime();
+            listNotes = noteService.findUserNotesInterval(inUser, startDate, endDate);
+        }
+        //Get all user notes
+        else {
+            listNotes = noteService.findUserNotes(inUser);
+        }
+        if(listNotes == null) {
+            outJSON.put(MESSAGE, Strings.ERR_GET_NOTES);
+            return outJSON;
+        }
+        JSONArray notesarr = new JSONArray();
+        for (int i = 0; i < listNotes.size(); i++) {
+            Note note = listNotes.get(i);
+            notesarr.put(i, getNoteJSON(note));
+        }
+        outJSON.put(DATA, notesarr.toString());
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_GET_NOTES_SUCCESS);
         return outJSON;
     }
 

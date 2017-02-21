@@ -48,6 +48,18 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @Transactional
+    public List<Note> findUserNotes(AppUser user) {
+        return noteDao.findUserNotes(user);
+    }
+
+    @Override
+    @Transactional
+    public List<Note> findUserNotesInterval(AppUser user, Date startDate, Date endDate) {
+        return noteDao.findUserNotesInterval(user, startDate, endDate);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Note> getAllNotes() {
         return noteDao.findAll();
