@@ -65,10 +65,27 @@ public class NoteDaoImpl extends AbstractDao<Integer, Note> implements NoteDao {
     public Note findByUserDate(AppUser user, Date date) {
         //Session session = sessionFactory.getCurrentSession();
         Criteria crit = createEntityCriteria();
-        crit.add(Restrictions.eq("date", date));
         crit.add(Restrictions.eq("user_id", user.getId()));
+        crit.add(Restrictions.eq("date", date));
         Note note = (Note) crit.uniqueResult();
         return note;
+    }
+
+    @Override
+    public List<Note> findUserNotes(AppUser user) {
+        Criteria crit = createEntityCriteria();
+        crit.add(Restrictions.eq("user_id", user.getId()));
+        List<Note> notes = crit.list();
+        return notes;
+    }
+
+    @Override
+    public List<Note> findUserNotesInterval(AppUser user, Date startDate, Date endDate) {
+        Criteria crit = createEntityCriteria();
+        crit.add(Restrictions.eq("user_id", user.getId()));
+        crit.add(Restrictions.between("date", startDate, endDate));
+        List<Note> notes = crit.list();
+        return notes;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class CabinetController {
     @Autowired
     BlogService blogService;
 
-    private String[] menuUrls = new String[]{"/cabinet/", "#", "#", "#", "/cabinet/success/", "/cabinet/recipe/","/cabinet/husband/", "#", "#", "last"};
+    private String[] menuUrls = new String[]{"cabinet/", "#", "#", "#", "cabinet/success/", "cabinet/recipe/","cabinet/husband/", "#", "#", "last"};
 
     static List<String> listMenuUrls = new ArrayList<String>();
 
@@ -77,7 +77,7 @@ public class CabinetController {
         modelAndView.addObject("namePage" , "Users table");
         modelAndView.addObject("nameTitle" , "Users of ComeOnBaby <small> list users</small>");
         modelAndView.addObject("menuUrls" , getMenuUrls());
-        modelAndView.addObject("addPath" , "../../");
+        modelAndView.addObject("addPath" , "../");//"/ComeOnBaby/"
 
         return modelAndView;
     }
