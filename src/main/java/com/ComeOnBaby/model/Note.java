@@ -1,29 +1,31 @@
 package com.ComeOnBaby.model;
 
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "calendar")
-public class Calendar  {
+@Table(name = "notes")
+public class Note {
 
     @Id
-    @NotEmpty
+    @GeneratedValue(generator = "increment2")
+    @GenericGenerator(name = "increment2", strategy = "increment")
+    @Column(name = "id")
+    private Long id;
+
     @Column(name="user_id", nullable=false)
     private Long user_id;
 
-    @NotEmpty
+//    @NotEmpty
+//    @DateTimeFormat
     @Column(name="date", nullable=false)
     private Date date;
 
-    @Column(name="basic_body_temperature")
-    private Float basic_body_temperature;
+    @Column(name="bbt")
+    private Float bbt;
 
     @Column(name="recommended_food")
     private String recommended_food;
@@ -40,6 +42,12 @@ public class Calendar  {
     @Column(name="has_tea")
     private Boolean has_tea;
 
+    @Column(name="has_exercise")
+    private Boolean has_exercise;
+
+    @Column(name="recommended_exercise")
+    private String recommended_exercise;
+
     @Column(name="going_to_bed_from")
     private String going_to_bed_from;
 
@@ -47,10 +55,10 @@ public class Calendar  {
     private String going_to_bed_to;
 
     @Column(name="water_intake")
-    private String water_intake;
+    private Double water_intake;
 
     @Column(name="heating_bathing")
-    private String heating_bathing;
+    private Integer heating_bathing;
 
     @Column(name="vitamin")
     private Boolean vitamin;
@@ -58,24 +66,32 @@ public class Calendar  {
     @Column(name="folic_acid")
     private Boolean folic_acid;
 
+    @Column(name="coffee_intake")
+    private Integer coffee_intake;
+
     @Column(name="alcohol_intake")
-    private Boolean alcohol_intake;
+    private Integer alcohol_intake;
 
     @Column(name="smoking")
     private Boolean smoking;
 
     @Column(name="emotional_state")
-    private String 	emotional_state;
+    private Integer emotional_state;
 
     @Column(name="bmi")
     private Float bmi;
 
 
-    public Calendar(){
-
+    public Note(){
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUser_id() {
         return user_id;
@@ -93,12 +109,12 @@ public class Calendar  {
         this.date = date;
     }
 
-    public Float getBasic_body_temperature() {
-        return basic_body_temperature;
+    public Float getBbt() {
+        return bbt;
     }
 
-    public void setBasic_body_temperature(Float basic_body_temperature) {
-        this.basic_body_temperature = basic_body_temperature;
+    public void setBbt(Float bbt) {
+        this.bbt = bbt;
     }
 
     public String getRecommended_food() {
@@ -141,6 +157,22 @@ public class Calendar  {
         this.has_tea = has_tea;
     }
 
+    public Boolean getHas_exercise() {
+        return has_exercise;
+    }
+
+    public void setHas_exercise(Boolean has_exercise) {
+        this.has_exercise = has_exercise;
+    }
+
+    public String getRecommended_exercise() {
+        return recommended_exercise;
+    }
+
+    public void setRecommended_exercise(String recommended_exercise) {
+        this.recommended_exercise = recommended_exercise;
+    }
+
     public String getGoing_to_bed_from() {
         return going_to_bed_from;
     }
@@ -157,19 +189,19 @@ public class Calendar  {
         this.going_to_bed_to = going_to_bed_to;
     }
 
-    public String getWater_intake() {
+    public Double getWater_intake() {
         return water_intake;
     }
 
-    public void setWater_intake(String water_intake) {
+    public void setWater_intake(Double water_intake) {
         this.water_intake = water_intake;
     }
 
-    public String getHeating_bathing() {
+    public Integer getHeating_bathing() {
         return heating_bathing;
     }
 
-    public void setHeating_bathing(String heating_bathing) {
+    public void setHeating_bathing(Integer heating_bathing) {
         this.heating_bathing = heating_bathing;
     }
 
@@ -189,11 +221,19 @@ public class Calendar  {
         this.folic_acid = folic_acid;
     }
 
-    public Boolean getAlcohol_intake() {
+    public Integer getCoffee_intake() {
+        return coffee_intake;
+    }
+
+    public void setCoffee_intake(Integer coffee_intake) {
+        this.coffee_intake = coffee_intake;
+    }
+
+    public Integer getAlcohol_intake() {
         return alcohol_intake;
     }
 
-    public void setAlcohol_intake(Boolean alcohol_intake) {
+    public void setAlcohol_intake(Integer alcohol_intake) {
         this.alcohol_intake = alcohol_intake;
     }
 
@@ -205,11 +245,11 @@ public class Calendar  {
         this.smoking = smoking;
     }
 
-    public String getEmotional_state() {
+    public Integer getEmotional_state() {
         return emotional_state;
     }
 
-    public void setEmotional_state(String emotional_state) {
+    public void setEmotional_state(Integer emotional_state) {
         this.emotional_state = emotional_state;
     }
 
@@ -221,27 +261,30 @@ public class Calendar  {
         this.bmi = bmi;
     }
 
-    public Calendar(Long user_id, Date date, Float basic_body_temperature, String recommended_food, String recommended_nuts,
-                    Boolean has_nuts, String recommended_tea, Boolean has_tea, String going_to_bed_from, String going_to_bed_to,
-                    String water_intake, String heating_bathing, Boolean vitamin, Boolean folic_acid, Boolean alcohol_intake,
-                    Boolean smoking, String emotional_state, Float bmi) {
-        this.user_id = user_id;
-        this.date = date;
-        this.basic_body_temperature = basic_body_temperature;
-        this.recommended_food = recommended_food;
-        this.recommended_nuts = recommended_nuts;
-        this.has_nuts = has_nuts;
-        this.recommended_tea = recommended_tea;
-        this.has_tea = has_tea;
-        this.going_to_bed_from = going_to_bed_from;
-        this.going_to_bed_to = going_to_bed_to;
-        this.water_intake = water_intake;
-        this.heating_bathing = heating_bathing;
-        this.vitamin = vitamin;
-        this.folic_acid = folic_acid;
-        this.alcohol_intake = alcohol_intake;
-        this.smoking = smoking;
-        this.emotional_state = emotional_state;
-        this.bmi = bmi;
+    @Override
+    public String toString() {
+        return "Note{" +
+                "user_id=" + user_id +
+                ", date=" + date +
+                ", bbt=" + bbt +
+                ", recommended_food='" + recommended_food + '\'' +
+                ", recommended_nuts='" + recommended_nuts + '\'' +
+                ", has_nuts=" + has_nuts +
+                ", recommended_tea='" + recommended_tea + '\'' +
+                ", has_tea=" + has_tea +
+                ", has_exercise=" + has_exercise +
+                ", recommended_exercise='" + recommended_exercise + '\'' +
+                ", going_to_bed_from='" + going_to_bed_from + '\'' +
+                ", going_to_bed_to='" + going_to_bed_to + '\'' +
+                ", water_intake=" + water_intake +
+                ", heating_bathing=" + heating_bathing +
+                ", vitamin=" + vitamin +
+                ", folic_acid=" + folic_acid +
+                ", coffee_intake=" + coffee_intake +
+                ", alcohol_intake=" + alcohol_intake +
+                ", smoking=" + smoking +
+                ", emotional_state=" + emotional_state +
+                ", bmi=" + bmi +
+                '}';
     }
 }
