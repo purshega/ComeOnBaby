@@ -1205,7 +1205,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/cabinet/">Users</a>
+                        <a href="<%out.print(addPath); %>cabinet/">Users</a>
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>

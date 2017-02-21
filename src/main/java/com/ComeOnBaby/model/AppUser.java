@@ -68,7 +68,7 @@ public class AppUser {
 
         sb.append("<tr>");
         sb.append("<td> id </td>");
-        sb.append("<td> <a href=\"/cabinet/user/"+id+"\">"+email+"</a> </td>");
+        sb.append("<td> <a href=\"../cabinet/user/"+id+"\">"+email+"</a> </td>");
         sb.append("<td> </td>");
         sb.append("<td> </td>");
         sb.append("<td> "+getLoginType()+" </td>");

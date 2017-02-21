@@ -506,14 +506,14 @@ License: You must have a valid license purchased only from themeforest(the above
                 <%
                     ArrayList<String> menuUrls = (ArrayList<String>) request.getAttribute("menuUrls");
 
-                    String menuUrl1 = menuUrls.get(0);
-                    String menuUrl2 = menuUrls.get(1);
-                    String menuUrl3 = menuUrls.get(2);
-                    String menuUrl4 = menuUrls.get(3);
-                    String menuUrl5 = menuUrls.get(4);
-                    String menuUrl6 = menuUrls.get(5);
-                    String menuUrl7 = menuUrls.get(6);
-                    String menuUrl8 = menuUrls.get(7);
+                    String menuUrl1 = addPath+menuUrls.get(0);
+                    String menuUrl2 = addPath+menuUrls.get(1);
+                    String menuUrl3 = addPath+menuUrls.get(2);
+                    String menuUrl4 = addPath+menuUrls.get(3);
+                    String menuUrl5 = addPath+menuUrls.get(4);
+                    String menuUrl6 = addPath+menuUrls.get(5);
+                    String menuUrl7 = addPath+menuUrls.get(6);
+                    String menuUrl8 = addPath+menuUrls.get(7);
                 %>
                 <li class="start ">
                     <a href="<% out.print(menuUrl1);%>">
@@ -1201,7 +1201,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>
-                        <a href="/cabinet/">Users</a>
+                        <a href="<%out.print(addPath); %>cabinet/">Users</a>
                     </li>
                 </ul>
                 <div class="page-toolbar">
