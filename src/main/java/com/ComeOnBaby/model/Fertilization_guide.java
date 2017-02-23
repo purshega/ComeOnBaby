@@ -71,4 +71,14 @@ public class Fertilization_guide {
         this.date = date;
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "Fertilization_guide{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", date=" + date +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }

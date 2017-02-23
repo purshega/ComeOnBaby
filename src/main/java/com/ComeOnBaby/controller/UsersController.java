@@ -1,10 +1,8 @@
 
 package com.ComeOnBaby.controller;
 
-import com.ComeOnBaby.model.AppUser;
-import com.ComeOnBaby.model.Note;
-import com.ComeOnBaby.model.Preferences;
-import com.ComeOnBaby.service.AppUserService;
+import com.ComeOnBaby.model.*;
+import com.ComeOnBaby.service.*;
 
 import com.ComeOnBaby.service.NoteService;
 import com.ComeOnBaby.service.PreferencesService;
@@ -17,15 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
 import javax.servlet.annotation.MultipartConfig;
-import java.awt.image.*;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Controller
@@ -52,6 +47,8 @@ public class UsersController {
     private final static String UPDATE_PROFILE_OPERATION = "updateprofile";
     private final static String ADD_CALENDAR_DAY_ACTIONS = "addcalendar";
     private final static String SAVE_NOTE_OPERATION = "savenote";
+    private final static String GET_GUIDE_OPERATION = "getguide";
+    private final static String GET_RECIPE_OPERATION = "getrecipe";
     private final static String GET_USER_NOTES_OPERATION = "getnotes";
 
     //JSON KEYS
@@ -62,6 +59,7 @@ public class UsersController {
     private final static String FAILURE = "failure";
     //private final static String MODEL = "model";
     private final static String USER = "user";
+    private final static String GUIDE = "guide";
     private final static String PROFILE = "profile";
     private final static String DATA = "data";
     private final static String NEW_EMAIL = "newemail";
@@ -78,6 +76,12 @@ public class UsersController {
 
     @Autowired
     NoteService noteService;
+
+    @Autowired
+    Fertilization_guideService guideService;
+
+    @Autowired
+    Recipe_guideService recipeService;
 
     @RequestMapping(value = "/users", method = RequestMethod.POST,  produces="application/json")
     @ResponseStatus(value = HttpStatus.OK)
@@ -140,6 +144,16 @@ public class UsersController {
                 getProfile(inJSON, outJSON);
                 break;
             }
+            case GET_GUIDE_OPERATION: {
+                getGuide(inJSON, outJSON);
+                break;
+                }
+
+            case GET_RECIPE_OPERATION: {
+                getRecipe(inJSON, outJSON);
+                break;
+            }
+
             default: {
                 throw new IllegalArgumentException(Strings.ERR_UNKNOWN_OPERATION);
             }
@@ -655,11 +669,62 @@ public class UsersController {
         }
     }
 
-    private JSONObject addCalendarDayActions(JSONObject inJSON, JSONObject outJSON){
+    private JSONObject getGuide(JSONObject inJSON, JSONObject outJSON) {
+        List<Fertilization_guide> guideList = guideService.getAllFertilization_guide();
 
 
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_GUIDE_DOWNLOAD_SUCCESS);
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (Fertilization_guide guide : guideList) {
+            System.out.println("TO STRING GUIDE   : " + guide.toString());
+            jsonArray.put(getGuideJSON(guide));
+        }
+        outJSON.put(DATA,jsonArray.toString());
         return outJSON;
     }
+
+    //Make JSON from Fertilization_guide
+    private JSONObject getGuideJSON(Fertilization_guide guide) {
+        JSONObject outGuide = new JSONObject();
+        outGuide.put("id", guide.getId());
+        outGuide.put("title", guide.getTitle());
+        outGuide.put("date", guide.getDate());
+        outGuide.put("image" , guide.getImage());
+        return outGuide;
+    }
+
+    private JSONObject getRecipe(JSONObject inJSON, JSONObject outJSON) {
+
+        List<Recipe_guide> recipeList = recipeService.getAllRecipe_guide();
+
+
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_RECIPE_DOWNLOAD_SUCCESS);
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (Recipe_guide recipe : recipeList) {
+            System.out.println("TO STRING GUIDE   : " + recipe.toString());
+            jsonArray.put(getRecipeJSON(recipe));
+        }
+        outJSON.put(DATA,jsonArray.toString());
+        return outJSON;
+    }
+
+    //Make JSON from Recipe_guide
+    private JSONObject getRecipeJSON(Recipe_guide recipe) {
+        JSONObject outGuide = new JSONObject();
+        outGuide.put("id", recipe.getId());
+        outGuide.put("title", recipe.getTitle());
+        outGuide.put("date", recipe.getDate());
+        outGuide.put("image_thumbnail" , recipe.getImage_thumbnail());
+        outGuide.put("url_naver" , recipe.getUrl_naver());
+        return outGuide;
+    }
+
 
     //EXCEPTION
     @ExceptionHandler(Exception.class)

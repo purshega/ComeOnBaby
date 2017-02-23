@@ -29,6 +29,12 @@ public class CommunityController {
 
     //Folder to store images
     private static final String IMAGES_DIR = "D:/images";
+    static {
+        File file = new File(IMAGES_DIR);
+        if(!file.exists()) {
+            file.mkdirs();
+        }
+    }
 
     //JSON KEYS
     private final static String OPERATION = "operation";
