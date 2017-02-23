@@ -17,14 +17,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.annotation.MultipartConfig;
+import java.awt.image.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 import java.util.List;
 
 @Controller
+@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
+        maxFileSize=1024*1024*10,      // 10MB
+        maxRequestSize=1024*1024*50)
 @SessionAttributes("roles")
 public class UsersController {
 
