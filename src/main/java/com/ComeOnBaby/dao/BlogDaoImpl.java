@@ -62,9 +62,9 @@ public class BlogDaoImpl implements BlogDao{
         return query.list();
     }
     @Override
-    public List<Blog> findBlogByType(String type){
+    public List<Blog> findBlogByType(Integer type){
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Blog.class).add(Restrictions.like("type","%"+type+"%"));
+        Criteria criteria = session.createCriteria(Blog.class).add(Restrictions.like("type", type));
         List<Blog> list = criteria.list();
         return list;
     }

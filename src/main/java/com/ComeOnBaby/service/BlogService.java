@@ -11,5 +11,5 @@ public interface BlogService {
     void updateBlog(Blog blog);
     void deleteBlog(Blog blog);
     List<Blog> getAllBlog();
-    List<Blog> findBlogByType(String type);
+    List<Blog> findBlogByType(Integer type);
 }

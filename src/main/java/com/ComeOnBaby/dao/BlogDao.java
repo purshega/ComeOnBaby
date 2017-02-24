@@ -12,7 +12,7 @@ public interface BlogDao {
     void update(Blog blog);
     void delete(Blog blog);
     List<Blog> findAll();
-    List<Blog> findBlogByType(String type);
+    List<Blog> findBlogByType(Integer type);
 }
 
 

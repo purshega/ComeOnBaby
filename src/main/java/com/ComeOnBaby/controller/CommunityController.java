@@ -1,8 +1,10 @@
 package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.model.AppUser;
+import com.ComeOnBaby.model.Blog;
 import com.ComeOnBaby.model.Preferences;
 import com.ComeOnBaby.service.AppUserService;
+import com.ComeOnBaby.service.BlogService;
 import com.ComeOnBaby.service.PreferencesService;
 import com.google.gson.Gson;
 import org.json.JSONArray;
@@ -15,8 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -48,6 +53,8 @@ public class CommunityController {
 
     //Operations
     public static final String UPDATE_AVATAR_OPERATION = "updateavatar";
+    public static final String SAVE_COMUNITY_RECORD_OPERATION = "saverecord";
+
 
 //    @Autowired
 //    ServletContext context;
@@ -57,6 +64,9 @@ public class CommunityController {
 
     @Autowired
     PreferencesService prefService;
+
+    @Autowired
+    BlogService blogService;
 
     @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
@@ -93,28 +103,12 @@ public class CommunityController {
         }
         System.out.println("Get " + images.length + " images fom user with id=" + body.getUserid());
 
-        File[] files = new File[images.length];
-        //Try to compress bitmaps and save files to storage
+        File[] files = null;
         try {
-            File file;
-            for (int i = 0; i < images.length; i++) {
-                byte[] img = images[i];
-                BufferedImage bi = ImageIO.read(new ByteArrayInputStream(img));
-                file = genRandomFile(IMAGES_DIR, "png");
-                files[i] = file;
-                ImageIO.write(bi, "png", file);
-                System.out.println("Saved file: " + file.getAbsolutePath());
-            }
-        //If something wrong, rollback changes and send error message
+            files = saveImagesToStorage(images);
         } catch (Exception e) {
-            e.printStackTrace();
-            for (File file : files) {
-                if(file != null && file.exists()) {
-                    file.delete();
-                    System.out.println("Remove file after exception: " + file.getAbsolutePath());
-                }
-            }
             js.put(RESULT, FAILURE);
+            removeFiles(files);
             //js.put(MESSAGE, Strings.ERR_SAVE_IMAGES);
             js.put(MESSAGE, e.getMessage());
             return js.toString();
@@ -180,7 +174,6 @@ public class CommunityController {
                     outJSON.put(MESSAGE, e.getMessage());
                     return outJSON.toString();
                 }
-
                 outJSON.put(RESULT, SUCCESS);
                 outJSON.put(MESSAGE, Strings.MSG_UPDATE_AVATAR_SUCCESS);
                 outJSON.put(DATA, new JSONObject().put(AVATAR, newAvatar.getName()).toString());
@@ -194,7 +187,110 @@ public class CommunityController {
         return outJSON.toString();
     }
 
+    @RequestMapping(value = "/community", method = RequestMethod.POST, produces="application/json")
+    public @ResponseBody String communityOperation (@RequestBody CommunityRequest req) {
+        System.out.println("Get community request: " + req.toString());
+        JSONObject outJSON = new JSONObject();
+        outJSON.put(RESULT, FAILURE);
+        outJSON.put(OPERATION, req.getOperation());
+        outJSON.put(MESSAGE, Strings.ERR_SERVER_ERROR);
 
+        if (req.getOperation() == null) throw new IllegalArgumentException(Strings.ERR_NO_OPERATION);
+        if (req.getUser() == null) throw new IllegalArgumentException(Strings.ERR_NO_USER);
+        JSONObject jsuser = new JSONObject(req.getUser());
+        Gson gson = new Gson();
+        AppUser inUser = gson.fromJson(jsuser.toString(), AppUser.class);
+        AppUser bdUser = null;
+        if (inUser == null || inUser.getId() != null) {
+            bdUser = userService.findById(inUser.getId());
+        }
+        if (bdUser == null) {
+            outJSON.put(MESSAGE, Strings.ERR_USER_NOT_FOUND);
+            return outJSON.toString();
+        }
+        switch (req.getOperation()) {
+            case SAVE_COMUNITY_RECORD_OPERATION: {
+                saveCommunityRecord(bdUser.getId(), req, outJSON);
+                break;
+            }
+            default: {
+                outJSON.put(MESSAGE, Strings.ERR_UNKNOWN_OPERATION);
+                return outJSON.toString();
+            }
+        }
+        System.out.println("Out JSON: " + outJSON.toString()  + "\n");
+        return outJSON.toString();
+    }
+
+    private void saveCommunityRecord(Long userID, CommunityRequest req, JSONObject outJSON) {
+        System.out.println("INSIDE METHOD SAVE");
+        Blog blog = new Blog();
+        File[] images = null;
+            try {
+                images = saveImagesToStorage(req.getBitmaps());
+                blog.setImages(getStringFileNames(images, ','));
+                blog.setId_user(userID);
+                blog.setTitle(req.getTitle());
+                blog.setText(req.getContent());
+                blog.setType(req.getType());
+                blog.setDatetime(Calendar.getInstance().getTime());
+                blogService.addNewBlog(blog);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                removeFiles(images);
+                //outJSON.put(MESSAGE, Strings.MSG_SAVE_COMUNITY_RECORD_FAIL);
+                outJSON.put(MESSAGE, exc.getMessage());
+                return;
+            }
+
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_SAVE_COMUNITY_RECORD_SUCCESS);
+    }
+
+    //Get String with filenames separated by separator
+    private String getStringFileNames(File[] files, char separator) {
+        String names = null;
+        for(File file : files) {
+            if(names == null) names = file.getName();
+            else names = names + separator + file.getName();
+        }
+        return names;
+    }
+
+    //Remove files
+    private void removeFiles(File[] files) {
+        if(files != null) {
+            for (File file : files) {
+                if (file != null && file.exists()) {
+                    file.delete();
+                    System.out.println("Remove file: " + file.getAbsolutePath());
+                }
+            }
+        }
+    }
+
+    //Save byte array bitmaps to storage and return saved File objects
+    private File[] saveImagesToStorage(byte[][] images) throws Exception {
+        int numOfImages = images != null ? images.length : 0;
+        File[] files = new File[numOfImages];
+        try {
+            File file;
+            for (int i = 0; i < numOfImages; i++) {
+                byte[] img = images[i];
+                BufferedImage bi = ImageIO.read(new ByteArrayInputStream(img));
+                file = genRandomFile(IMAGES_DIR, "jpg");
+                files[i] = file;
+                ImageIO.write(bi, "jpg", file);
+                System.out.println("Saved file: " + file.getAbsolutePath());
+            }
+            //If something wrong, rollback changes and send error message
+        } catch (Exception exc) {
+            exc.printStackTrace();
+            removeFiles(files);
+            throw exc;
+        }
+        return files;
+    }
 
     //Random file name generator
     //Folder - containing folder, suffix - file extension
@@ -207,14 +303,9 @@ public class CommunityController {
         return file;
     }
 
-    class ImagesUploadRequest {
+    private class ImagesUploadRequest {
         private Long userid;
         private byte[][] bitmaps;
-
-        public ImagesUploadRequest(Long userid, byte[][] bitmaps) {
-            this.userid = userid;
-            this.bitmaps = bitmaps;
-        }
 
         public Long getUserid() {return userid;}
         public void setUserid(Long userid) {this.userid = userid;}
@@ -222,25 +313,48 @@ public class CommunityController {
         public void setBitmaps(byte[][] bitmaps) {this.bitmaps = bitmaps;}
     }
 
-    public class UpdateAvatarRequest {
+    private class UpdateAvatarRequest {
         private String operation;
         private String user;
         private byte[] bitmap;
 
-        public UpdateAvatarRequest(String operation, String user, byte[] bitmap) {
-            this.operation = operation;
-            this.user = user;
-            this.bitmap = bitmap;
-        }
+        public String getOperation() {return operation;}
+        public void setOperation(String operation) {this.operation = operation;}
+        public String getUser() {return user;}
+        public void setUser(String user) {this.user = user;}
+        public byte[] getBitmap() {return bitmap;}
+        public void setBitmap(byte[] bitmap) {this.bitmap = bitmap;}
+    }
+
+    private class CommunityRequest {
+        private String operation;
+        private String user;
+        private String title;
+        private String content;
+        private String data;
+        private int type;
+        private byte[][] bitmaps;
 
         public String getOperation() {return operation;}
         public void setOperation(String operation) {this.operation = operation;}
-
         public String getUser() {return user;}
         public void setUser(String user) {this.user = user;}
+        public String getTitle() {return title;}
+        public void setTitle(String title) {this.title = title;}
+        public String getContent() {return content;}
+        public void setContent(String content) {this.content = content;}
+        public String getData() {return data;}
+        public void setData(String data) {this.data = data;}
+        public int getType() {return type;}
+        public void setType(int type) {this.type = type;}
+        public byte[][] getBitmaps() {return bitmaps;}
+        public void setBitmaps(byte[][] bitmaps) {this.bitmaps = bitmaps;}
 
-        public byte[] getBitmap() {return bitmap;}
-        public void setBitmap(byte[] bitmap) {this.bitmap = bitmap;}
+        @Override
+        public String toString() {
+            return "operation=" + operation + ", user=" + user + ", title=" + title + ", content=" + content +
+                    ", data=" + data + ", type=" + type + ", bitmaps=" + bitmaps!=null ? "" + bitmaps.length : "null";
+        }
     }
 
     //EXCEPTION
