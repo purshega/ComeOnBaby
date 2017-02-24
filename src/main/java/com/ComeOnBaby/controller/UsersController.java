@@ -83,11 +83,13 @@ public class UsersController {
     @Autowired
     Recipe_guideService recipeService;
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST,  produces="application/json")
-    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(value = "/users", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
+    @ResponseStatus(value = HttpStatus.OK )
     public @ResponseBody String userAction (@RequestBody String body) {
+
         System.out.println("Get json: " + body.toString());
         JSONObject inJSON = new JSONObject(body);
+
         if(!inJSON.has(OPERATION)) throw new IllegalArgumentException(Strings.ERR_NO_OPERATION);
         if(!inJSON.has(USER)) throw new IllegalArgumentException(Strings.ERR_NO_USER);
         //Default response values
@@ -159,6 +161,7 @@ public class UsersController {
             }
         }
         System.out.println("Out JSON: " + outJSON.toString()  + "\n");
+       /* String respond = new String(outJSON.toString() , "UTF-8" );*/
         return outJSON.toString();
     }
 
@@ -707,7 +710,6 @@ public class UsersController {
         JSONArray jsonArray = new JSONArray();
 
         for (Recipe_guide recipe : recipeList) {
-            System.out.println("TO STRING GUIDE   : " + recipe.toString());
             jsonArray.put(getRecipeJSON(recipe));
         }
         outJSON.put(DATA,jsonArray.toString());
@@ -719,7 +721,7 @@ public class UsersController {
         JSONObject outGuide = new JSONObject();
         outGuide.put("id", recipe.getId());
         outGuide.put("title", recipe.getTitle());
-        outGuide.put("date", recipe.getDate());
+        outGuide.put("date", recipe.getDateFormat());
         outGuide.put("image_thumbnail" , recipe.getImage_thumbnail());
         outGuide.put("url_naver" , recipe.getUrl_naver());
         return outGuide;
