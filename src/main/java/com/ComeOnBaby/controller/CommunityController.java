@@ -69,32 +69,32 @@ public class CommunityController {
     @Autowired
     BlogService blogService;
 
-    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {"image/jpg", "image/jpeg", "image/png"})
     public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
         File imagePath = new File(IMAGES_DIR, imgName);
         System.out.println("Get image command: " + imagePath.getAbsolutePath());
         if(imagePath.exists()) {
             //InputStream in = context.getResourceAsStream(imagePath.getAbsolutePath());
-            ByteArrayOutputStream pngOutStr = new ByteArrayOutputStream();
+            ByteArrayOutputStream imgOutStr = new ByteArrayOutputStream();
             BufferedImage image = ImageIO.read(imagePath);
 
-            //
+            //определяем формат
             String format = "jpg";
             try {
                 int index = imgName.lastIndexOf('.');
                 format = imgName.substring(index + 1);
-                if(format.equals("jpeg")) format = "jpg";
-            } catch (Exception exc) {
-                exc.printStackTrace();
-            }
+                if(!format.equals("jpg") || !format.equals("png")) {
+                    format = "jpg";
+                }
+            } catch (Exception exc) {}
 
-            ImageIO.write(image, format, pngOutStr);
-            byte[] imgByte = pngOutStr.toByteArray();
+            ImageIO.write(image, format, imgOutStr);
+            byte[] imgByte = imgOutStr.toByteArray();
             response.setStatus(HttpServletResponse.SC_OK);
             response.setHeader("Cache-Control", "no-store");
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
-            response.setContentType("image/*");
+            response.setContentType("image/" + format);
             ServletOutputStream responseOutputStream = response.getOutputStream();
             responseOutputStream.write(imgByte);
             responseOutputStream.flush();
@@ -103,6 +103,7 @@ public class CommunityController {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
+
 
     @RequestMapping(value = "/putimages", method = RequestMethod.POST, produces="application/json")
     public @ResponseBody String saveImages(@RequestBody ImagesUploadRequest body) {
@@ -165,8 +166,8 @@ public class CommunityController {
                         oldAvatar = new File(IMAGES_DIR, pref.getAvatar());
                     }
                     BufferedImage bi = ImageIO.read(new ByteArrayInputStream(byteImg));
-                    newAvatar = genRandomFile(IMAGES_DIR, "png");
-                    ImageIO.write(bi, "png", newAvatar);
+                    newAvatar = genRandomFile(IMAGES_DIR, "jpg");
+                    ImageIO.write(bi, "jpg", newAvatar);
                     System.out.println("Saved new avatar file: " + newAvatar.getAbsolutePath());
                     pref.setAvatar(newAvatar.getName());
                     prefService.updatePreferences(pref);
