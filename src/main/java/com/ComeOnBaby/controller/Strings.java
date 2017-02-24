@@ -40,5 +40,7 @@ public class Strings {
     public final static String MSG_UPDATE_AVATAR_SUCCESS = "Update avatar success";
     public final static String MSG_SAVE_COMUNITY_RECORD_SUCCESS = "Save community record success";
     public final static String MSG_SAVE_COMUNITY_RECORD_FAIL = "Save community record fail";
+    public final static String MSG_GET_COMMUNITY_RECORDS_SUCCESS = "Get community records success";
+    public final static String MSG_GET_COMMUNITY_RECORDS_FAIL = "Get community records fail";
 
 }

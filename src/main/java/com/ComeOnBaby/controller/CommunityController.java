@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -54,6 +54,7 @@ public class CommunityController {
     //Operations
     public static final String UPDATE_AVATAR_OPERATION = "updateavatar";
     public static final String SAVE_COMUNITY_RECORD_OPERATION = "saverecord";
+    public static final String GET_COMUNITY_RECORDS_OPERATION = "getrecords";
 
 
 //    @Autowired
@@ -68,7 +69,7 @@ public class CommunityController {
     @Autowired
     BlogService blogService;
 
-    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
     public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
         File imagePath = new File(IMAGES_DIR, imgName);
         System.out.println("Get image command: " + imagePath.getAbsolutePath());
@@ -76,13 +77,24 @@ public class CommunityController {
             //InputStream in = context.getResourceAsStream(imagePath.getAbsolutePath());
             ByteArrayOutputStream pngOutStr = new ByteArrayOutputStream();
             BufferedImage image = ImageIO.read(imagePath);
-            ImageIO.write(image, "png", pngOutStr);
+
+            //
+            String format = "jpg";
+            try {
+                int index = imgName.lastIndexOf('.');
+                format = imgName.substring(index + 1);
+                if(format.equals("jpeg")) format = "jpg";
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+
+            ImageIO.write(image, format, pngOutStr);
             byte[] imgByte = pngOutStr.toByteArray();
             response.setStatus(HttpServletResponse.SC_OK);
             response.setHeader("Cache-Control", "no-store");
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
-            response.setContentType("image/png");
+            response.setContentType("image/*");
             ServletOutputStream responseOutputStream = response.getOutputStream();
             responseOutputStream.write(imgByte);
             responseOutputStream.flush();
@@ -189,6 +201,10 @@ public class CommunityController {
 
     @RequestMapping(value = "/community", method = RequestMethod.POST, produces="application/json")
     public @ResponseBody String communityOperation (@RequestBody CommunityRequest req) {
+        if(req == null) {
+            System.out.println("REQUEST NULL");
+            return "";
+        }
         System.out.println("Get community request: " + req.toString());
         JSONObject outJSON = new JSONObject();
         outJSON.put(RESULT, FAILURE);
@@ -213,6 +229,10 @@ public class CommunityController {
                 saveCommunityRecord(bdUser.getId(), req, outJSON);
                 break;
             }
+            case GET_COMUNITY_RECORDS_OPERATION: {
+                getCommunityRecordsOperation(req, outJSON);
+                break;
+            }
             default: {
                 outJSON.put(MESSAGE, Strings.ERR_UNKNOWN_OPERATION);
                 return outJSON.toString();
@@ -222,8 +242,41 @@ public class CommunityController {
         return outJSON.toString();
     }
 
+    private void getCommunityRecordsOperation(CommunityRequest req, JSONObject outJSON) {
+        List<Blog> list = blogService.findBlogByType(req.getType());
+        JSONArray jsarr = new JSONArray();
+        for (int i = 0; i < list.size(); i++) {
+            Blog blog = list.get(i);
+            jsarr.put(getBlogJSON(blog));
+        }
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_GET_COMMUNITY_RECORDS_SUCCESS);
+        outJSON.put(DATA, jsarr.toString());
+    }
+
+    private final static String BLOGID = "id";
+    private final static String USERID = "user_id";
+    private final static String BLOGTYPE = "type";
+    private final static String BLOGTITLE = "title";
+    private final static String BLOGTEXT = "text";
+    private final static String BLOGIMAGES = "images";
+    private final static String BLOGDATE = "date";
+
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+    private JSONObject getBlogJSON(Blog blog) {
+        JSONObject js = new JSONObject();
+        js.put(BLOGID, blog.getId());
+        js.put(USERID, blog.getId_user());
+        js.put(BLOGTYPE, blog.getType());
+        js.put(BLOGTITLE, blog.getTitle());
+        js.put(BLOGTEXT, blog.getText());
+        js.put(BLOGDATE, dateFormat.format(blog.getDatetime()));
+        if(blog.getImages() != null) js.put(BLOGIMAGES, blog.getImages());
+        return js;
+    }
+
     private void saveCommunityRecord(Long userID, CommunityRequest req, JSONObject outJSON) {
-        System.out.println("INSIDE METHOD SAVE");
         Blog blog = new Blog();
         File[] images = null;
             try {
@@ -242,7 +295,6 @@ public class CommunityController {
                 outJSON.put(MESSAGE, exc.getMessage());
                 return;
             }
-
         outJSON.put(RESULT, SUCCESS);
         outJSON.put(MESSAGE, Strings.MSG_SAVE_COMUNITY_RECORD_SUCCESS);
     }
@@ -352,8 +404,9 @@ public class CommunityController {
 
         @Override
         public String toString() {
-            return "operation=" + operation + ", user=" + user + ", title=" + title + ", content=" + content +
-                    ", data=" + data + ", type=" + type + ", bitmaps=" + bitmaps!=null ? "" + bitmaps.length : "null";
+//            return "operation=" + operation + ", user=" + user + ", title=" + title + ", content=" + content +
+//                    ", data=" + data + ", type=" + type + ", bitmaps=" + bitmaps!=null ? "" + bitmaps.length : "null";
+            return "REQUESTTTTTT";
         }
     }
 
