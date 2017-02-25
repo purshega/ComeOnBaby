@@ -136,7 +136,7 @@ public class CommunityController {
     }
 
 
-    @RequestMapping(value = "/putimages", method = RequestMethod.POST, produces="application/json")
+    @RequestMapping(value = "/putimages", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
     public @ResponseBody String saveImages(@RequestBody ImagesUploadRequest body) {
         JSONObject js = new JSONObject();
         byte[][] images = body.getBitmaps();
@@ -168,7 +168,7 @@ public class CommunityController {
         return js.toString();
     }
 
-    @RequestMapping(value = "/avatar", method = RequestMethod.POST, produces="application/json")
+    @RequestMapping(value = "/avatar", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
     public @ResponseBody String saveImages(@RequestBody UpdateAvatarRequest body) {
         JSONObject outJSON = new JSONObject();
         outJSON.put(RESULT, FAILURE);
@@ -231,7 +231,7 @@ public class CommunityController {
         return outJSON.toString();
     }
 
-    @RequestMapping(value = "/community", method = RequestMethod.POST, produces="application/json")
+    @RequestMapping(value = "/community", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
     public @ResponseBody String communityOperation (@RequestBody CommunityRequest req) {
         System.out.println("Get community request: " + req.toString());
         JSONObject outJSON = new JSONObject();
