@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +18,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -69,37 +71,66 @@ public class CommunityController {
     @Autowired
     BlogService blogService;
 
+//    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {"image/jpg", "image/jpeg", "image/png"})
+//    public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
+//        File imagePath = new File(IMAGES_DIR, imgName);
+//        System.out.println("Get image command: " + imagePath.getAbsolutePath());
+//        if(imagePath.exists()) {
+//            //InputStream in = context.getResourceAsStream(imagePath.getAbsolutePath());
+//            ByteArrayOutputStream imgOutStr = new ByteArrayOutputStream();
+//            BufferedImage image = ImageIO.read(imagePath);
+//
+//            //определяем формат
+//            String format = null;
+//            try {
+//                int dotIndex = imgName.lastIndexOf('.');
+//                format = imgName.substring(dotIndex + 1);
+//                if(!format.equals("jpg") || !format.equals("png")) {
+//                    throw new Exception("Unknown image format");
+//                }
+//            } catch (Exception exc) {
+//                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+//                return;
+//            }
+//
+//            ImageIO.write(image, format, imgOutStr);
+//            byte[] imgByte = imgOutStr.toByteArray();
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            response.setHeader("Cache-Control", "no-store");
+//            response.setHeader("Pragma", "no-cache");
+//            response.setDateHeader("Expires", 0);
+//            response.setContentType("image/" + format);
+//            ServletOutputStream responseOutputStream = response.getOutputStream();
+//            responseOutputStream.write(imgByte);
+//            responseOutputStream.flush();
+//            responseOutputStream.close();
+//        } else {
+//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+//        }
+//    }
+
     @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {"image/jpg", "image/jpeg", "image/png"})
     public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
-        File imagePath = new File(IMAGES_DIR, imgName);
-        System.out.println("Get image command: " + imagePath.getAbsolutePath());
-        if(imagePath.exists()) {
-            //InputStream in = context.getResourceAsStream(imagePath.getAbsolutePath());
-            ByteArrayOutputStream imgOutStr = new ByteArrayOutputStream();
-            BufferedImage image = ImageIO.read(imagePath);
-
+        try {
+            Path path = Paths.get(IMAGES_DIR, imgName);
+            System.out.println("Get image command: " + path.toString());
             //определяем формат
-            String format = "jpg";
-            try {
-                int index = imgName.lastIndexOf('.');
-                format = imgName.substring(index + 1);
-                if(!format.equals("jpg") || !format.equals("png")) {
-                    format = "jpg";
-                }
-            } catch (Exception exc) {}
-
-            ImageIO.write(image, format, imgOutStr);
-            byte[] imgByte = imgOutStr.toByteArray();
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setHeader("Cache-Control", "no-store");
-            response.setHeader("Pragma", "no-cache");
-            response.setDateHeader("Expires", 0);
-            response.setContentType("image/" + format);
-            ServletOutputStream responseOutputStream = response.getOutputStream();
-            responseOutputStream.write(imgByte);
-            responseOutputStream.flush();
-            responseOutputStream.close();
-        } else {
+            int dotIndex = imgName.lastIndexOf('.');
+            String format = imgName.substring(dotIndex + 1);
+            if (!format.equals("jpg") && !format.equals("png")) throw new FileNotFoundException("Unknown image format: " + format);
+            if (Files.exists(path)) {
+                ServletOutputStream outStream = response.getOutputStream();
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.setContentType("image/" + format);
+                Files.copy(path, outStream);
+                outStream.flush();
+                outStream.close();
+                return;
+            } else {
+                throw new FileNotFoundException("File " + path.toString() + " not found");
+            }
+        } catch (Exception exc) {
+            System.out.println("Get image fail: " + exc.getMessage());
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -202,10 +233,6 @@ public class CommunityController {
 
     @RequestMapping(value = "/community", method = RequestMethod.POST, produces="application/json")
     public @ResponseBody String communityOperation (@RequestBody CommunityRequest req) {
-        if(req == null) {
-            System.out.println("REQUEST NULL");
-            return "";
-        }
         System.out.println("Get community request: " + req.toString());
         JSONObject outJSON = new JSONObject();
         outJSON.put(RESULT, FAILURE);
@@ -257,24 +284,30 @@ public class CommunityController {
 
     private final static String BLOGID = "id";
     private final static String USERID = "user_id";
+    private final static String USERNICKNAME = "nickname";
+    private final static String USERAVATAR = "avatar";
     private final static String BLOGTYPE = "type";
     private final static String BLOGTITLE = "title";
     private final static String BLOGTEXT = "text";
     private final static String BLOGIMAGES = "images";
     private final static String BLOGDATE = "date";
-
-    static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
     private JSONObject getBlogJSON(Blog blog) {
-        JSONObject js = new JSONObject();
-        js.put(BLOGID, blog.getId());
-        js.put(USERID, blog.getId_user());
-        js.put(BLOGTYPE, blog.getType());
-        js.put(BLOGTITLE, blog.getTitle());
-        js.put(BLOGTEXT, blog.getText());
-        js.put(BLOGDATE, dateFormat.format(blog.getDatetime()));
-        if(blog.getImages() != null) js.put(BLOGIMAGES, blog.getImages());
-        return js;
+        JSONObject json = new JSONObject();
+        json.put(BLOGID, blog.getId());
+        json.put(USERID, blog.getId_user());
+        Preferences pr = prefService.findById(blog.getId_user());
+        if(pr != null) {
+            if (pr.getAvatar() != null) json.put(USERAVATAR, pr.getAvatar());
+            if (pr.getNickname() != null) json.put(USERNICKNAME, pr.getNickname());
+        }
+        json.put(BLOGTYPE, blog.getType());
+        json.put(BLOGTITLE, blog.getTitle());
+        json.put(BLOGTEXT, blog.getText());
+        json.put(BLOGDATE, dateFormat.format(blog.getDatetime()));
+        if(blog.getImages() != null) json.put(BLOGIMAGES, blog.getImages());
+        return json;
     }
 
     private void saveCommunityRecord(Long userID, CommunityRequest req, JSONObject outJSON) {
@@ -336,9 +369,8 @@ public class CommunityController {
                 ImageIO.write(bi, "jpg", file);
                 System.out.println("Saved file: " + file.getAbsolutePath());
             }
-            //If something wrong, rollback changes and send error message
+        //If something wrong, remove files and send error message
         } catch (Exception exc) {
-            exc.printStackTrace();
             removeFiles(files);
             throw exc;
         }
@@ -405,9 +437,9 @@ public class CommunityController {
 
         @Override
         public String toString() {
-//            return "operation=" + operation + ", user=" + user + ", title=" + title + ", content=" + content +
-//                    ", data=" + data + ", type=" + type + ", bitmaps=" + bitmaps!=null ? "" + bitmaps.length : "null";
-            return "REQUESTTTTTT";
+            return "operation=" + operation + ", user=" + user + ", title=" + title + ", content=" + content +
+                    ", data=" + data + ", type=" + type + ", bitmaps=" + (bitmaps!=null ? "" + bitmaps.length : "null");
+            //return "REQUESTTTTTT";
         }
     }
 
