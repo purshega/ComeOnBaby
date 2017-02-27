@@ -42,5 +42,9 @@ public class Strings {
     public final static String MSG_SAVE_COMUNITY_RECORD_FAIL = "Save community record fail";
     public final static String MSG_GET_COMMUNITY_RECORDS_SUCCESS = "Get community records success";
     public final static String MSG_GET_COMMUNITY_RECORDS_FAIL = "Get community records fail";
+    public final static String MSG_SAVE_COMMENT_SUCCESS = "Save comment success";
+    public final static String MSG_SAVE_COMMENT_FAIL = "Save comment fail";
+    public final static String MSG_GET_COMMENTS_SUCCESS = "Get comments success";
+    public final static String MSG_GET_COMMENTS_FAIL = "Get comments fail";
 
 }
