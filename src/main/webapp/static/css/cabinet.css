@@ -1,0 +1,59 @@
+.DTTT_Print .btnEditTitleBlock, .DTTT_Print .btnSaveTitleBlock, .DTTT_Print .btnCancelTitleBlock{
+    display: none;
+}
+
+.btnRight{
+    float: right;
+
+}
+.btnMiddleRight {
+    float: right;
+}
+.btnAddText{
+    margin-right: 10px;
+    display: none;
+}
+.btnAddImg{
+    margin-right: 40px;
+    display: none;
+}
+.divAddBlock, .BlockInfo, .btnSaveBlock, .btnCancelSaveBlock, .btnSaveTitleBlock, .btnCancelTitleBlock, .Reserv, .btnBlockSave {
+    display: none;
+}
+.btnCancelSaveBlock{
+    margin-left: 10px;
+}
+.btnRemoveTextImg{
+    display: none;
+}
+.TitleBlockInfo{
+    width: 650px;
+}
+.BlockInfoHTML{
+    margin-top: 10px;
+    border: 1px solid grey;
+}
+.SecondBlockForBtn{// btnOpenInfo
+    width: 40px;
+    display: inline-block;
+}
+.btnAddBlock{
+    margin-bottom: 10px;
+}
+.first{
+    width: 90px;
+}
+.second{
+    width: 85%;
+    min-width: 700px;
+}
+.third{
+    width: 10%;
+    min-width: 90px;
+}
+.divAddBlock textarea{
+    display: inline-block;
+}
+.tableBlocks{
+    margin-top: 10px;
+}

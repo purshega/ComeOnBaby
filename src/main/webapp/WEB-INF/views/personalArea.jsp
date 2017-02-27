@@ -520,7 +520,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
                 %>
                 <li class="start ">
-                    <a href="<% out.print(menuUrl1);%>">
+                    <a href="<% out.print(addPath+menuUrl1);%>">
                         <i class="icon-user"></i>
                         <span class="title">Users</span>
                         <!-- <span class="arrow "></span> -->
@@ -551,12 +551,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="<% out.print(menuUrl2);%>">
+                            <a href="<% out.print(addPath+menuUrl2);%>">
                                 <!-- <i class="icon-minus"></i> -->
                                 Featured recipes</a>
                         </li>
                         <li>
-                            <a href="<% out.print(menuUrl3);%>">
+                            <a href="<% out.print(addPath+menuUrl3);%>">
                                 <!-- <i class="icon-minus"></i> -->
                                 Fertilization guide</a>
                         </li>
@@ -570,23 +570,23 @@ License: You must have a valid license purchased only from themeforest(the above
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="<% out.print(menuUrl4);%>">
+                            <a href="<% out.print(addPath+menuUrl4);%>">
                                 Notice / Event</a>
                         </li>
                         <li>
-                            <a href="<% out.print(menuUrl5);%>">
+                            <a href="<% out.print(addPath+menuUrl5);%>">
                                 My success story</a>
                         </li>
                         <li>
-                            <a href="<% out.print(menuUrl6);%>">
+                            <a href="<% out.print(addPath+menuUrl6);%>">
                                 My recipes</a>
                         </li>
                         <li>
-                            <a href="<% out.print(menuUrl7);%>">
+                            <a href="<% out.print(addPath+menuUrl7);%>">
                                 Husband story</a>
                         </li>
                         <li>
-                            <a href="<% out.print(menuUrl8);%>">
+                            <a href="<% out.print(addPath+menuUrl8);%>">
                                 Q &amp; A list</a>
                         </li>
                     </ul>

@@ -32,6 +32,12 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     @Transactional
+    public Notice get(Long id) {
+        return noticeDao.read(id);
+    }
+
+    @Override
+    @Transactional
     public void deleteNotice(Notice notice) {
         noticeDao.delete(notice);
     }
