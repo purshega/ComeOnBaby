@@ -44,7 +44,7 @@ public class Recipe_quideDaoImpl implements Recipe_guideDao {
     public void update(Recipe_guide aRecipe_guide) {
         Session session = sessionFactory.getCurrentSession();
         session.update(aRecipe_guide);
-        session.getTransaction().commit();
+        //session.getTransaction().commit();
         logger.error("Recipe_guide update successfully, Recipe_guide=" + aRecipe_guide);
     }
 

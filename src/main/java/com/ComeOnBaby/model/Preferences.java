@@ -1,5 +1,6 @@
 package com.ComeOnBaby.model;
 
+import org.hibernate.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,6 +20,10 @@ public class Preferences {
     @Id
     @Column(name="user_id", nullable=false)
     private Long id;
+
+    @OneToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private AppUser appUser;
 
     @Column(name="city_id")
     private Long city;
@@ -60,6 +65,14 @@ public class Preferences {
     private Boolean is_finish_question;
 
     public Preferences(){
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     public Long getId() {

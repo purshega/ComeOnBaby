@@ -43,7 +43,6 @@ public class LikesDaoImpl implements LikesDao {
     public void update(Likes aLikes) {
         Session session = sessionFactory.getCurrentSession();
         session.update(aLikes);
-        session.getTransaction().commit();
         logger.error("Likes update successfully, Likes=" + aLikes);
     }
 
