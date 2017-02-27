@@ -2,9 +2,11 @@ package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.model.AppUser;
 import com.ComeOnBaby.model.Blog;
+import com.ComeOnBaby.model.Comment;
 import com.ComeOnBaby.model.Preferences;
 import com.ComeOnBaby.service.AppUserService;
 import com.ComeOnBaby.service.BlogService;
+import com.ComeOnBaby.service.CommentsService;
 import com.ComeOnBaby.service.PreferencesService;
 import com.google.gson.Gson;
 import org.json.JSONArray;
@@ -57,6 +59,8 @@ public class CommunityController {
     public static final String UPDATE_AVATAR_OPERATION = "updateavatar";
     public static final String SAVE_COMUNITY_RECORD_OPERATION = "saverecord";
     public static final String GET_COMUNITY_RECORDS_OPERATION = "getrecords";
+    public static final String SAVE_COMMENT_OPERATION = "savecomment";
+    public static final String GET_COMMENTS_OPERATION = "getcomments";
 
 
 //    @Autowired
@@ -70,6 +74,9 @@ public class CommunityController {
 
     @Autowired
     BlogService blogService;
+
+    @Autowired
+    CommentsService commentsService;
 
 //    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {"image/jpg", "image/jpeg", "image/png"})
 //    public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
@@ -233,7 +240,7 @@ public class CommunityController {
 
     @RequestMapping(value = "/community", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
     public @ResponseBody String communityOperation (@RequestBody CommunityRequest req) {
-        System.out.println("Get community request: " + req.toString());
+        System.out.println("Community request: " + req.toString());
         JSONObject outJSON = new JSONObject();
         outJSON.put(RESULT, FAILURE);
         outJSON.put(OPERATION, req.getOperation());
@@ -261,6 +268,14 @@ public class CommunityController {
                 getCommunityRecordsOperation(req, outJSON);
                 break;
             }
+            case SAVE_COMMENT_OPERATION: {
+                saveCommentOperation(bdUser, req, outJSON);
+                break;
+            }
+            case GET_COMMENTS_OPERATION: {
+                getListComments(bdUser, req, outJSON);
+                break;
+            }
             default: {
                 outJSON.put(MESSAGE, Strings.ERR_UNKNOWN_OPERATION);
                 return outJSON.toString();
@@ -268,6 +283,37 @@ public class CommunityController {
         }
         System.out.println("Out JSON: " + outJSON.toString()  + "\n");
         return outJSON.toString();
+    }
+
+    private void saveCommentOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
+        System.out.println("INSIDE SAVE COMMENT: ");
+        try {
+            Comment comm = new Comment();
+            comm.setId_user(user.getId());
+            comm.setId_blog(req.communityID);
+            comm.setText(req.getContent());
+            comm.setDatetime(Calendar.getInstance().getTime());
+            commentsService.addNewComments(comm);
+        } catch (Exception exc) {
+            exc.printStackTrace();
+            outJSON.put(RESULT, FAILURE);
+            outJSON.put(MESSAGE, Strings.MSG_SAVE_COMMENT_FAIL);
+            return;
+        }
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_SAVE_COMMENT_SUCCESS);
+    }
+
+    private void getListComments(AppUser user, CommunityRequest req, JSONObject outJSON) {
+        List<Comment> comments = commentsService.findByBlogID(req.communityID);
+        JSONArray jsarr = new JSONArray();
+        for (int i = 0; i < comments.size(); i++) {
+            Comment comm = comments.get(i);
+            jsarr.put(getCommentJSON(comm));
+        }
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_GET_COMMENTS_SUCCESS);
+        outJSON.put(DATA, jsarr.toString());
     }
 
     private void getCommunityRecordsOperation(CommunityRequest req, JSONObject outJSON) {
@@ -282,7 +328,7 @@ public class CommunityController {
         outJSON.put(DATA, jsarr.toString());
     }
 
-    private final static String BLOGID = "id";
+    private final static String BLOGID = "blog_id";
     private final static String USERID = "user_id";
     private final static String USERNICKNAME = "nickname";
     private final static String USERAVATAR = "avatar";
@@ -307,6 +353,23 @@ public class CommunityController {
         json.put(BLOGTEXT, blog.getText());
         json.put(BLOGDATE, dateFormat.format(blog.getDatetime()));
         if(blog.getImages() != null) json.put(BLOGIMAGES, blog.getImages());
+        return json;
+    }
+
+    private final static String COMMID = "comm_id";
+
+    private JSONObject getCommentJSON(Comment comm) {
+        JSONObject json = new JSONObject();
+        json.put(COMMID, comm.getId());
+        json.put(BLOGID, comm.getId_blog());
+        json.put(USERID, comm.getId_user());
+        json.put(BLOGTEXT, comm.getText());
+        Preferences pr = prefService.findById(comm.getId_user());
+        if(pr != null) {
+            if (pr.getAvatar() != null) json.put(USERAVATAR, pr.getAvatar());
+            if (pr.getNickname() != null) json.put(USERNICKNAME, pr.getNickname());
+        }
+        json.put(BLOGDATE, dateFormat.format(comm.getDatetime()));
         return json;
     }
 
@@ -418,6 +481,7 @@ public class CommunityController {
         private String content;
         private String data;
         private int type;
+        private long communityID;
         private byte[][] bitmaps;
 
         public String getOperation() {return operation;}
@@ -432,14 +496,16 @@ public class CommunityController {
         public void setData(String data) {this.data = data;}
         public int getType() {return type;}
         public void setType(int type) {this.type = type;}
+        public long getCommunityID() {return communityID;}
+        public void setCommunityID(long communityID) {this.communityID = communityID;}
         public byte[][] getBitmaps() {return bitmaps;}
         public void setBitmaps(byte[][] bitmaps) {this.bitmaps = bitmaps;}
 
         @Override
         public String toString() {
             return "operation=" + operation + ", user=" + user + ", title=" + title + ", content=" + content +
-                    ", data=" + data + ", type=" + type + ", bitmaps=" + (bitmaps!=null ? "" + bitmaps.length : "null");
-            //return "REQUESTTTTTT";
+                    ", data=" + data + ", type=" + type + ", bitmaps=" + (bitmaps!=null ? "" + bitmaps.length : "null"
+            + ", communityID=" + communityID);
         }
     }
 

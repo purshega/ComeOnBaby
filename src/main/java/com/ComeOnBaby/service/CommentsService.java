@@ -2,13 +2,14 @@ package com.ComeOnBaby.service;
 
 
 
-import com.ComeOnBaby.model.Comments;
+import com.ComeOnBaby.model.Comment;
 
 import java.util.List;
 
 public interface CommentsService {
-    void addNewComments(Comments comments);
-    void updateComments(Comments comments);
-    void deleteComments(Comments comments);
-    List<Comments> getAllComments();
+    void addNewComments(Comment comment);
+    void updateComments(Comment comment);
+    void deleteComments(Comment comment);
+    List<Comment> getAllComments();
+    public List<Comment> findByBlogID(Long blogID);
 }

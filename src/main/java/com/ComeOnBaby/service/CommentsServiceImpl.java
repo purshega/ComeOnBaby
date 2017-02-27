@@ -2,7 +2,7 @@ package com.ComeOnBaby.service;
 
 
 import com.ComeOnBaby.dao.CommentsDao;
-import com.ComeOnBaby.model.Comments;
+import com.ComeOnBaby.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,25 +22,29 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
-    public void addNewComments(Comments comments) {
-        commentsDao.create(comments);
+    public void addNewComments(Comment comment) {
+        commentsDao.create(comment);
     }
 
     @Override
     @Transactional
-    public void updateComments(Comments comments) {
-        commentsDao.update(comments);
+    public void updateComments(Comment comment) {
+        commentsDao.update(comment);
     }
 
     @Override
     @Transactional
-    public void deleteComments(Comments comments) {
-        commentsDao.delete(comments);
+    public void deleteComments(Comment comment) {
+        commentsDao.delete(comment);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comments> getAllComments() {
+    public List<Comment> getAllComments() {
         return commentsDao.findAll();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Comment> findByBlogID(Long blogID) {return commentsDao.findByBlogID(blogID);}
 }

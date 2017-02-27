@@ -1,11 +1,11 @@
 package com.ComeOnBaby.dao;
 
-
-
-import com.ComeOnBaby.model.Comments;
+import com.ComeOnBaby.model.Comment;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,41 +26,48 @@ public class CommentsDaoImpl implements CommentsDao {
     }
 
     @Override
-    public Long create(Comments comments) {
+    public Long create(Comment comment) {
         Session session = sessionFactory.getCurrentSession();
-        Long id = (Long) session.save(comments);
+        Long id = (Long) session.save(comment);
         return id;
     }
 
     @Override
-    public Comments read(Long id) {
+    public Comment read(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        Comments comments = (Comments) session.get(Comments.class, id);
-        logger.error("CommentsService findById successfully, CommentsService=" + comments);
-        return comments;
+        Comment comment = (Comment) session.get(Comment.class, id);
+        logger.error("CommentsService findById successfully, CommentsService=" + comment);
+        return comment;
     }
 
     @Override
-    public void update(Comments comments) {
+    public void update(Comment comment) {
         Session session = sessionFactory.getCurrentSession();
-        session.update(comments);
-        logger.error("CommentsService update successfully, CommentsService=" + comments);
+        session.update(comment);
+        logger.error("CommentsService update successfully, CommentsService=" + comment);
     }
 
     @Override
-    public void delete(Comments comments) {
+    public void delete(Comment comment) {
         Session session = sessionFactory.getCurrentSession();
-        session.delete(comments);
-        logger.info("CommentsService deleted successfully, CommentsService details=" + comments);
+        session.delete(comment);
+        logger.info("CommentsService deleted successfully, CommentsService details=" + comment);
     }
 
     @Override
-    public List<Comments> findAll() {
+    public List<Comment> findAll() {
         Session session = sessionFactory.getCurrentSession();
         Query query =  session.createQuery("from Comments");
         return query.list();
     }
 
+    @Override
+    public List<Comment> findByBlogID(Long blogID) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Comment.class).add(Restrictions.like("id_blog", blogID));
+        List<Comment> list = criteria.list();
+        return list;
+    }
 }
 
 
