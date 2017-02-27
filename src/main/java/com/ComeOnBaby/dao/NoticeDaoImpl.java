@@ -44,17 +44,9 @@ public class NoticeDaoImpl implements NoticeDao {
 
     @Override
     public void update(Notice aNotice) {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            session.update(aNotice);
-            //session.flush();
-            //session.getTransaction().commit();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        //session.getTransaction().commit();
+        Session session = sessionFactory.getCurrentSession();
+        session.update(aNotice);
         System.out.println("Notice update successfully, Notice=" + aNotice);
-        //logger.error("Notice update successfully, Notice=" + aNotice);
     }
 
     @Override
@@ -67,10 +59,6 @@ public class NoticeDaoImpl implements NoticeDao {
     @Override
     public List<Notice> findAll() {
         Session session = sessionFactory.getCurrentSession();
-        /*
-        Criteria criteria = session.createCriteria(Notice.class);
-        return (List<Notice>)criteria.list();
-        */
         Query query = session.createQuery("from Notice");
         return query.list();
     }
