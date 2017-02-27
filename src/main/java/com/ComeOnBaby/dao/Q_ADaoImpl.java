@@ -44,7 +44,7 @@ public class Q_ADaoImpl implements Q_ADao {
     public void update(Q_A aQ_A) {
         Session session = sessionFactory.getCurrentSession();
         session.update(aQ_A);
-        session.getTransaction().commit();
+        //session.getTransaction().commit();
         logger.error("Q_AService update successfully, Q_AService=" + aQ_A);
     }
 
