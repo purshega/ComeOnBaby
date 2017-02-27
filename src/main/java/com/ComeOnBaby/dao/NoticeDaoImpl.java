@@ -23,8 +23,8 @@ public class NoticeDaoImpl implements NoticeDao {
     private SessionFactory sessionFactory;
 
     @Autowired
-    public void setSessionFactory(SessionFactory sf) {
-        this.sessionFactory = sf;
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
 

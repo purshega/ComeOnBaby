@@ -23,7 +23,7 @@ public class Blog {
     private Long id_user;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="appUser")
+    @JoinColumn(name="id_user",insertable = false, updatable = false)
     private AppUser appUser;
 
     @Column(name="type", nullable=false)
