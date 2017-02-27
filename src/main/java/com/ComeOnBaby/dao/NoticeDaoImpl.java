@@ -2,9 +2,11 @@ package com.ComeOnBaby.dao;
 
 
 import com.ComeOnBaby.model.Notice;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +44,17 @@ public class NoticeDaoImpl implements NoticeDao {
 
     @Override
     public void update(Notice aNotice) {
-        Session session = sessionFactory.getCurrentSession();
-        session.update(aNotice);
-        session.getTransaction().commit();
-        logger.error("Notice update successfully, Notice=" + aNotice);
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            session.update(aNotice);
+            //session.flush();
+            //session.getTransaction().commit();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        //session.getTransaction().commit();
+        System.out.println("Notice update successfully, Notice=" + aNotice);
+        //logger.error("Notice update successfully, Notice=" + aNotice);
     }
 
     @Override
@@ -58,6 +67,10 @@ public class NoticeDaoImpl implements NoticeDao {
     @Override
     public List<Notice> findAll() {
         Session session = sessionFactory.getCurrentSession();
+        /*
+        Criteria criteria = session.createCriteria(Notice.class);
+        return (List<Notice>)criteria.list();
+        */
         Query query = session.createQuery("from Notice");
         return query.list();
     }

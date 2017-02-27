@@ -16,23 +16,23 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
 	@Autowired
-	private UserDao dao;
+	private UserDao userDao;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	public User findById(int id) {
-		return dao.findById(id);
+		return userDao.findById(id);
 	}
 
 	public User findBySSO(String sso) {
-		User user = dao.findBySSO(sso);
+		User user = userDao.findBySSO(sso);
 		return user;
 	}
 
 	public void saveUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		dao.save(user);
+		userDao.save(user);
 	}
 
 	/*
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 	 * It will be updated in db once transaction ends.
 	 */
 	public void updateUser(User user) {
-		User entity = dao.findById(user.getId());
+		User entity = userDao.findById(user.getId());
 		if(entity!=null){
 			entity.setSsoId(user.getSsoId());
 			if(!user.getPassword().equals(entity.getPassword())){
@@ -56,11 +56,11 @@ public class UserServiceImpl implements UserService{
 
 
 	public void deleteUserBySSO(String sso) {
-		dao.deleteBySSO(sso);
+		userDao.deleteBySSO(sso);
 	}
 
 	public List<User> findAllUsers() {
-		return dao.findAllUsers();
+		return userDao.findAllUsers();
 	}
 
 	public boolean isUserSSOUnique(Integer id, String sso) {

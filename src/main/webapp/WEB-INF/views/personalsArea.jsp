@@ -3,8 +3,10 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.ComeOnBaby.model.AppUser" %>
+<%@ page import="com.ComeOnBaby.model.Notice" %>
 <%@ page
-        import="com.ComeOnBaby.model.AppUser" %><%--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>--%>
+        import="com.ComeOnBaby.model.ImgText" %><%--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>--%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page language="java" pageEncoding="UTF-8" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -43,17 +45,23 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
           type="text/css"/>
-    <link href="<%out.print(addPath);%>resources/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/font-awesome/css/font-awesome.min.css"
+          rel="stylesheet"
           type="text/css"/>
-    <link href="<%out.print(addPath);%>resources/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet"
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/simple-line-icons/simple-line-icons.min.css"
+          rel="stylesheet"
           type="text/css"/>
-    <link href="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="<%out.print(addPath);%>resources/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-    <link href="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet"
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css"
+          rel="stylesheet"
           type="text/css"/>
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PAGE LEVEL STYLES -->
-    <link rel="stylesheet" type="text/css" href="<%out.print(addPath);%>resources/assets/global/plugins/select2/select2.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%out.print(addPath);%>resources/assets/global/plugins/select2/select2.css"/>
     <link rel="stylesheet" type="text/css"
           href="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
     <link rel="stylesheet" type="text/css"
@@ -62,12 +70,15 @@ License: You must have a valid license purchased only from themeforest(the above
           href="<%out.print(addPath);%>resources/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
     <!-- END PAGE LEVEL STYLES -->
     <!-- BEGIN THEME STYLES -->
-    <link href="<%out.print(addPath);%>resources/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+    <link href="<%out.print(addPath);%>resources/assets/global/css/components.css" id="style_components"
+          rel="stylesheet" type="text/css"/>
     <link href="<%out.print(addPath);%>resources/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
     <link href="<%out.print(addPath);%>resources/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
-    <link id="style_color" href="<%out.print(addPath);%>resources/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet"
+    <link id="style_color" href="<%out.print(addPath);%>resources/assets/admin/layout/css/themes/darkblue.css"
+          rel="stylesheet"
           type="text/css"/>
     <link href="<%out.print(addPath);%>resources/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+    <link href="<%out.print(addPath);%>static/css/cabinet.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -90,7 +101,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="index.html">
-                <img src="<%out.print(addPath);%>resources/assets/admin/layout/img/logo.png" alt="logo" class="logo-default"/>
+                <img src="<%out.print(addPath);%>resources/assets/admin/layout/img/logo.png" alt="logo"
+                     class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler hide">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -407,7 +419,8 @@ License: You must have a valid license purchased only from themeforest(the above
                 <li class="dropdown dropdown-user">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                        data-close-others="true">
-                        <img alt="" class="img-circle" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar.png"/>
+                        <img alt="" class="img-circle"
+                             src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar.png"/>
                         <span class="username username-hide-on-mobile">
 					Admin </span>
                         <i class="fa fa-angle-down"></i>
@@ -506,14 +519,14 @@ License: You must have a valid license purchased only from themeforest(the above
                 <%
                     ArrayList<String> menuUrls = (ArrayList<String>) request.getAttribute("menuUrls");
 
-                    String menuUrl1 = addPath+menuUrls.get(0);
-                    String menuUrl2 = addPath+menuUrls.get(1);
-                    String menuUrl3 = addPath+menuUrls.get(2);
-                    String menuUrl4 = addPath+menuUrls.get(3);
-                    String menuUrl5 = addPath+menuUrls.get(4);
-                    String menuUrl6 = addPath+menuUrls.get(5);
-                    String menuUrl7 = addPath+menuUrls.get(6);
-                    String menuUrl8 = addPath+menuUrls.get(7);
+                    String menuUrl1 = addPath + menuUrls.get(0);
+                    String menuUrl2 = addPath + menuUrls.get(1);
+                    String menuUrl3 = addPath + menuUrls.get(2);
+                    String menuUrl4 = addPath + menuUrls.get(3);
+                    String menuUrl5 = addPath + menuUrls.get(4);
+                    String menuUrl6 = addPath + menuUrls.get(5);
+                    String menuUrl7 = addPath + menuUrls.get(6);
+                    String menuUrl8 = addPath + menuUrls.get(7);
                 %>
                 <li class="start ">
                     <a href="<% out.print(menuUrl1);%>">
@@ -1232,7 +1245,30 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- BEGIN PAGE CONTENT-->
             <%
                 String namePage = (String) request.getAttribute("namePage");
+
+                ArrayList<String> fields = null;
+                if (request.getAttribute("fields") != null) fields = (ArrayList<String>) request.getAttribute("fields");
+
+                ArrayList<String> values = null;
+                if (request.getAttribute("values") != null) values = (ArrayList<String>) request.getAttribute("values");
+
+                ArrayList<Notice> blocks = null;
+                if (request.getAttribute("blocks") != null) blocks = (ArrayList<Notice>) request.getAttribute("blocks");
+
             %>
+            <!-- myBlock-->
+            <% if (blocks != null) {%>
+            <button type="button" class="btn btnRight btnAddBlock">Add Notice</button>
+            <button type="button" class="btn btnRight btnCancelSaveBlock">Cancel add Notice</button>
+            <form method="post">
+                <button type="submit" class="btn btnRight btnSaveBlock">Save Notice</button>
+                <div class="divAddBlock">
+                    <p>New notice:</p>
+                    <textarea cols="80" id="textAddNewNotice" name="textAddNewNotice"></textarea>
+                </div>
+            </form>
+            <%}%>
+
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -1247,12 +1283,107 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                         </div>
 
+                        <%
+                        %>
+                        <% if (blocks != null) {%>
 
+                        <div class="portlet-body">
+
+
+                            <table class="table table-striped table-bordered table-hover tableBlocks" id="sample_1">
+                                <thead>
+                                <tr>
+                                    <td>Num</td>
+                                    <td>Date</td>
+                                    <td>Notice</td>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <% for (int i = 0; i < blocks.size(); i++) {%>
+                                <%
+                                    Set<ImgText> items = blocks.get(i).getImgTexts();
+                                    String html = blocks.get(i).getHtml();
+                                    if (html == null) html = "";
+                                %>
+                                <tr>
+                                    <td>
+                                        <% out.print(i+1); %>
+                                    </td>
+                                    <td class="first">
+                                        <% out.println(blocks.get(i).getSimpleDate()); %>
+                                    </td>
+                                    <td class="second">
+                                        <div class="SecondBlockForBtn">
+                                            <button type="button"
+                                                    class="btn btn-fit-height grey-salt btnOpenCloseInfo btnOpenCloseInfo<%out.print(i);%>"
+                                                    par="<%out.print(i);%>" status="0">+
+                                            </button>
+                                        </div>
+                                        <input disabled class="TitleBlockInfo" id="titleBlockInfo<%out.print(i);%>"
+                                               value="<% out.println(blocks.get(i).getTitle());%>"/>
+                                        <input class="Reserv" id="reserv_titleBlockInfo<%out.print(i);%>"
+                                               value="<% out.println(blocks.get(i).getTitle());%>"/>
+                                        <button type="button"
+                                                class="btn btnRight btnEditTitleBlock NotEditable<%out.print(i);%>"
+                                                par="<%out.print(i);%>" id="btnEditTitleBlock<%out.print(i);%>">Edit
+                                        </button>
+                                        <button type="button" class="btn btnRight btnSaveTitleBlock Editable<%out.print(i);%>"
+                                                par="<%out.print(i);%>" id="btnSaveTitleBlock<%out.print(i);%>"
+                                                code="<%out.print(blocks.get(i).getId());%>">Save
+                                        </button>
+                                        <!--<button type="submit" class="btn btnRight btnCancelTitleBlock Editable<%out.print(i);%>" par="<%out.print(i);%>" id="btnCancelTitleBlock<%out.print(i);%>">Cancel</button>-->
+                                        <br><br>
+                                        <div class="BlockInfo BlockInfo<%out.print(i);%> BlockEditable<%out.print(i);%>"
+                                             count="<%out.print(items.size());%>" id="BlockInfo<%out.print(i);%>"
+                                             code="<%out.print(blocks.get(i).getId());%>">
+
+                                            <button class="btn btnMiddleRight btnAddImg Editable<%out.print(i);%>" par="<%out.print(i);%>">Add Img</button>
+                                            <button class="btn btnMiddleRight btnAddText Editable<%out.print(i);%>" par="<%out.print(i);%>">Add Text</button>
+
+
+                                            <% int j = 0;%>
+                                            <% for (ImgText item : items) {%>
+                                                <% if (item.getType() == 0) { %>
+                                                    <div class="BlockInfoItem<%out.print(i+"_"+j);%>" id="BlockInfoItem<%out.print(i+"_"+j);%>"
+                                                         code="<%out.print(item.getId());%>" sort="<%out.print(i);%>" type="0">
+                                                        <hr>
+                                                        <br>
+                                                        <% String text = item.getText();
+                                                            if (text == null) text = "";%>
+                                                        <textarea cols="80" id="BlockInfoItemTextarea<%out.print(i+"_"+j);%>"
+                                                                  code="<%out.print(item.getId());%>"><%
+                                                            out.print(text);%></textarea>
+                                                    </div>
+                                                <%} else {%>
+                                                    <div class="BlockInfoItem<%out.print(i+"_"+j);%>" type="1">
+                                                        <%
+                                                            String src = item.getImg();
+                                                            if (src == null) src = "";
+                                                        %>
+                                                        <img src="<% out.print(src);%>" title="">
+                                                    </div>
+                                                <%}%>
+                                            <%j++;}%>
+                                            <br>
+                                        </div>
+                                        <div class="BlockInfoHTML BlockInfoHTML<%out.print(i);%> NotBlockEditable<%out.print(i);%>">
+                                            <iframe srcdoc="<% out.print(html);%>"></iframe>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <%}%>
+
+                        <%if (fields != null && values != null) {%>
                         <div class="portlet-body">
                             <table class="table table-striped table-bordered table-hover" id="sample_1">
                                 <thead>
                                 <tr>
-                                    <% ArrayList<String> fields = (ArrayList<String>) request.getAttribute("fields"); %>
                                     <% for (String field : fields) {%>
                                     <th>
                                         <% out.println(field);%>
@@ -1261,7 +1392,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <% ArrayList<String> values = (ArrayList<String>) request.getAttribute("values"); %>
                                 <% for (String value : values) {%>
                                 <% out.println(value);%>
                                 <%}%>
@@ -1269,6 +1399,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </tbody>
                             </table>
                         </div>
+                        <%}%>
+
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
 
@@ -1330,7 +1462,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-success">8</span>
                                     </div>
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar3.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Bob Nilson</h4>
@@ -1340,7 +1473,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar1.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar1.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Nick Larson</h4>
@@ -1353,7 +1487,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-danger">3</span>
                                     </div>
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar4.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar4.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Deon Hubert</h4>
@@ -1363,7 +1498,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar2.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Ella Wong</h4>
@@ -1379,7 +1515,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-warning">2</span>
                                     </div>
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar6.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar6.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Lara Kunis</h4>
@@ -1395,7 +1532,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="label label-sm label-success">new</span>
                                     </div>
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar7.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar7.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Ernie Kyllonen</h4>
@@ -1406,7 +1544,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar8.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar8.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Lisa Stone</h4>
@@ -1422,7 +1561,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-success">7</span>
                                     </div>
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar9.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar9.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Deon Portalatin</h4>
@@ -1432,7 +1572,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </div>
                                 </li>
                                 <li class="media">
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar10.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar10.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Irina Savikova</h4>
@@ -1445,7 +1586,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <div class="media-status">
                                         <span class="badge badge-danger">4</span>
                                     </div>
-                                    <img class="media-object" src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar11.jpg"
+                                    <img class="media-object"
+                                         src="<%out.print(addPath);%>resources/assets/admin/layout/img/avatar11.jpg"
                                          alt="...">
                                     <div class="media-body">
                                         <h4 class="media-heading">Maria Gomez</h4>
@@ -1993,39 +2135,51 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="<%out.print(addPath);%>resources/assets/global/plugins/excanvas.min.js"></script>
 <![endif]-->
 <script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-migrate.min.js"
+        type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-<script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-ui/jquery-ui.min.js"
+        type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap/js/bootstrap.min.js"
+        type="text/javascript"></script>
 <script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"
         type="text/javascript"></script>
 <script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js"
         type="text/javascript"></script>
-<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-<script src="<%out.print(addPath);%>resources/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.blockui.min.js"
+        type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/jquery.cokie.min.js"
+        type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/global/plugins/uniform/jquery.uniform.min.js"
+        type="text/javascript"></script>
 <script src="<%out.print(addPath);%>resources/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js"
         type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="<%out.print(addPath);%>resources/assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript"
+        src="<%out.print(addPath);%>resources/assets/global/plugins/select2/select2.min.js"></script>
 <script type="text/javascript"
         src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript"
         src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+
 <script type="text/javascript"
         src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+
 <script type="text/javascript"
         src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+
 <script type="text/javascript"
         src="<%out.print(addPath);%>resources/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="<%out.print(addPath);%>resources/assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/quick-sidebar.js"
+        type="text/javascript"></script>
 <script src="<%out.print(addPath);%>resources/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
 <script src="<%out.print(addPath);%>resources/assets/admin/pages/scripts/table-advanced.js"></script>
+<script src="<%out.print(addPath);%>static/js/baby.js"></script>
 <script>
     jQuery(document).ready(function () {
         Metronic.init(); // init metronic core components

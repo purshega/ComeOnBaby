@@ -30,8 +30,10 @@ public class CabinetController {
     PreferencesService preferencesService;
     @Autowired
     BlogService blogService;
+    @Autowired
+    NoticeService noticeService;
 
-    private String[] menuUrls = new String[]{"cabinet/", "#", "#", "#", "cabinet/success/", "cabinet/recipe/","cabinet/husband/", "#", "#", "last"};
+    private String[] menuUrls = new String[]{"cabinet/", "#", "#", "cabinet/notice/", "cabinet/success/", "cabinet/recipe/","cabinet/husband/", "#", "#", "last"};
 
     static List<String> listMenuUrls = new ArrayList<String>();
 
@@ -227,7 +229,40 @@ public class CabinetController {
 
         return modelAndView;
     }
-    public void temporary(){
+    //List<Notice> notices = new ArrayList<>();
 
+    @RequestMapping(value = "/notice/", method = RequestMethod.POST)
+    public ModelAndView getPostNotice(@RequestParam("textAddNewNotice") String textAddNewNotice, HttpSession httpSession) {
+        System.out.println("notice_POST, textAddNewNotice="+textAddNewNotice);
+        Notice notice = null;
+        try {
+            notice = new Notice(Calendar.getInstance().getTime(), textAddNewNotice, "");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("notice="+notice);
+        noticeService.addNewNotice(notice);
+        System.out.println("notice_POST, after notice create");
+        return getNotice(httpSession);
+    }
+
+    @RequestMapping(value = "/notice/", method = RequestMethod.GET)
+    public ModelAndView getNotice(HttpSession httpSession) {
+        System.out.println("notice_GET");
+        //
+        ModelAndView modelAndView = new ModelAndView("personalsArea");
+
+        List<Notice> notices = noticeService.getAllNotice();
+        System.out.println("notices.size()="+notices.size());
+
+        //modelAndView.addObject("fields" , fields);
+        //modelAndView.addObject("values" , values);
+        modelAndView.addObject("blocks" , notices);
+        modelAndView.addObject("namePage" , "Notice story");
+        modelAndView.addObject("nameTitle" , "Notices table");
+        modelAndView.addObject("menuUrls" , getMenuUrls());
+        modelAndView.addObject("addPath" , "../../");
+
+        return modelAndView;
     }
 }

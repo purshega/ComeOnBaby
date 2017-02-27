@@ -29,7 +29,18 @@ public class AppUser {
     @Column(name="login_type", nullable=false)
     private String loginType;
 
+    @OneToOne(mappedBy = "appUser", fetch = FetchType.EAGER)
+    private Preferences preferences;
+
     public AppUser(){
+    }
+
+    public void setPreferences(Preferences preferences) {
+        this.preferences = preferences;
+    }
+
+    public Preferences getPreferences() {
+        return preferences;
     }
 
     public AppUser(String email, String password, Long socialID, String loginType) {
@@ -69,10 +80,19 @@ public class AppUser {
         sb.append("<tr>");
         sb.append("<td> id </td>");
         sb.append("<td> <a href=\"../cabinet/user/"+id+"\">"+email+"</a> </td>");
-        sb.append("<td> </td>");
-        sb.append("<td> </td>");
+        if(preferences!=null) {
+            sb.append("<td>"+preferences.getNickname()+"</td>");//nickname
+            sb.append("<td>"+preferences.getBirth_year()+"</td>");//bithyear
+        } else {
+            sb.append("<td> </td>");//nickname
+            sb.append("<td> </td>");//bithyear
+        }
         sb.append("<td> "+getLoginType()+" </td>");
-        sb.append("<td> !! need add</td>");
+        if(preferences!=null) {
+            sb.append("<td>"+preferences.getGender()+"</td>");//gender
+        } else {
+            sb.append("<td> </td>");//gender
+        }
         sb.append("</tr>");
 
         return sb.toString();
