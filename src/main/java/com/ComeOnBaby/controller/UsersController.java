@@ -362,7 +362,9 @@ public class UsersController {
                 outJSON.put(RESULT, SUCCESS);
                 outJSON.put(MESSAGE, Strings.MSG_LOGIN_EMAIL_SUCCESS);
                 outJSON.put(USER, getUserJSON(bdUser).toString());
-                JSONObject profile = getPreferencesJSON(prefService.findById(bdUser.getId()));
+
+                //JSONObject profile = getPreferencesJSON(prefService.findById(bdUser.getId()));
+                JSONObject profile = getPreferencesJSON(bdUser.getPreferences());
                 outJSON.put(DATA, profile.toString());
 
             }

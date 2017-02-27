@@ -343,11 +343,14 @@ public class CommunityController {
         JSONObject json = new JSONObject();
         json.put(BLOGID, blog.getId());
         json.put(USERID, blog.getId_user());
-        Preferences pr = prefService.findById(blog.getId_user());
-        if(pr != null) {
-            if (pr.getAvatar() != null) json.put(USERAVATAR, pr.getAvatar());
-            if (pr.getNickname() != null) json.put(USERNICKNAME, pr.getNickname());
-        }
+//        Preferences pr = prefService.findById(blog.getId_user());
+//        if(pr != null) {
+//            if (pr.getAvatar() != null) json.put(USERAVATAR, pr.getAvatar());
+//            if (pr.getNickname() != null) json.put(USERNICKNAME, pr.getNickname());
+//        }
+        Preferences pref = blog.getAppUser().getPreferences();
+        if(pref != null && pref.getAvatar() != null) json.put(USERAVATAR, pref.getAvatar());
+        if (pref != null && pref.getNickname() != null) json.put(USERNICKNAME, pref.getNickname());
         json.put(BLOGTYPE, blog.getType());
         json.put(BLOGTITLE, blog.getTitle());
         json.put(BLOGTEXT, blog.getText());
