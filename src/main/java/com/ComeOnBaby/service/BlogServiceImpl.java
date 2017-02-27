@@ -46,5 +46,5 @@ public class BlogServiceImpl implements BlogService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Blog> findBlogByType(String type){return blogDao.findBlogByType(type);}
+    public List<Blog> findBlogByType(Integer type){return blogDao.findBlogByType(type);}
 }

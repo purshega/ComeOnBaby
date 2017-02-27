@@ -145,7 +145,7 @@ public class CabinetController {
 
         ModelAndView modelAndView = new ModelAndView("personalsArea");
 
-        List<Blog> blogs = blogService.findBlogByType("1");
+        List<Blog> blogs = blogService.findBlogByType(2);
 
         List<String> fields = new ArrayList<>();
         fields.add("ID");
@@ -174,7 +174,7 @@ public class CabinetController {
 
         ModelAndView modelAndView = new ModelAndView("personalsArea");
 
-        List<Blog> blogs = blogService.findBlogByType("2");
+        List<Blog> blogs = blogService.findBlogByType(3);
 
         List<String> fields = new ArrayList<>();
         fields.add("ID");
@@ -203,7 +203,7 @@ public class CabinetController {
 
         ModelAndView modelAndView = new ModelAndView("personalsArea");
 
-        List<Blog> blogs = blogService.findBlogByType("3");
+        List<Blog> blogs = blogService.findBlogByType(4);
 
         List<String> fields = new ArrayList<>();
         fields.add("ID");

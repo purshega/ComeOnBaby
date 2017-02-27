@@ -14,6 +14,7 @@ public class Strings {
     public final static String ERR_USER_NOT_FOUND = "Error! User not found";
     public final static String ERR_SAVE_NOTE = "Error! Note not saved";
     public final static String ERR_GET_NOTES = "Error! Get notes for user fail";
+    public final static String ERR_SAVE_IMAGES = "Error! Save images fail";
 
     //Messages
     public final static String MSG_EMAIL_UPDATE_FAIL = "Email allready in use";
@@ -31,6 +32,15 @@ public class Strings {
     public final static String MSG_LIST_CITY_SUCCESS = "Get list cities success";
     public final static String MSG_PROFILE_UPDATE_SUCCESS = "Profile update success";
     public final static String MSG_NOTE_SAVE_SUCCESS = "Note save success";
+    public final static String MSG_GUIDE_DOWNLOAD_SUCCESS = "Guides download success";
+    public final static String MSG_RECIPE_DOWNLOAD_SUCCESS = "Recipes download success";
     public final static String MSG_GET_NOTES_SUCCESS = "Get user notes success";
+    public final static String MSG_SAVE_IMAGES_SUCCESS = "Save images success";
+    public final static String MSG_UPDATE_AVATAR_FAIL = "Update avatar fail";
+    public final static String MSG_UPDATE_AVATAR_SUCCESS = "Update avatar success";
+    public final static String MSG_SAVE_COMUNITY_RECORD_SUCCESS = "Save community record success";
+    public final static String MSG_SAVE_COMUNITY_RECORD_FAIL = "Save community record fail";
+    public final static String MSG_GET_COMMUNITY_RECORDS_SUCCESS = "Get community records success";
+    public final static String MSG_GET_COMMUNITY_RECORDS_FAIL = "Get community records fail";
 
 }
