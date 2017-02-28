@@ -11,5 +11,6 @@ public interface BlogService {
     void updateBlog(Blog blog);
     void deleteBlog(Blog blog);
     List<Blog> getAllBlog();
+    Blog findById(Long id);
     List<Blog> findBlogByType(Integer type);
 }

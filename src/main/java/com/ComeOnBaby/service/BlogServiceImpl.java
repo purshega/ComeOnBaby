@@ -45,6 +45,10 @@ public class BlogServiceImpl implements BlogService{
     }
 
     @Override
+    @Transactional
+    public Blog findById(Long id) {return blogDao.read(id);}
+
+    @Override
     @Transactional(readOnly = true)
     public List<Blog> findBlogByType(Integer type){return blogDao.findBlogByType(type);}
 }

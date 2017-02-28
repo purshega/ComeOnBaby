@@ -59,6 +59,7 @@ public class CommunityController {
     public static final String SAVE_COMMENT_OPERATION = "savecomment";
     public static final String GET_COMMENTS_OPERATION = "getcomments";
     public static final String GET_NOTICES_OPERATION = "getnotices";
+    public static final String DELETE_COMUNITY_RECORD_OPERATION = "deleterecord";
 
 
 //    @Autowired
@@ -281,6 +282,10 @@ public class CommunityController {
                 getListComments(bdUser, req, outJSON);
                 break;
             }
+            case DELETE_COMUNITY_RECORD_OPERATION: {
+                deleteCommunityOperation(bdUser, req, outJSON);
+                break;
+            }
             default: {
                 outJSON.put(MESSAGE, Strings.ERR_UNKNOWN_OPERATION);
                 return outJSON.toString();
@@ -288,6 +293,38 @@ public class CommunityController {
         }
         System.out.println("Out JSON: " + outJSON.toString()  + "\n");
         return outJSON.toString();
+    }
+
+    //Delete community record operation
+    private void deleteCommunityOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
+        Blog blog = blogService.findById(req.getCommunityID());
+        try {
+            if (blog != null && user.getId() == blog.getId_user()) {
+                //Delete images
+                if(blog.getImages() != null && !blog.getImages().isEmpty()) {
+                    String[] images = blog.getImages().split(",");
+                    for (String img : images) {
+                        File file = new File(IMAGES_DIR, img);
+                        if (file.exists()) file.delete();
+                    }
+                }
+                //Delete comments
+                List<Comment> commList = commentsService.findByBlogID(blog.getId());
+                for (Comment comm : commList) {
+                    commentsService.deleteComments(comm);
+                }
+                //Delete blog
+                blogService.deleteBlog(blog);
+
+                outJSON.put(RESULT, SUCCESS);
+                outJSON.put(MESSAGE, Strings.MSG_DELETE_COMMUNITY_SUCCESS);
+            } else {
+                throw new Exception("No such blog or user not own this blog");
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+            outJSON.put(MESSAGE, Strings.MSG_DELETE_COMMUNITY_FAIL);
+        }
     }
 
     private void getNoticesOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
@@ -305,11 +342,6 @@ public class CommunityController {
             outJSON.put(MESSAGE, Strings.MSG_GET_NOTICES_FAIL);
         }
     }
-
-//    private final static String NOTICEID = "notice_id";
-//    private final static String NOTICEDATE = "date";
-//    private final static String NOTICETITLE = "title";
-//    private final static String NOTICEHTML = "html";
 
     private void saveCommentOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
         System.out.println("INSIDE SAVE COMMENT: ");

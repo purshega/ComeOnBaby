@@ -48,5 +48,6 @@ public class Strings {
     public final static String MSG_GET_COMMENTS_FAIL = "Get comments fail";
     public final static String MSG_GET_NOTICES_SUCCESS = "Get notices success";
     public final static String MSG_GET_NOTICES_FAIL = "Get notices fail";
-
+    public final static String MSG_DELETE_COMMUNITY_FAIL = "Delete community record fail";
+    public final static String MSG_DELETE_COMMUNITY_SUCCESS = "Delete community record success";
 }
