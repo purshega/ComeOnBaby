@@ -160,7 +160,7 @@ function sendAjax(operation, code, num, count){
     $.ajax({
         type: "POST",
         data: 'operation='+operation+'&code='+code,
-        url: '/ajax/action',
+        url: '../../ajax/action',
         dataType: "json",
         success: function(data){
             if(operation=='saveTitleBlock'){
@@ -170,6 +170,7 @@ function sendAjax(operation, code, num, count){
                 $('#titleBlockInfo'+num).prop('disabled', true);
 
                 var ans = data.answer;
+                console.log('data.answer='+data.answer);
                 if(ans!=undefined){
                     var arr = (""+ans).split(",");
                     //alert(arr[0] + '/'+ arr[1]);
@@ -197,7 +198,7 @@ function sendAjax(operation, code, num, count){
                  $('.BlockInfo'+num).css('display', 'block');
                  }
 
-                 * */
+                 */
             }
         },
         error: function(){
