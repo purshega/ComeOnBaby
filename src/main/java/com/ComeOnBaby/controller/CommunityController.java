@@ -1,5 +1,6 @@
 package com.ComeOnBaby.controller;
 
+import com.ComeOnBaby.configuration.ConstConfig;
 import com.ComeOnBaby.model.AppUser;
 import com.ComeOnBaby.model.Blog;
 import com.ComeOnBaby.model.Comment;
@@ -37,7 +38,7 @@ import java.util.UUID;
 public class CommunityController {
 
     //Folder to store images
-    private static final String IMAGES_DIR = "D:/images";
+    private static final String IMAGES_DIR = ConstConfig.INNER_IMAGES_ADDRESS;
     static {
         File file = new File(IMAGES_DIR);
         if(!file.exists()) {
