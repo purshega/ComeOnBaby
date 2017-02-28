@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -55,6 +56,10 @@ public class Fertilization_guide {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDateFormat() {
+        return  new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     public String getImage() {

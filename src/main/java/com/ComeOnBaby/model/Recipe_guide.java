@@ -61,7 +61,7 @@ public class Recipe_guide {
     }
 
     public String getDateFormat() {
-        return  new SimpleDateFormat("yyyy-MM-dd").format(date);
+            return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     public void setDate(Date date) {

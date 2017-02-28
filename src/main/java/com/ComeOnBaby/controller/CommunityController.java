@@ -1,5 +1,7 @@
 package com.ComeOnBaby.controller;
 
+import com.ComeOnBaby.model.*;
+import com.ComeOnBaby.service.*;
 import com.ComeOnBaby.configuration.ConstConfig;
 import com.ComeOnBaby.model.*;
 import com.ComeOnBaby.service.*;
@@ -60,6 +62,7 @@ public class CommunityController {
     public static final String GET_COMMENTS_OPERATION = "getcomments";
     public static final String GET_NOTICES_OPERATION = "getnotices";
     public static final String DELETE_COMUNITY_RECORD_OPERATION = "deleterecord";
+    private final static String GET_Q_A_OPERATION = "getqa";
 
 
 //    @Autowired
@@ -76,6 +79,9 @@ public class CommunityController {
 
     @Autowired
     CommentsService commentsService;
+
+    @Autowired
+    Q_AService q_a_service;
 
     @Autowired
     NoticeService noticeService;
@@ -280,6 +286,11 @@ public class CommunityController {
             }
             case GET_COMMENTS_OPERATION: {
                 getListComments(bdUser, req, outJSON);
+                break;
+            }
+
+            case GET_Q_A_OPERATION: {
+                getQ_A(outJSON);
                 break;
             }
             case DELETE_COMUNITY_RECORD_OPERATION: {
@@ -577,6 +588,43 @@ public class CommunityController {
                     ", data=" + data + ", type=" + type + ", bitmaps=" + (bitmaps!=null ? "" + bitmaps.length : "null"
             + ", communityID=" + communityID);
         }
+    }
+
+
+    //Get Q_A
+    private JSONObject getQ_A(JSONObject outJSON) {
+
+        List<Q_A> q_a_List = q_a_service.getAllQ_A();
+        outJSON.put(RESULT, SUCCESS);
+        outJSON.put(MESSAGE, Strings.MSG_Q_A_DOWNLOAD_SUCCESS);
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (Q_A q_a : q_a_List) {
+            jsonArray.put(get_Q_A_JSON(q_a));
+        }
+        outJSON.put(DATA,jsonArray.toString());
+        return outJSON;
+    }
+
+    //Make JSON from Q_A
+    private JSONObject get_Q_A_JSON(Q_A q_a) {
+        JSONObject outQ_A = new JSONObject();
+        outQ_A.put("id", q_a.getId());
+        outQ_A.put("id_user", q_a.getId_user());
+        outQ_A.put("question_date", q_a.getQuestionDateFormat());
+        outQ_A.put("answer_date", q_a.getAnswerDateFormat());
+        outQ_A.put("title", q_a.getTitle());
+        outQ_A.put("text", q_a.getText());
+        outQ_A.put("is_access", q_a.getIs_access());
+        outQ_A.put("answer", q_a.getAnswer());
+        outQ_A.put("is_answer", q_a.getIs_answer());
+        Preferences pr = prefService.findById(q_a.getId_user());
+        if(pr != null) {
+            if (pr.getAvatar() != null) outQ_A.put(USERAVATAR, pr.getAvatar());
+            if (pr.getNickname() != null) outQ_A.put(USERNICKNAME, pr.getNickname());
+        }
+        return outQ_A;
     }
 
     //EXCEPTION

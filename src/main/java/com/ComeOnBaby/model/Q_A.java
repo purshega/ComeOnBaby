@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -18,32 +19,43 @@ public class Q_A {
     @Column(name="id", nullable=false)
     private Long id;
 
-    @NotEmpty
+
     @Column(name="id_user", nullable=false)
     private Long id_user;
 
-    @NotEmpty
-    @Column(name="date", nullable=false)
-    private Date date;
 
-    @NotEmpty
+    @Column(name="question_date", nullable=false)
+    private Date question_date;
+
+
+    @Column(name="answer_date", nullable=false)
+    private Date answer_date;
+
+
     @Column(name="title", nullable=false)
     private String title;
 
-    @NotEmpty
+
     @Column(name="text", nullable=false)
     private String text;
 
-    @NotEmpty
+
     @Column(name="is_access", nullable=false)
     private Boolean is_access;
 
-    @NotEmpty
+
     @Column(name="answer", nullable=false)
     private String answer;
 
+    @Column(name="is_answer", nullable=false)
+    private Boolean is_answer;
+
 
     public Q_A(){}
+
+    public Boolean getIs_answer() {
+        return is_answer;
+    }
 
     public Long getId() {
         return id;
@@ -61,12 +73,32 @@ public class Q_A {
         this.id_user = id_user;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getQuestion_date() {
+        return question_date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public String getQuestionDateFormat() {
+        return  new SimpleDateFormat("yyyy-MM-dd").format(question_date);
+    }
+
+    public void setQuestion_date(Date question_date) {
+        this.question_date = question_date;
+    }
+
+    public Date getAnswer_date() {
+        return answer_date;
+    }
+
+    public String getAnswerDateFormat() {
+        if (answer_date!=null){
+            return  new SimpleDateFormat("yyyy-MM-dd").format(answer_date);
+        } else {
+            return "";
+        }
+    }
+
+    public void setAnswer_date(Date answer_date) {
+        this.answer_date = answer_date;
     }
 
     public String getTitle() {
@@ -101,14 +133,14 @@ public class Q_A {
         this.answer = answer;
     }
 
-    public Q_A(Long id, Long id_user, Date date, String title, String text, Boolean is_access, String answer) {
+    public Q_A(Long id, Long id_user, Date question_date, Date answer_date, String title, String text, Boolean is_access, String answer) {
         this.id = id;
         this.id_user = id_user;
-        this.date = date;
+        this.question_date = question_date;
+        this.answer_date = answer_date;
         this.title = title;
         this.text = text;
         this.is_access = is_access;
         this.answer = answer;
     }
-
 }

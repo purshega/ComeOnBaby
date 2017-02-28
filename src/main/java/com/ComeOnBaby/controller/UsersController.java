@@ -51,6 +51,7 @@ public class UsersController {
     private final static String GET_RECIPE_OPERATION = "getrecipe";
     private final static String GET_USER_NOTES_OPERATION = "getnotes";
 
+
     //JSON KEYS
     private final static String OPERATION = "operation";
     private final static String RESULT = "result";
@@ -82,6 +83,7 @@ public class UsersController {
 
     @Autowired
     Recipe_guideService recipeService;
+
 
     @RequestMapping(value = "/users", method = RequestMethod.POST, produces={"application/json; charset=UTF-8"})
     @ResponseStatus(value = HttpStatus.OK )
@@ -149,7 +151,7 @@ public class UsersController {
             case GET_GUIDE_OPERATION: {
                 getGuide(inJSON, outJSON);
                 break;
-                }
+            }
 
             case GET_RECIPE_OPERATION: {
                 getRecipe(inJSON, outJSON);
@@ -696,7 +698,7 @@ public class UsersController {
         JSONObject outGuide = new JSONObject();
         outGuide.put("id", guide.getId());
         outGuide.put("title", guide.getTitle());
-        outGuide.put("date", guide.getDate());
+        outGuide.put("date", guide.getDateFormat());
         outGuide.put("image" , guide.getImage());
         return outGuide;
     }
@@ -728,6 +730,7 @@ public class UsersController {
         outGuide.put("url_naver" , recipe.getUrl_naver());
         return outGuide;
     }
+
 
 
     //EXCEPTION
