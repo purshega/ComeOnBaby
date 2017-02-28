@@ -299,7 +299,7 @@ public class CommunityController {
     private void deleteCommunityOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
         Blog blog = blogService.findById(req.getCommunityID());
         try {
-            if (blog != null && user.getId() == blog.getId_user()) {
+            if (blog != null && user.getId().equals(blog.getId_user())) {
                 //Delete images
                 if(blog.getImages() != null && !blog.getImages().isEmpty()) {
                     String[] images = blog.getImages().split(",");
