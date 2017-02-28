@@ -1,14 +1,8 @@
 package com.ComeOnBaby.controller;
 
 import com.ComeOnBaby.configuration.ConstConfig;
-import com.ComeOnBaby.model.AppUser;
-import com.ComeOnBaby.model.Blog;
-import com.ComeOnBaby.model.Comment;
-import com.ComeOnBaby.model.Preferences;
-import com.ComeOnBaby.service.AppUserService;
-import com.ComeOnBaby.service.BlogService;
-import com.ComeOnBaby.service.CommentsService;
-import com.ComeOnBaby.service.PreferencesService;
+import com.ComeOnBaby.model.*;
+import com.ComeOnBaby.service.*;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,6 +40,8 @@ public class CommunityController {
         }
     }
 
+    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+
     //JSON KEYS
     private final static String OPERATION = "operation";
     private final static String RESULT = "result";
@@ -62,6 +58,7 @@ public class CommunityController {
     public static final String GET_COMUNITY_RECORDS_OPERATION = "getrecords";
     public static final String SAVE_COMMENT_OPERATION = "savecomment";
     public static final String GET_COMMENTS_OPERATION = "getcomments";
+    public static final String GET_NOTICES_OPERATION = "getnotices";
 
 
 //    @Autowired
@@ -78,6 +75,9 @@ public class CommunityController {
 
     @Autowired
     CommentsService commentsService;
+
+    @Autowired
+    NoticeService noticeService;
 
 //    @RequestMapping(value = "/images/{imgName}", method = RequestMethod.GET, produces = {"image/jpg", "image/jpeg", "image/png"})
 //    public void getImage(HttpServletResponse response, @PathVariable String imgName) throws IOException {
@@ -269,6 +269,10 @@ public class CommunityController {
                 getCommunityRecordsOperation(req, outJSON);
                 break;
             }
+            case GET_NOTICES_OPERATION: {
+                getNoticesOperation(bdUser, req, outJSON);
+                break;
+            }
             case SAVE_COMMENT_OPERATION: {
                 saveCommentOperation(bdUser, req, outJSON);
                 break;
@@ -285,6 +289,27 @@ public class CommunityController {
         System.out.println("Out JSON: " + outJSON.toString()  + "\n");
         return outJSON.toString();
     }
+
+    private void getNoticesOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
+        try {
+            List<Notice> listNotices = noticeService.getAllNotice();
+            JSONArray jsarr = new JSONArray();
+            for (int i = 0; i < listNotices.size(); i++) {
+                jsarr.put(i, getNoticeJSON(listNotices.get(i)));
+            }
+            outJSON.put(RESULT, SUCCESS);
+            outJSON.put(MESSAGE, Strings.MSG_GET_NOTICES_SUCCESS);
+            outJSON.put(DATA, jsarr.toString());
+        } catch (Exception exc) {
+            exc.printStackTrace();
+            outJSON.put(MESSAGE, Strings.MSG_GET_NOTICES_FAIL);
+        }
+    }
+
+//    private final static String NOTICEID = "notice_id";
+//    private final static String NOTICEDATE = "date";
+//    private final static String NOTICETITLE = "title";
+//    private final static String NOTICEHTML = "html";
 
     private void saveCommentOperation(AppUser user, CommunityRequest req, JSONObject outJSON) {
         System.out.println("INSIDE SAVE COMMENT: ");
@@ -338,7 +363,6 @@ public class CommunityController {
     private final static String BLOGTEXT = "text";
     private final static String BLOGIMAGES = "images";
     private final static String BLOGDATE = "date";
-    private final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
     private JSONObject getBlogJSON(Blog blog) {
         JSONObject json = new JSONObject();
@@ -358,6 +382,16 @@ public class CommunityController {
         json.put(BLOGDATE, dateFormat.format(blog.getDatetime()));
         if(blog.getImages() != null) json.put(BLOGIMAGES, blog.getImages());
         return json;
+    }
+
+    private JSONObject getNoticeJSON(Notice notice) {
+        JSONObject js = new JSONObject();
+        js.put(BLOGID, notice.getId());
+        js.put(BLOGDATE, dateFormat.format(notice.getDate()));
+        js.put(BLOGTYPE, 1);
+        js.put(BLOGTITLE, notice.getTitle());
+        js.put(BLOGTEXT, notice.getHtml());
+        return js;
     }
 
     private final static String COMMID = "comm_id";

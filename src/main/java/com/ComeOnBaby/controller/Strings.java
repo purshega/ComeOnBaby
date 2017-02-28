@@ -46,5 +46,7 @@ public class Strings {
     public final static String MSG_SAVE_COMMENT_FAIL = "Save comment fail";
     public final static String MSG_GET_COMMENTS_SUCCESS = "Get comments success";
     public final static String MSG_GET_COMMENTS_FAIL = "Get comments fail";
+    public final static String MSG_GET_NOTICES_SUCCESS = "Get notices success";
+    public final static String MSG_GET_NOTICES_FAIL = "Get notices fail";
 
 }
